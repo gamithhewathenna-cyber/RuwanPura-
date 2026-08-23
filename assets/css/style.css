@@ -213,8 +213,8 @@ ul { list-style: none; }
     transition: background .2s, color .2s, border-color .2s;
 }
 .hero-arrow:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
-.hero-arrow.prev { left: 14px; }
-.hero-arrow.next { right: 14px; }
+.hero-arrow.prev { left: -60px; }
+.hero-arrow.next { right: -60px; }
 
 /* =====================================================================
    JOURNEY
@@ -577,6 +577,8 @@ ul { list-style: none; }
    ===================================================================== */
 @media (max-width: 1100px) {
     .hero-title { font-size: 60px; }
+    .hero-arrow.prev { left: 14px; }
+    .hero-arrow.next { right: 14px; }
     .collection-arrow.prev { left: -20px; }
     .collection-arrow.next { right: -20px; }
 }
