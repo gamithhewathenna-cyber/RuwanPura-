@@ -1,4 +1,7 @@
-<?php require_once __DIR__ . '/functions.php'; ?>
+<?php
+require_once __DIR__ . '/functions.php';
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,9 +35,9 @@
     <div class="container">
         <nav class="nav">
             <div class="nav-left nav-menu">
-                <a href="<?= BASE_URL ?>index.php" class="nav-link active"><?= e(c('nav_home')) ?></a>
-                <a href="#collection" class="nav-link"><?= e(c('nav_gemstones')) ?> <span class="caret">▼</span></a>
-                <a href="#journey" class="nav-link"><?= e(c('nav_about')) ?></a>
+                <a href="<?= BASE_URL ?>index.php" class="nav-link<?= $currentPage === 'index.php' ? ' active' : '' ?>"><?= e(c('nav_home')) ?></a>
+                <a href="<?= BASE_URL ?>index.php#collection" class="nav-link"><?= e(c('nav_gemstones')) ?> <span class="caret">▼</span></a>
+                <a href="<?= BASE_URL ?>about.php" class="nav-link<?= $currentPage === 'about.php' ? ' active' : '' ?>"><?= e(c('nav_about')) ?></a>
             </div>
 
             <a class="nav-logo" href="<?= BASE_URL ?>index.php">
@@ -43,7 +46,7 @@
             </a>
 
             <div class="nav-right">
-                <a href="#events" class="nav-link"><?= e(c('nav_news')) ?></a>
+                <a href="<?= BASE_URL ?>index.php#events" class="nav-link"><?= e(c('nav_news')) ?></a>
                 <a href="#contact" class="nav-link"><?= e(c('nav_contact')) ?></a>
                 <div class="nav-icons">
                     <a href="tel:<?= e(c('footer_phone1')) ?>" aria-label="Call">

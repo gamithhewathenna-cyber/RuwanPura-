@@ -13,8 +13,8 @@
                 <h4>Link</h4>
                 <ul>
                     <li><a href="<?= BASE_URL ?>index.php"><?= e(c('nav_home')) ?></a></li>
-                    <li><a href="#collection"><?= e(c('nav_gemstones')) ?></a></li>
-                    <li><a href="#journey"><?= e(c('nav_about')) ?></a></li>
+                    <li><a href="<?= BASE_URL ?>index.php#collection"><?= e(c('nav_gemstones')) ?></a></li>
+                    <li><a href="<?= BASE_URL ?>about.php"><?= e(c('nav_about')) ?></a></li>
                     <li><a href="#contact"><?= e(c('nav_contact')) ?></a></li>
                 </ul>
             </div>

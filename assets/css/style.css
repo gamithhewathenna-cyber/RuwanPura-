@@ -540,6 +540,209 @@ ul { list-style: none; }
 .cta-help .btn-dark { flex: 0 0 auto; }
 
 /* =====================================================================
+   ABOUT PAGE
+   ===================================================================== */
+.img-placeholder {
+    aspect-ratio: 4/3;
+    border-radius: 10px;
+    background: radial-gradient(circle at 50% 40%, #fdf6ec, #f3ede3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-family: var(--serif);
+    font-size: 22px;
+    text-align: center;
+    padding: 20px;
+}
+
+/* --- About hero band --- */
+.about-hero {
+    background: var(--dark);
+    color: #fff;
+    padding: 70px 0 60px;
+    text-align: center;
+}
+.about-hero .eyebrow { justify-content: center; }
+.about-hero-title {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 1.08;
+    letter-spacing: 2px;
+    color: #fff;
+    margin: 14px 0 22px;
+    text-transform: uppercase;
+}
+.about-hero-quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: #d8d2c4;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* --- The Radical Evolution --- */
+.evolution { padding: 80px 0; }
+.evolution-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.evolution-title {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 20px;
+}
+.evolution-content p { color: var(--muted); font-size: 15.5px; margin-bottom: 16px; }
+.evolution-img { position: relative; }
+.evolution-img > img:first-child, .evolution-img > .img-placeholder {
+    width: 100%; border-radius: 10px; object-fit: cover; aspect-ratio: 4/3;
+}
+.evolution-badge {
+    position: absolute; left: -30px; bottom: -30px;
+    width: 220px; border-radius: 6px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.25);
+}
+
+/* --- Our Global Journey (timeline) --- */
+.history { padding: 80px 0; }
+.history-head { text-align: center; margin-bottom: 60px; }
+.timeline { position: relative; max-width: 900px; margin: 0 auto; }
+.timeline::before {
+    content: '';
+    position: absolute; left: 130px; top: 6px; bottom: 6px; width: 1px;
+    background: var(--line);
+}
+.timeline-item {
+    display: grid;
+    grid-template-columns: 110px 40px 1fr;
+    align-items: center;
+    margin-bottom: 22px;
+    position: relative;
+}
+.timeline-year {
+    background: #f3f3f3;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+}
+.timeline-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--gold);
+    margin: 0 auto;
+    position: relative; z-index: 2;
+    box-shadow: 0 0 0 4px #fff;
+}
+.timeline-desc {
+    background: #4a4a4a;
+    color: #f2f2f2;
+    border-radius: 10px;
+    padding: 18px 22px;
+    font-size: 14.5px;
+    line-height: 1.6;
+}
+
+/* --- Direct From The Source (video + responsibility) --- */
+.about-video { background: var(--dark); color: #fff; padding: 80px 0; text-align: center; }
+.about-video .eyebrow { justify-content: center; margin-bottom: 30px; }
+.video-frame {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto 50px;
+    aspect-ratio: 16/8;
+    background: #d9d9d9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.video-frame img { width: 100%; height: 100%; object-fit: cover; }
+.play-btn {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    width: 60px; height: 60px; border-radius: 50%;
+    background: #fff; color: var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    cursor: pointer; border: none;
+}
+.video-heading {
+    font-family: var(--serif);
+    color: var(--gold);
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: left;
+}
+.about-video > .container > p,
+.about-video p { color: #ccc; font-size: 14.5px; text-align: left; margin-bottom: 16px; }
+.video-cards {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+    margin-top: 30px;
+}
+.video-card {
+    background: #1c1c1c; border: 1px solid #2a2a2a; border-radius: 10px; padding: 24px;
+    text-align: left;
+}
+.video-card h3 { color: #fff; font-size: 17px; margin-bottom: 10px; font-family: var(--serif); }
+.video-card p { color: #aaa; font-size: 14px; margin: 0; }
+
+/* --- National Industry Excellence (awards) --- */
+.awards { padding: 80px 0; }
+.awards-head { text-align: center; margin-bottom: 50px; }
+.awards-grid {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    gap: 50px;
+    align-items: center;
+}
+.awards-img img, .awards-img .img-placeholder { width: 100%; }
+
+/* --- Gübelin Gem Lab --- */
+.gubelin { padding: 30px 0 90px; }
+.gubelin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 50px;
+}
+.gubelin-content .eyebrow { justify-content: flex-start; }
+.gubelin-content .eyebrow::before { display: none; }
+.gubelin-title { font-family: var(--serif); font-size: 34px; font-weight: 600; color: var(--ink); margin: 10px 0 4px; }
+.gubelin-subtitle { color: var(--gold); font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 18px; }
+.gubelin-content p { color: var(--muted); font-size: 14.5px; margin-bottom: 24px; }
+.gubelin-signatures { display: flex; gap: 40px; flex-wrap: wrap; }
+.signature { border-top: 1px solid var(--line); padding-top: 10px; }
+.sig-name { font-family: var(--serif); font-size: 16px; color: var(--ink); font-weight: 600; }
+.sig-title { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.gubelin-img img, .gubelin-img .img-placeholder { width: 100%; border-radius: 8px; }
+
+/* --- Professional standing / memberships --- */
+.membership { padding: 20px 0 90px; }
+.membership-head { text-align: center; max-width: 720px; margin: 0 auto 50px; }
+.membership-head p { color: var(--muted); margin-top: 14px; }
+.membership-logos {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px;
+    margin-bottom: 40px;
+}
+.membership-item { text-align: center; }
+.membership-item img { max-height: 50px; width: auto; object-fit: contain; margin: 0 auto 14px; filter: grayscale(1); opacity: .85; }
+.membership-item .logo-fallback { display: block; margin-bottom: 14px; }
+.membership-item p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.membership-footer { color: var(--muted); font-size: 14.5px; max-width: 900px; margin: 0 auto; text-align: center; }
+
+/* =====================================================================
    FOOTER
    ===================================================================== */
 .site-footer {
@@ -637,6 +840,28 @@ ul { list-style: none; }
     .cta-help { flex-direction: column; align-items: flex-start; }
 
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 34px; }
+
+    .about-hero-title { font-size: 44px; }
+
+    .evolution-grid { grid-template-columns: 1fr; gap: 30px; }
+    .evolution-img { order: -1; }
+    .evolution-badge { width: 150px; left: -14px; bottom: -14px; }
+
+    .timeline { max-width: 100%; }
+    .timeline::before { left: 5px; }
+    .timeline-item { grid-template-columns: 12px 1fr; gap: 14px; align-items: start; }
+    .timeline-year { order: 2; grid-column: 2; background: none; border: none; padding: 0 0 6px; text-align: left; font-size: 13px; color: var(--gold); }
+    .timeline-dot { order: 1; grid-column: 1; margin-top: 6px; }
+    .timeline-desc { order: 3; grid-column: 2; }
+
+    .video-cards { grid-template-columns: 1fr; }
+
+    .awards-grid { grid-template-columns: 1fr; gap: 30px; }
+
+    .gubelin-grid { grid-template-columns: 1fr; gap: 30px; padding: 30px; }
+    .gubelin-img { order: -1; }
+
+    .membership-logos { grid-template-columns: repeat(2, 1fr); gap: 30px 20px; }
 }
 
 @media (max-width: 560px) {
@@ -650,4 +875,9 @@ ul { list-style: none; }
     .footer-grid { grid-template-columns: 1fr; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
     .cta-help .help-text { font-size: 18px; letter-spacing: 2px; }
+
+    .about-hero-title { font-size: 32px; }
+    .evolution-title, .gubelin-title { font-size: 28px; }
+    .video-heading { font-size: 26px; }
+    .membership-logos { grid-template-columns: 1fr; }
 }

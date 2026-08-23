@@ -22,6 +22,11 @@ function image_size_hint($key)
         'factory_image3' => '500 × 700px',
         'branches_map'   => '1200 × 900px',
         'cta_image'      => '1920 × 800px',
+        'evolution_image'      => '900 × 675px',
+        'evolution_badge_image'=> '500 × 350px, transparent PNG',
+        'video_thumbnail'      => '1600 × 800px',
+        'awards_image'         => '700 × 900px',
+        'gubelin_image'        => '900 × 1100px',
     ];
     return $hints[$key] ?? '';
 }

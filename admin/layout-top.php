@@ -22,6 +22,18 @@ $homePageSections = [
     'section-footer.php'      => 'Footer',
 ];
 $onHomePage = array_key_exists($current, $homePageSections);
+
+$aboutPageSections = [
+    'section-about-hero.php'      => 'Hero Band',
+    'section-about-evolution.php' => 'The Radical Evolution',
+    'section-history.php'         => 'Our Global Journey',
+    'section-about-video.php'     => 'Direct From The Source',
+    'section-awards.php'          => 'National Industry Excellence',
+    'section-gubelin.php'         => 'Gübelin Gem Lab',
+    'section-membership.php'      => 'Memberships',
+];
+$onAboutPage = array_key_exists($current, $aboutPageSections);
+
 // $page_title should be set before including
 $page_title = $page_title ?? 'Dashboard';
 ?>
@@ -51,6 +63,11 @@ $page_title = $page_title ?? 'Dashboard';
             <a href="<?= BASE_URL ?>admin/section-header.php" class="side-link <?= $onHomePage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
                 Home Page
+            </a>
+
+            <a href="<?= BASE_URL ?>admin/section-about-hero.php" class="side-link <?= $onAboutPage ? 'active' : '' ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="M17 3.5a3.5 3.5 0 0 1 0 7"/></svg>
+                About Us
             </a>
 
             <div class="nav-group-label">System</div>
@@ -99,6 +116,14 @@ $page_title = $page_title ?? 'Dashboard';
             <?php if ($onHomePage): ?>
                 <div class="home-tabs">
                     <?php foreach ($homePageSections as $file => $label): ?>
+                        <a href="<?= BASE_URL ?>admin/<?= $file ?>" class="home-tab <?= nav_active($file) ?>"><?= e($label) ?></a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($onAboutPage): ?>
+                <div class="home-tabs">
+                    <?php foreach ($aboutPageSections as $file => $label): ?>
                         <a href="<?= BASE_URL ?>admin/<?= $file ?>" class="home-tab <?= nav_active($file) ?>"><?= e($label) ?></a>
                     <?php endforeach; ?>
                 </div>
