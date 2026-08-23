@@ -270,7 +270,7 @@ ul { list-style: none; }
     grid-template-columns: repeat(5, 1fr);
     gap: 24px;
 }
-.gem-card { text-align: center; }
+.gem-card { display: block; text-align: center; }
 .gem-thumb {
     height: 210px;
     display: flex; align-items: center; justify-content: center;

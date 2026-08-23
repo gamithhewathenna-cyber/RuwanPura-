@@ -138,9 +138,21 @@ function get_hero_slides()
 {
     return db()->query("SELECT * FROM hero_slides WHERE is_active=1 ORDER BY sort_order, id")->fetchAll();
 }
-function get_gemstones()
+/* Latest active catalogue products, for the homepage "Explore Our Gemstones" section */
+function get_latest_products($limit = 10)
 {
-    return db()->query("SELECT * FROM gemstones WHERE is_active=1 ORDER BY sort_order, id")->fetchAll();
+    $limit = max(1, (int) $limit);
+    try {
+        $sql = "SELECT p.*,
+                       (SELECT image FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order, id LIMIT 1) AS thumb
+                FROM products p
+                WHERE p.is_active = 1
+                ORDER BY p.created_at DESC, p.id DESC
+                LIMIT $limit";
+        return db()->query($sql)->fetchAll();
+    } catch (PDOException $e) {
+        return []; // catalogue tables not migrated yet
+    }
 }
 function get_branches()
 {

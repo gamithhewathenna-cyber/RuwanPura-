@@ -5,7 +5,7 @@ maybe_show_maintenance_page();
 include __DIR__ . '/includes/header.php';
 
 $heroSlides   = get_hero_slides();
-$gemstones    = get_gemstones();
+$gemstones    = get_latest_products(10);
 $branches     = get_branches();
 $partners     = get_partners();
 $testimonials = get_testimonials();
@@ -89,28 +89,20 @@ $testimonials = get_testimonials();
         <div class="collection-slider">
             <button class="collection-arrow prev" aria-label="Previous">‹</button>
             <div class="collection-track">
-                <?php foreach ($gemstones as $g): ?>
-                    <div class="gem-card">
+                <?php if ($gemstones): foreach ($gemstones as $g): ?>
+                    <a href="<?= BASE_URL ?>gemstone.php?slug=<?= urlencode($g['slug']) ?>" class="gem-card">
                         <div class="gem-thumb">
-                            <?php
-                                // Fallback: map default gemstone names to bundled placeholder images
-                                $gemFallbacks = [
-                                    'Alexandrite'                => 'gem-alexandrite.png',
-                                    'Padparadscha (Pasparaja)'   => 'gem-padparadscha.png',
-                                    'Blue Sapphire'              => 'gem-bluesapphire.png',
-                                    'Yellow & Orange Sapphires'  => 'gem-yelloworange.png',
-                                ];
-                                $gemFallback = $gemFallbacks[$g['name']] ?? 'gem-placeholder.png';
-                            ?>
-                            <?php if ($g['image']): ?>
-                                <img src="<?= row_img($g['image']) ?>" alt="<?= e($g['name']) ?>">
+                            <?php if ($g['thumb']): ?>
+                                <img src="<?= UPLOAD_URL . e($g['thumb']) ?>" alt="<?= e($g['name']) ?>">
                             <?php else: ?>
-                                <img src="<?= BASE_URL ?>assets/images/<?= $gemFallback ?>" alt="<?= e($g['name']) ?>">
+                                <img src="<?= BASE_URL ?>assets/images/gem-placeholder.png" alt="<?= e($g['name']) ?>">
                             <?php endif; ?>
                         </div>
                         <div class="gem-name"><?= e($g['name']) ?></div>
-                    </div>
-                <?php endforeach; ?>
+                    </a>
+                <?php endforeach; else: ?>
+                    <p style="color:var(--muted);grid-column:1/-1;text-align:center;">Gemstones will appear here once added to the catalogue.</p>
+                <?php endif; ?>
             </div>
             <button class="collection-arrow next" aria-label="Next">›</button>
         </div>
