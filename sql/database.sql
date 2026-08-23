@@ -318,9 +318,7 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('factory_title','Factory & Laboratories','factory','Factory Title','textarea',2),
 ('factory_p1','Ruwanpura Gems operates a meticulous production pipeline, transitioning from its 1985 "Gold House" foundations to a global gemstone powerhouse. All cutting, polishing, and assortment are managed by their specialized subsidiaries, Ruwanpura Facets and RuwanpuraBlu, where highly vetted craftsmen utilize traditional artistry alongside modern precision.','factory','Factory Paragraph 1','textarea',3),
 ('factory_p2','The company maintains a strict chain of custody through its own mining operations in Sri Lanka and investments in Madagascar and Mozambique. Their laboratories ensure every stone is ethically sourced, following rigorous labor and environmental standards. This commitment to quality and transparency provides customers with an authentic, sustainably produced gemstone experience.','factory','Factory Paragraph 2','textarea',4),
-('factory_image1','','factory','Factory Image 1','image',5),
-('factory_image2','','factory','Factory Image 2','image',6),
-('factory_image3','','factory','Factory Image 3','image',7),
+('factory_image1','','factory','Factory Image','image',5),
 -- Branches
 ('branches_eyebrow','GLOBAL PRESENCE','branches','Branches Eyebrow','text',1),
 ('branches_title','Our Branches','branches','Branches Title','text',2),

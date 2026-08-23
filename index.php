@@ -119,13 +119,7 @@ $testimonials = get_testimonials();
     <div class="container">
         <div class="factory-grid">
             <div class="factory-images">
-                <div class="fac-col">
-                    <img class="fac-a" src="<?= c('factory_image1') ? c_img('factory_image1') : BASE_URL.'assets/images/factory1.jpg' ?>" alt="Laboratory">
-                    <img class="fac-c" src="<?= c('factory_image3') ? c_img('factory_image3') : BASE_URL.'assets/images/factory3.jpg' ?>" alt="Craftsman">
-                </div>
-                <div class="fac-col">
-                    <img class="fac-b" src="<?= c('factory_image2') ? c_img('factory_image2') : BASE_URL.'assets/images/factory2.jpg' ?>" alt="Gem inspection">
-                </div>
+                <img class="fac-single" src="<?= c('factory_image1') ? c_img('factory_image1') : BASE_URL.'assets/images/factory1.jpg' ?>" alt="Factory & Laboratories">
             </div>
             <div class="factory-content">
                 <div class="eyebrow left"><?= e(c('factory_eyebrow')) ?></div>

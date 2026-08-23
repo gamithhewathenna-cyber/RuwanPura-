@@ -17,9 +17,7 @@ function image_size_hint($key)
 {
     static $hints = [
         'journey_image'  => '900 × 1000px, transparent PNG',
-        'factory_image1' => '500 × 700px',
-        'factory_image2' => '500 × 700px',
-        'factory_image3' => '500 × 700px',
+        'factory_image1' => '900 × 900px, square',
         'branches_map'   => '1200 × 900px',
         'cta_image'      => '1920 × 800px',
         'evolution_image'      => '900 × 675px',
