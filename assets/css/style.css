@@ -185,11 +185,10 @@ ul { list-style: none; }
 }
 
 .hero-slider {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    position: relative;
+    border-radius: 14px;
 }
-.hero-slides { position: relative; flex: 1; min-width: 0; border-radius: 14px; overflow: hidden; aspect-ratio: 16/11; background:#111; }
+.hero-slides { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 16/11; background:#111; }
 .hero-slide {
     position: absolute; inset: 0;
     opacity: 0;
@@ -198,7 +197,9 @@ ul { list-style: none; }
 .hero-slide img { width: 100%; height: 100%; object-fit: cover; }
 .hero-slide.active { opacity: 1; }
 .hero-arrow {
-    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
     background: #fff;
     border: 1px solid #ece5da;
     border-radius: 50%;
@@ -207,10 +208,13 @@ ul { list-style: none; }
     cursor: pointer;
     width: 48px; height: 48px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    z-index: 3;
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
     transition: background .2s, color .2s, border-color .2s;
 }
 .hero-arrow:hover { background: var(--gold); border-color: var(--gold); color: #fff; }
+.hero-arrow.prev { left: 14px; }
+.hero-arrow.next { right: 14px; }
 
 /* =====================================================================
    JOURNEY
