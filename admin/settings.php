@@ -26,6 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             update_setting('site_logo', $newLogo);
         }
 
+        // White / light logo upload (for dark backgrounds)
+        $oldLogoWhite = setting('site_logo_white');
+        $newLogoWhite = handle_upload('site_logo_white', $oldLogoWhite);
+        if ($newLogoWhite !== $oldLogoWhite) {
+            update_setting('site_logo_white', $newLogoWhite);
+        }
+
         // Maintenance mode
         update_setting('maintenance_mode', isset($_POST['maintenance_mode']) ? '1' : '0');
         update_setting('maintenance_message', trim($_POST['maintenance_message'] ?? ''));
@@ -59,6 +66,23 @@ require_once __DIR__ . '/layout-top.php';
                 <div class="upload-btn-wrap">
                     <button type="button" class="btn btn-sm">Choose Logo</button>
                     <input type="file" name="site_logo" accept="image/*" data-preview="logoPrev">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>White Logo <span class="hint">(used on dark backgrounds, e.g. the footer)</span></label>
+            <div class="img-field">
+                <div class="img-preview" id="logoWhitePrev" style="background:#1b1e27;">
+                    <?php if (setting('site_logo_white')): ?>
+                        <img src="<?= UPLOAD_URL . e(setting('site_logo_white')) ?>">
+                    <?php else: ?>
+                        <img src="<?= logo_white_url() ?>">
+                    <?php endif; ?>
+                </div>
+                <div class="upload-btn-wrap">
+                    <button type="button" class="btn btn-sm">Choose White Logo</button>
+                    <input type="file" name="site_logo_white" accept="image/*" data-preview="logoWhitePrev">
                 </div>
             </div>
         </div>

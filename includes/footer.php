@@ -4,7 +4,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <img src="<?= logo_url() ?>" alt="<?= e(setting('site_name')) ?>" onerror="this.style.display='none'">
+                    <img src="<?= logo_white_url() ?>" alt="<?= e(setting('site_name')) ?>" onerror="this.style.display='none'">
                 </div>
                 <p class="footer-about"><?= e(c('footer_about')) ?></p>
             </div>

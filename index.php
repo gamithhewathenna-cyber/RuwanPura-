@@ -29,7 +29,7 @@ if (setting('maintenance_mode') === '1' && empty($_SESSION['admin_id'])) {
     </head>
     <body>
         <div class="maint-box">
-            <img class="maint-logo" src="<?= logo_url() ?>" alt="<?= e($siteName) ?>">
+            <img class="maint-logo" src="<?= logo_white_url() ?>" alt="<?= e($siteName) ?>">
             <h1>We'll be right back</h1>
             <p><?= e_nl($message) ?></p>
         </div>

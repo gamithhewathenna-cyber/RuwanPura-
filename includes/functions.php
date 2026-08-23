@@ -77,6 +77,14 @@ function logo_url()
     return BASE_URL . 'assets/images/logo.png';
 }
 
+/* White/light logo URL helper (for dark backgrounds e.g. footer) — falls back to the main logo */
+function logo_white_url()
+{
+    $logo = setting('site_logo_white');
+    if ($logo) return UPLOAD_URL . e($logo);
+    return logo_url();
+}
+
 /* ------------------------------------------------------------------ */
 /*  Repeatable content fetchers                                        */
 /* ------------------------------------------------------------------ */

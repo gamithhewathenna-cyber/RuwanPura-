@@ -123,6 +123,7 @@ INSERT INTO `admins` (`name`,`email`,`password_hash`) VALUES
 -- Settings
 INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('site_logo',''),
+('site_logo_white',''),
 ('theme_primary','#c99a5b'),
 ('theme_dark','#0d0d0d'),
 ('admin_email','gamithhewathenna@gmail.com'),
