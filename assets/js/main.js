@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var track = document.querySelector('.collection-track');
         if (!track) return;
         var cards = Array.prototype.slice.call(track.children);
+        if (cards.length === 0) return;
         var perView = 5;
-        if (cards.length <= perView) return; // no need to page
         var start = 0;
         var next = document.querySelector('.collection-arrow.next');
         var prev = document.querySelector('.collection-arrow.prev');
