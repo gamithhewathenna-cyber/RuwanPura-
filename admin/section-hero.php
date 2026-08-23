@@ -111,6 +111,7 @@ require_once __DIR__ . '/layout-top.php';
                                 <input type="file" name="slide_image" accept="image/*" data-preview="slidePrev<?= (int)$s['id'] ?>">
                             </div>
                         </div>
+                        <div class="hint" style="margin-top:6px;">Recommended: 1600 × 1100px</div>
                         <label style="display:flex;gap:6px;align-items:center;font-size:13px;margin-top:12px;">
                             <input type="checkbox" name="is_active" <?= $s['is_active'] ? 'checked' : '' ?>> Show this slide
                         </label>
@@ -167,6 +168,7 @@ require_once __DIR__ . '/layout-top.php';
                         <input type="file" name="slide_image" accept="image/*" data-preview="newSlidePrev" required>
                     </div>
                 </div>
+                <div class="hint" style="margin-top:6px;">Recommended: 1600 × 1100px</div>
             </div>
             <div class="slide-editor-fields">
                 <div class="form-group">

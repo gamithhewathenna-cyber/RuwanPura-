@@ -63,7 +63,7 @@ require_once __DIR__ . '/layout-top.php';
 
 <div class="card">
     <h2>Exhibition / Partner Logos</h2>
-    <p class="card-sub">Logos shown in the row. If no image is uploaded, the name is shown as text.</p>
+    <p class="card-sub">Logos shown in the row. If no image is uploaded, the name is shown as text. Recommended image size: 300 × 150px, transparent PNG.</p>
 
     <table class="items-table">
         <thead><tr><th>Logo</th><th>Name</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
@@ -112,7 +112,7 @@ require_once __DIR__ . '/layout-top.php';
                 <input type="text" name="name" class="form-control" placeholder="e.g. JCK Las Vegas">
             </div>
             <div class="form-group">
-                <label>Logo Image</label>
+                <label>Logo Image <span class="hint">(300 × 150px, transparent PNG)</span></label>
                 <div class="img-field">
                     <div class="img-preview" id="newLogoPrev">No image</div>
                     <div class="upload-btn-wrap">

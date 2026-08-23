@@ -109,7 +109,7 @@ img { max-width: 100%; display: block; }
 
 .form-group { margin-bottom: 18px; }
 .form-group label { display: block; font-weight: 500; margin-bottom: 7px; font-size: 13.5px; color: #374151; }
-.form-group .hint { font-weight: 400; color: var(--muted); font-size: 12px; }
+.hint { font-weight: 400; color: var(--muted); font-size: 12px; }
 .switch-label { display: flex !important; align-items: center; gap: 10px; cursor: pointer; }
 .switch-label input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary, #c99a5b); cursor: pointer; }
 .form-control {

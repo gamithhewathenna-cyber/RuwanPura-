@@ -12,6 +12,20 @@ function content_group($group)
     return $stmt->fetchAll();
 }
 
+/* Recommended upload dimensions for content-block images, keyed by block_key */
+function image_size_hint($key)
+{
+    static $hints = [
+        'journey_image'  => '900 × 1000px, transparent PNG',
+        'factory_image1' => '500 × 700px',
+        'factory_image2' => '500 × 700px',
+        'factory_image3' => '500 × 700px',
+        'branches_map'   => '1200 × 900px',
+        'cta_image'      => '1920 × 800px',
+    ];
+    return $hints[$key] ?? '';
+}
+
 /* Render a single field based on its block_type */
 function render_content_field($block)
 {
@@ -22,6 +36,13 @@ function render_content_field($block)
 
     echo '<div class="form-group">';
     echo '<label>' . e($label) . '</label>';
+
+    if ($type === 'image') {
+        $hint = image_size_hint($key);
+        if ($hint) {
+            echo '<div class="hint" style="margin:-4px 0 10px;">Recommended size: ' . e($hint) . '</div>';
+        }
+    }
 
     switch ($type) {
         case 'textarea':

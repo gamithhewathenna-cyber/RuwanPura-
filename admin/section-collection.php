@@ -65,7 +65,7 @@ require_once __DIR__ . '/layout-top.php';
 
 <div class="card">
     <h2>Gemstones</h2>
-    <p class="card-sub">Each gemstone appears as a card in the collection carousel.</p>
+    <p class="card-sub">Each gemstone appears as a card in the collection carousel. Recommended image size: 400 × 400px, transparent PNG.</p>
 
     <table class="items-table">
         <thead><tr><th>Image</th><th>Name</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
@@ -114,7 +114,7 @@ require_once __DIR__ . '/layout-top.php';
                 <input type="text" name="name" class="form-control" placeholder="e.g. Ruby" required>
             </div>
             <div class="form-group">
-                <label>Image</label>
+                <label>Image <span class="hint">(400 × 400px, transparent PNG)</span></label>
                 <div class="img-field">
                     <div class="img-preview" id="newGemPrev">No image</div>
                     <div class="upload-btn-wrap">

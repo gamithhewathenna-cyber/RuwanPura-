@@ -54,7 +54,7 @@ require_once __DIR__ . '/layout-top.php';
         <p class="card-sub">Your website logo and name.</p>
 
         <div class="form-group">
-            <label>Website Logo <span class="hint">(PNG or SVG recommended, transparent background)</span></label>
+            <label>Website Logo <span class="hint">(PNG or SVG recommended, transparent background, ~400 × 120px)</span></label>
             <div class="img-field">
                 <div class="img-preview" id="logoPrev" style="background:#1b1e27;">
                     <?php if (setting('site_logo')): ?>
@@ -71,7 +71,7 @@ require_once __DIR__ . '/layout-top.php';
         </div>
 
         <div class="form-group">
-            <label>White Logo <span class="hint">(used on dark backgrounds, e.g. the footer)</span></label>
+            <label>White Logo <span class="hint">(used on dark backgrounds, e.g. the footer, ~400 × 120px)</span></label>
             <div class="img-field">
                 <div class="img-preview" id="logoWhitePrev" style="background:#1b1e27;">
                     <?php if (setting('site_logo_white')): ?>

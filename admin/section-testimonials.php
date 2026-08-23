@@ -63,7 +63,7 @@ require_once __DIR__ . '/layout-top.php';
 
 <div class="card">
     <h2>Client Reviews</h2>
-    <p class="card-sub">Each review is a card in the testimonials slider.</p>
+    <p class="card-sub">Each review is a card in the testimonials slider. Recommended avatar size: 200 × 200px, square.</p>
 
     <?php foreach ($items as $t): ?>
         <form method="post" enctype="multipart/form-data" style="border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;">
@@ -120,11 +120,14 @@ require_once __DIR__ . '/layout-top.php';
                 <input type="text" name="author_role" class="form-control">
             </div>
         </div>
-        <div class="img-field" style="margin-bottom:14px;">
-            <div class="img-preview" id="newAvatarPrev" style="width:56px;height:56px;border-radius:50%;">Avatar</div>
-            <div class="upload-btn-wrap">
-                <button type="button" class="btn btn-sm">Choose Avatar</button>
-                <input type="file" name="avatar" accept="image/*" data-preview="newAvatarPrev">
+        <div class="form-group" style="margin-bottom:14px;">
+            <label>Avatar <span class="hint">(200 × 200px, square)</span></label>
+            <div class="img-field">
+                <div class="img-preview" id="newAvatarPrev" style="width:56px;height:56px;border-radius:50%;">Avatar</div>
+                <div class="upload-btn-wrap">
+                    <button type="button" class="btn btn-sm">Choose Avatar</button>
+                    <input type="file" name="avatar" accept="image/*" data-preview="newAvatarPrev">
+                </div>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Add Testimonial</button>
