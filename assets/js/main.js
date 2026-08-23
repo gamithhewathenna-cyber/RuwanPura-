@@ -72,13 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
         restartAuto();
     })();
 
-    /* ---- Testimonials slider ---- */
+    /* ---- Testimonials slider (auto-advances, loops back to the start) ---- */
     (function () {
         var track = document.querySelector('.testi-track');
         if (!track) return;
         var prev = document.querySelector('.testi-nav .prev');
         var next = document.querySelector('.testi-nav .next');
         var bar = document.querySelector('.testi-progress .bar');
+        var timer;
+
         function step() {
             var card = track.querySelector('.testi-card');
             return card ? card.offsetWidth + 24 : 320;
@@ -88,14 +90,31 @@ document.addEventListener('DOMContentLoaded', function () {
             var pct = max > 0 ? (track.scrollLeft / max) * 100 : 0;
             if (bar) bar.style.width = Math.max(15, pct) + '%';
         }
-        if (next) next.addEventListener('click', function () {
-            track.scrollBy({ left: step(), behavior: 'smooth' });
-        });
-        if (prev) prev.addEventListener('click', function () {
+        function atEnd() {
+            return track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+        }
+        function goNext() {
+            if (atEnd()) {
+                track.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: step(), behavior: 'smooth' });
+            }
+        }
+        function goPrev() {
             track.scrollBy({ left: -step(), behavior: 'smooth' });
-        });
+        }
+        function restartAuto() {
+            clearInterval(timer);
+            if (track.scrollWidth - track.clientWidth <= 0) return; // nothing to scroll
+            timer = setInterval(goNext, 5000);
+        }
+
+        if (next) next.addEventListener('click', function () { goNext(); restartAuto(); });
+        if (prev) prev.addEventListener('click', function () { goPrev(); restartAuto(); });
+
         track.addEventListener('scroll', updateBar);
         updateBar();
+        restartAuto();
     })();
 
 });
