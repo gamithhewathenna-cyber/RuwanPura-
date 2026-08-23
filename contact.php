@@ -64,17 +64,32 @@ include __DIR__ . '/includes/header.php';
                 <p><?= e(c('contact_p2')) ?></p>
 
                 <div class="contact-detail">
-                    <h4>Phone</h4>
-                    <p><?= e(c('footer_phone1')) ?></p>
-                    <p><?= e(c('footer_phone2')) ?></p>
+                    <div class="contact-detail-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Phone</h4>
+                        <p><?= e(c('footer_phone1')) ?></p>
+                        <p><?= e(c('footer_phone2')) ?></p>
+                    </div>
                 </div>
                 <div class="contact-detail">
-                    <h4>Email</h4>
-                    <p><?= e(c('footer_email')) ?></p>
+                    <div class="contact-detail-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg>
+                    </div>
+                    <div>
+                        <h4>Email</h4>
+                        <p><?= e(c('footer_email')) ?></p>
+                    </div>
                 </div>
                 <div class="contact-detail">
-                    <h4>Address</h4>
-                    <p><?= e_nl(c('footer_address')) ?></p>
+                    <div class="contact-detail-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <div>
+                        <h4>Address</h4>
+                        <p><?= e_nl(c('footer_address')) ?></p>
+                    </div>
                 </div>
             </div>
 

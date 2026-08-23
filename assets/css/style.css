@@ -760,7 +760,15 @@ ul { list-style: none; }
 }
 .contact-heading { font-family: var(--serif); font-size: 36px; font-weight: 600; color: var(--ink); margin-bottom: 20px; }
 .contact-info p { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
-.contact-detail { margin-top: 24px; }
+.contact-detail { display: flex; gap: 16px; align-items: flex-start; margin-top: 26px; }
+.contact-detail-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: rgba(201,154,91,.12);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 44px;
+}
+.contact-detail-icon svg { width: 19px; height: 19px; }
 .contact-detail h4 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
 .contact-detail p { color: var(--text); margin-bottom: 2px; }
 
