@@ -146,8 +146,22 @@ Google Fonts.
 
 ---
 
-## 8. Phase 1 scope
+## 8. Gemstone Catalogue
 
-This delivery covers the **Home Page** and the **Admin backend to manage it**.
-Other pages, the gemstone catalogue, product management, customer accounts,
-e-commerce, and payment gateways are intended for future phases.
+Beyond the Home Page, About Us, and Contact Us pages, the site includes a full
+gemstone catalogue:
+
+- **`gemstones.php`** — product grid with a multi-select filter sidebar
+  (Category, Weight, Shape, Treatment, Origin, Availability).
+- **`gemstone.php?slug=...`** — individual product page with an image
+  gallery, specs, description, and certificate info.
+- **`cart.php`** — an "Add to Enquiry Cart" flow (localStorage-based, no
+  accounts or payment). Customers review their selected gemstones, submit
+  their contact details, and the system emails both the admin and the
+  customer automatically.
+- **Admin → Gemstones** — manage Products (with multiple images per
+  gemstone), Categories, Shapes, Treatments, Origins, and incoming
+  Enquiries.
+
+There is still no payment gateway or customer account system — enquiries are
+followed up manually by the team.

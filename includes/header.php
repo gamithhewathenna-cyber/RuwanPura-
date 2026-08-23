@@ -36,7 +36,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <nav class="nav">
             <div class="nav-left nav-menu">
                 <a href="<?= BASE_URL ?>index.php" class="nav-link<?= $currentPage === 'index.php' ? ' active' : '' ?>"><?= e(c('nav_home')) ?></a>
-                <a href="<?= BASE_URL ?>index.php#collection" class="nav-link"><?= e(c('nav_gemstones')) ?> <span class="caret">▼</span></a>
+                <a href="<?= BASE_URL ?>gemstones.php" class="nav-link<?= in_array($currentPage, ['gemstones.php', 'gemstone.php'], true) ? ' active' : '' ?>"><?= e(c('nav_gemstones')) ?></a>
                 <a href="<?= BASE_URL ?>about.php" class="nav-link<?= $currentPage === 'about.php' ? ' active' : '' ?>"><?= e(c('nav_about')) ?></a>
             </div>
 
@@ -57,6 +57,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     </a>
                     <a href="<?= BASE_URL ?>contact.php" aria-label="Location">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </a>
+                    <a href="<?= BASE_URL ?>cart.php" aria-label="Enquiry Cart" class="cart-icon-link">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+                        <span id="cartCount" class="cart-badge" style="display:none;">0</span>
                     </a>
                 </div>
                 <button class="menu-toggle" aria-label="Menu">

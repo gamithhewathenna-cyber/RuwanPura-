@@ -169,6 +169,106 @@ CREATE TABLE IF NOT EXISTS `contact_messages` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ---------------------------------------------------------------------
+-- Gemstone catalogue: taxonomy tables (Category, Shape, Treatment, Origin)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `gem_categories` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL,
+  `slug` VARCHAR(140) NOT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `gem_shapes` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `gem_treatments` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `gem_origins` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
+-- Table: products  (the gemstone catalogue)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(190) NOT NULL,
+  `slug` VARCHAR(220) NOT NULL,
+  `sku` VARCHAR(60) DEFAULT NULL,
+  `category_id` INT(11) DEFAULT NULL,
+  `shape_id` INT(11) DEFAULT NULL,
+  `treatment_id` INT(11) DEFAULT NULL,
+  `origin_id` INT(11) DEFAULT NULL,
+  `weight` DECIMAL(8,2) DEFAULT NULL COMMENT 'Carat weight',
+  `description` TEXT DEFAULT NULL,
+  `certificate_info` TEXT DEFAULT NULL,
+  `status` ENUM('available','reserved','sold','unavailable') NOT NULL DEFAULT 'available',
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Shown on the website',
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `category_id` (`category_id`),
+  KEY `shape_id` (`shape_id`),
+  KEY `treatment_id` (`treatment_id`),
+  KEY `origin_id` (`origin_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `product_images` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `product_id` INT(11) NOT NULL,
+  `image` VARCHAR(255) NOT NULL,
+  `is_primary` TINYINT(1) NOT NULL DEFAULT 0,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
+-- Gemstone enquiries (cart submissions - no online payment)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `enquiries` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `full_name` VARCHAR(150) DEFAULT NULL,
+  `email` VARCHAR(190) DEFAULT NULL,
+  `phone` VARCHAR(60) DEFAULT NULL,
+  `country` VARCHAR(100) DEFAULT NULL,
+  `message` TEXT DEFAULT NULL,
+  `is_read` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `enquiry_items` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `enquiry_id` INT(11) NOT NULL,
+  `product_id` INT(11) DEFAULT NULL,
+  `product_name` VARCHAR(190) DEFAULT NULL,
+  `weight` DECIMAL(8,2) DEFAULT NULL,
+  `shape` VARCHAR(120) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `enquiry_id` (`enquiry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- =====================================================================
 -- DEFAULT DATA
 -- =====================================================================
@@ -360,3 +460,21 @@ INSERT INTO `memberships` (`name`,`description`,`sort_order`) VALUES
 ('Jewelers of America (JA)','Membership in JA connects us with a national community committed to shared ethical standards in the jewelry industry.',3),
 ('Jewelers Board of Trade (JBT)','This connection integrates us into the premier credit information and business intelligence network for the jewelry trade.',4),
 ('American Chamber of Commerce in Sri Lanka','As a close trading partner, this membership highlights our role in fostering strong commercial ties between Sri Lanka and the American continents.',5);
+
+-- Gemstone catalogue taxonomy defaults
+INSERT INTO `gem_categories` (`name`,`slug`,`sort_order`) VALUES
+('Blue Sapphire','blue-sapphire',1),
+('Padparadscha Sapphire','padparadscha-sapphire',2),
+('Yellow & Orange Sapphire','yellow-orange-sapphire',3),
+('Alexandrite','alexandrite',4),
+('Ruby','ruby',5),
+('Spinel','spinel',6);
+
+INSERT INTO `gem_shapes` (`name`,`sort_order`) VALUES
+('Oval',1),('Cushion',2),('Round',3),('Pear',4),('Emerald Cut',5),('Cabochon',6);
+
+INSERT INTO `gem_treatments` (`name`,`sort_order`) VALUES
+('Unheated',1),('Heated',2),('Diffusion',3);
+
+INSERT INTO `gem_origins` (`name`,`sort_order`) VALUES
+('Sri Lanka',1),('Madagascar',2),('Mozambique',3),('Thailand',4);

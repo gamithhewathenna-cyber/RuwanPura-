@@ -178,6 +178,188 @@ function count_unread_messages()
     }
 }
 
+function count_unread_enquiries()
+{
+    try {
+        return (int) db()->query("SELECT COUNT(*) FROM enquiries WHERE is_read = 0")->fetchColumn();
+    } catch (PDOException $e) {
+        return 0; // table not migrated yet
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Gemstone catalogue                                                 */
+/* ------------------------------------------------------------------ */
+function get_categories($activeOnly = true)
+{
+    $sql = "SELECT * FROM gem_categories" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
+    return db()->query($sql)->fetchAll();
+}
+function get_shapes($activeOnly = true)
+{
+    $sql = "SELECT * FROM gem_shapes" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
+    return db()->query($sql)->fetchAll();
+}
+function get_treatments($activeOnly = true)
+{
+    $sql = "SELECT * FROM gem_treatments" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
+    return db()->query($sql)->fetchAll();
+}
+function get_origins($activeOnly = true)
+{
+    $sql = "SELECT * FROM gem_origins" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
+    return db()->query($sql)->fetchAll();
+}
+
+/* Lookup a name by id from a small reference table (cached per-request) */
+function lookup_name($table, $id)
+{
+    static $cache = [];
+    if (!$id) return '';
+    $allowed = ['gem_categories', 'gem_shapes', 'gem_treatments', 'gem_origins'];
+    if (!in_array($table, $allowed, true)) return '';
+    if (!isset($cache[$table])) {
+        $cache[$table] = [];
+        foreach (db()->query("SELECT id, name FROM `$table`")->fetchAll() as $r) {
+            $cache[$table][$r['id']] = $r['name'];
+        }
+    }
+    return $cache[$table][$id] ?? '';
+}
+
+/* Fixed carat-weight buckets used for catalogue filtering */
+function weight_ranges()
+{
+    return [
+        'u1'   => ['label' => 'Under 1 ct',    'min' => 0,  'max' => 1],
+        '1-3'  => ['label' => '1 – 3 ct',       'min' => 1,  'max' => 3],
+        '3-5'  => ['label' => '3 – 5 ct',       'min' => 3,  'max' => 5],
+        '5-10' => ['label' => '5 – 10 ct',      'min' => 5,  'max' => 10],
+        '10p'  => ['label' => '10 ct & above',  'min' => 10, 'max' => null],
+    ];
+}
+
+function product_status_labels()
+{
+    return [
+        'available'   => 'Available',
+        'reserved'    => 'Reserved',
+        'sold'        => 'Sold',
+        'unavailable' => 'Unavailable',
+    ];
+}
+
+/* Filtered + paginated product listing for the catalogue page */
+function get_products($filters = [], $page = 1, $perPage = 12)
+{
+    $where  = ['p.is_active = 1'];
+    $params = [];
+
+    foreach (['category' => 'category_id', 'shape' => 'shape_id', 'treatment' => 'treatment_id', 'origin' => 'origin_id'] as $key => $col) {
+        if (!empty($filters[$key]) && is_array($filters[$key])) {
+            $ids = array_filter(array_map('intval', $filters[$key]));
+            if ($ids) {
+                $in = implode(',', array_fill(0, count($ids), '?'));
+                $where[] = "p.$col IN ($in)";
+                foreach ($ids as $v) $params[] = $v;
+            }
+        }
+    }
+
+    if (!empty($filters['status']) && is_array($filters['status'])) {
+        $valid = array_keys(product_status_labels());
+        $statuses = array_values(array_intersect($filters['status'], $valid));
+        if ($statuses) {
+            $in = implode(',', array_fill(0, count($statuses), '?'));
+            $where[] = "p.status IN ($in)";
+            foreach ($statuses as $v) $params[] = $v;
+        }
+    }
+
+    if (!empty($filters['weight']) && is_array($filters['weight'])) {
+        $ranges = weight_ranges();
+        $clauses = [];
+        foreach ($filters['weight'] as $key) {
+            if (!isset($ranges[$key])) continue;
+            $r = $ranges[$key];
+            $clauses[] = $r['max'] === null
+                ? '(p.weight >= ' . (float)$r['min'] . ')'
+                : '(p.weight >= ' . (float)$r['min'] . ' AND p.weight < ' . (float)$r['max'] . ')';
+        }
+        if ($clauses) $where[] = '(' . implode(' OR ', $clauses) . ')';
+    }
+
+    $whereSql = implode(' AND ', $where);
+
+    $countStmt = db()->prepare("SELECT COUNT(*) FROM products p WHERE $whereSql");
+    $countStmt->execute($params);
+    $total = (int) $countStmt->fetchColumn();
+
+    $perPage = max(1, (int) $perPage);
+    $page    = max(1, (int) $page);
+    $offset  = ($page - 1) * $perPage;
+
+    $sql = "SELECT p.*,
+                   (SELECT image FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order, id LIMIT 1) AS thumb
+            FROM products p
+            WHERE $whereSql
+            ORDER BY p.sort_order, p.id DESC
+            LIMIT $perPage OFFSET $offset";
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+
+    return [
+        'items' => $stmt->fetchAll(),
+        'total' => $total,
+        'pages' => (int) ceil($total / $perPage),
+        'page'  => $page,
+    ];
+}
+
+function get_product_by_slug($slug)
+{
+    $stmt = db()->prepare("SELECT * FROM products WHERE slug = ? AND is_active = 1");
+    $stmt->execute([$slug]);
+    return $stmt->fetch();
+}
+
+function get_product_images($productId)
+{
+    $stmt = db()->prepare("SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, sort_order, id");
+    $stmt->execute([(int) $productId]);
+    return $stmt->fetchAll();
+}
+
+/* URL-safe slug from a string */
+function slugify($text)
+{
+    $text = preg_replace('~[^\pL\d]+~u', '-', (string) $text);
+    $text = trim($text, '-');
+    $text = strtolower($text);
+    $text = preg_replace('~[^-a-z0-9]+~', '', $text);
+    return $text !== '' ? $text : 'item';
+}
+
+/* Unique slug for a table's `slug` column, excluding a given id (for edits) */
+function unique_slug($table, $name, $excludeId = 0)
+{
+    $allowed = ['products', 'gem_categories'];
+    if (!in_array($table, $allowed, true)) {
+        throw new InvalidArgumentException('Invalid table for unique_slug()');
+    }
+    $base = slugify($name);
+    $slug = $base;
+    $i = 2;
+    while (true) {
+        $stmt = db()->prepare("SELECT COUNT(*) FROM `$table` WHERE slug = ? AND id <> ?");
+        $stmt->execute([$slug, (int) $excludeId]);
+        if ((int) $stmt->fetchColumn() === 0) break;
+        $slug = $base . '-' . $i;
+        $i++;
+    }
+    return $slug;
+}
+
 /* Image URL for a repeatable row image column */
 function row_img($file, $placeholder = '')
 {

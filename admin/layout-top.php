@@ -40,7 +40,28 @@ $contactPageSections = [
 ];
 $onContactPage = array_key_exists($current, $contactPageSections);
 
-$unreadMessages = count_unread_messages();
+$gemPageSections = [
+    ['file' => 'gemstones-list.php',                     'label' => 'Products'],
+    ['file' => 'gem-taxonomy.php', 'type' => 'category',  'label' => 'Categories'],
+    ['file' => 'gem-taxonomy.php', 'type' => 'shape',     'label' => 'Shapes'],
+    ['file' => 'gem-taxonomy.php', 'type' => 'treatment', 'label' => 'Treatments'],
+    ['file' => 'gem-taxonomy.php', 'type' => 'origin',    'label' => 'Origins'],
+    ['file' => 'enquiries.php',                           'label' => 'Enquiries'],
+];
+$onGemPage = in_array($current, ['gemstones-list.php', 'gemstones-edit.php', 'gem-taxonomy.php', 'enquiries.php'], true);
+
+function gem_tab_active($section) {
+    $cur = basename($_SERVER['PHP_SELF']);
+    if ($section['file'] === 'gemstones-list.php' && $cur === 'gemstones-edit.php') return true;
+    if ($cur !== $section['file']) return false;
+    if (isset($section['type'])) {
+        return ($_GET['type'] ?? 'category') === $section['type'];
+    }
+    return true;
+}
+
+$unreadMessages  = count_unread_messages();
+$unreadEnquiries = count_unread_enquiries();
 
 // $page_title should be set before including
 $page_title = $page_title ?? 'Dashboard';
@@ -71,6 +92,14 @@ $page_title = $page_title ?? 'Dashboard';
             <a href="<?= BASE_URL ?>admin/section-header.php" class="side-link <?= $onHomePage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
                 Home Page
+            </a>
+
+            <a href="<?= BASE_URL ?>admin/gemstones-list.php" class="side-link <?= $onGemPage ? 'active' : '' ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 3 8 9l4 12 4-12-4-6"/></svg>
+                Gemstones
+                <?php if ($unreadEnquiries > 0): ?>
+                    <span class="badge on" style="margin-left:auto;"><?= (int)$unreadEnquiries ?></span>
+                <?php endif; ?>
             </a>
 
             <a href="<?= BASE_URL ?>admin/section-about-hero.php" class="side-link <?= $onAboutPage ? 'active' : '' ?>">
@@ -153,6 +182,21 @@ $page_title = $page_title ?? 'Dashboard';
                 <div class="home-tabs">
                     <?php foreach ($contactPageSections as $file => $label): ?>
                         <a href="<?= BASE_URL ?>admin/<?= $file ?>" class="home-tab <?= nav_active($file) ?>"><?= e($label) ?></a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($onGemPage): ?>
+                <div class="home-tabs">
+                    <?php foreach ($gemPageSections as $section):
+                        $href = BASE_URL . 'admin/' . $section['file'] . (isset($section['type']) ? '?type=' . urlencode($section['type']) : '');
+                    ?>
+                        <a href="<?= $href ?>" class="home-tab <?= gem_tab_active($section) ? 'active' : '' ?>">
+                            <?= e($section['label']) ?>
+                            <?php if ($section['file'] === 'enquiries.php' && $unreadEnquiries > 0): ?>
+                                <span class="badge on" style="margin-left:6px;"><?= (int)$unreadEnquiries ?></span>
+                            <?php endif; ?>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
