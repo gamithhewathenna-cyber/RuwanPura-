@@ -28,10 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
         function next() { idx = (idx + 1) % slides.length; show(idx); }
         function prev() { idx = (idx - 1 + slides.length) % slides.length; show(idx); }
         show(0);
-        var np = document.querySelector('.hero-arrow.next');
-        var pp = document.querySelector('.hero-arrow.prev');
-        if (np) np.addEventListener('click', next);
-        if (pp) pp.addEventListener('click', prev);
+        document.querySelectorAll('.hero-arrow.next').forEach(function (b) { b.addEventListener('click', next); });
+        document.querySelectorAll('.hero-arrow.prev').forEach(function (b) { b.addEventListener('click', prev); });
         if (slides.length > 1) setInterval(next, 6000);
     })();
 

@@ -50,6 +50,8 @@ $testimonials = get_testimonials();
 
 <!-- ================= HERO ================= -->
 <section class="hero">
+    <button class="hero-arrow hero-arrow-outer prev" aria-label="Previous">‹</button>
+    <button class="hero-arrow hero-arrow-outer next" aria-label="Next">›</button>
     <div class="container">
         <div class="hero-grid">
             <div class="hero-text">
@@ -71,7 +73,7 @@ $testimonials = get_testimonials();
             </div>
 
             <div class="hero-slider">
-                <button class="hero-arrow prev" aria-label="Previous">‹</button>
+                <button class="hero-arrow hero-arrow-inner prev" aria-label="Previous">‹</button>
                 <div class="hero-slides">
                     <?php if ($heroSlides): foreach ($heroSlides as $i => $s): ?>
                         <div class="hero-slide<?= $i === 0 ? ' active' : '' ?>">
@@ -87,7 +89,7 @@ $testimonials = get_testimonials();
                         </div>
                     <?php endif; ?>
                 </div>
-                <button class="hero-arrow next" aria-label="Next">›</button>
+                <button class="hero-arrow hero-arrow-inner next" aria-label="Next">›</button>
             </div>
         </div>
     </div>
