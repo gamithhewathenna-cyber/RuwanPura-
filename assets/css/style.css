@@ -272,15 +272,17 @@ ul { list-style: none; }
 }
 .gem-card { display: block; text-align: center; }
 .gem-thumb {
-    height: 210px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 26px;
+    aspect-ratio: 4/5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f6f6f6;
+    margin-bottom: 16px;
 }
-.gem-thumb img { max-height: 190px; width: auto; object-fit: contain; filter: drop-shadow(0 22px 26px rgba(0,0,0,.18)); transition: transform .3s; }
-.gem-card:hover .gem-thumb img { transform: translateY(-6px) scale(1.03); }
+.gem-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.gem-card:hover .gem-thumb img { transform: scale(1.03); }
 .gem-name {
     font-family: var(--serif);
-    font-size: 24px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--ink);
 }
