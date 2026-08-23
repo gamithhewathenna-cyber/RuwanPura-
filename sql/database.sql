@@ -116,16 +116,16 @@ CREATE TABLE IF NOT EXISTS `testimonials` (
 -- DEFAULT DATA
 -- =====================================================================
 
--- Default admin  (email: admin@ruwanpuragems.com  password: Admin@123)
+-- Default admin  (email: gamithhewathenna@gmail.com  password: Admin@123)
 INSERT INTO `admins` (`name`,`email`,`password_hash`) VALUES
-('Administrator','admin@ruwanpuragems.com','$2y$10$8mjLQS8QYzL5xBRq83g6D.KTG15zLZHuy8WdXT9BtGSOMQXfiEVA6');
+('Administrator','gamithhewathenna@gmail.com','$2y$10$8mjLQS8QYzL5xBRq83g6D.KTG15zLZHuy8WdXT9BtGSOMQXfiEVA6');
 
 -- Settings
 INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('site_logo',''),
 ('theme_primary','#c99a5b'),
 ('theme_dark','#0d0d0d'),
-('admin_email','admin@ruwanpuragems.com'),
+('admin_email','gamithhewathenna@gmail.com'),
 ('site_name','Ruwanpura Gems'),
 ('maintenance_mode','0'),
 ('maintenance_message','We\'re currently performing scheduled maintenance. Please check back soon.');

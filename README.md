@@ -78,7 +78,7 @@ admin can save uploaded images.
 | Field    | Value                          |
 |----------|--------------------------------|
 | URL      | `/admin/`                      |
-| Email    | `admin@ruwanpuragems.com`      |
+| Email    | `gamithhewathenna@gmail.com`   |
 | Password | `Admin@123`                    |
 
 **⚠️ Change the password immediately** after your first login:
