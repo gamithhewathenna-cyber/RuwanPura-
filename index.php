@@ -107,6 +107,10 @@ $testimonials = get_testimonials();
         <?php else: ?>
             <p style="color:var(--muted);text-align:center;">Gemstones will appear here once added to the catalogue.</p>
         <?php endif; ?>
+
+        <div class="collection-btn-wrap">
+            <a href="<?= BASE_URL ?>gemstones.php" class="btn-dark"><?= e(c('collection_btn_text', 'View Gems Collection')) ?></a>
+        </div>
     </div>
 </section>
 

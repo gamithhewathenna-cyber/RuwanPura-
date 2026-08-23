@@ -312,6 +312,7 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 -- Collection
 ('collection_eyebrow','OUR COLLECTION','collection','Collection Eyebrow','text',1),
 ('collection_title','Explore Our Gemstones','collection','Collection Title','text',2),
+('collection_btn_text','View Gems Collection','collection','Button Text','text',3),
 -- Factory
 ('factory_eyebrow','PRODUCTION','factory','Factory Eyebrow','text',1),
 ('factory_title','Factory & Laboratories','factory','Factory Title','textarea',2),
