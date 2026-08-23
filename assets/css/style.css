@@ -914,6 +914,7 @@ ul { list-style: none; }
 .add-to-cart-btn:disabled { background: #ccc; cursor: not-allowed; }
 
 .related-products { padding: 40px 0 90px; border-top: 1px solid var(--line); }
+.related-products .product-grid { grid-template-columns: repeat(4, 1fr); }
 .related-title { font-family: var(--serif); font-size: 30px; font-weight: 600; color: var(--ink); margin-bottom: 28px; }
 
 /* --- Cart / enquiry page --- */
@@ -1062,7 +1063,7 @@ ul { list-style: none; }
 
     .catalogue-layout { grid-template-columns: 1fr; gap: 30px; }
     .catalogue-filters { position: static; }
-    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .product-grid, .related-products .product-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
     .product-detail-grid { grid-template-columns: 1fr; gap: 34px; }
     .cart-wrap { grid-template-columns: 1fr; gap: 34px; }
 }
@@ -1087,7 +1088,7 @@ ul { list-style: none; }
     .contact-heading { font-size: 28px; }
 
     .catalogue-hero-title { font-size: 32px; }
-    .product-grid { grid-template-columns: 1fr; }
+    .product-grid, .related-products .product-grid { grid-template-columns: 1fr; }
     .product-title { font-size: 30px; }
     .product-specs { grid-template-columns: 1fr 1fr; }
     .cart-page-title { font-size: 30px; }
