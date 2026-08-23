@@ -9,6 +9,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e(setting('site_name', 'Ruwanpura Gems')) ?> — <?= e(c('hero_title')) ?></title>
     <meta name="description" content="<?= e(c('hero_desc')) ?>">
+    <?php if (setting('noindex_site') === '1'): ?>
+        <meta name="robots" content="noindex, nofollow">
+    <?php endif; ?>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

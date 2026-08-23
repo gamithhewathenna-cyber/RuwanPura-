@@ -286,7 +286,8 @@ INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('admin_email','gamithhewathenna@gmail.com'),
 ('site_name','Ruwanpura Gems'),
 ('maintenance_mode','0'),
-('maintenance_message','We\'re currently performing scheduled maintenance. Please check back soon.');
+('maintenance_message','We\'re currently performing scheduled maintenance. Please check back soon.'),
+('noindex_site','1');
 
 -- Content blocks -------------------------------------------------------
 INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_label`,`block_type`,`sort_order`) VALUES

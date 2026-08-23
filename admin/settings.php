@@ -37,6 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         update_setting('maintenance_mode', isset($_POST['maintenance_mode']) ? '1' : '0');
         update_setting('maintenance_message', trim($_POST['maintenance_message'] ?? ''));
 
+        // Search engine indexing
+        update_setting('noindex_site', isset($_POST['noindex_site']) ? '1' : '0');
+
         set_flash('success', 'Settings saved successfully.');
     }
     header('Location: ' . $_SERVER['PHP_SELF']);
@@ -144,6 +147,19 @@ require_once __DIR__ . '/layout-top.php';
         <div class="form-group">
             <label>Message shown to visitors</label>
             <textarea name="maintenance_message" class="form-control" rows="3"><?= e(setting('maintenance_message', "We're currently performing scheduled maintenance. Please check back soon.")) ?></textarea>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Search Engine Visibility</h2>
+        <p class="card-sub">Control whether Google and other search engines are allowed to index this website.</p>
+
+        <div class="form-group">
+            <label class="switch-label">
+                <input type="checkbox" name="noindex_site" value="1" <?= setting('noindex_site') === '1' ? 'checked' : '' ?>>
+                Hide this website from search engines (noindex)
+            </label>
+            <p class="hint" style="margin-top:8px;">Turn this <strong>off</strong> once the site is ready to go live and you want it to appear in Google search results.</p>
         </div>
     </div>
 
