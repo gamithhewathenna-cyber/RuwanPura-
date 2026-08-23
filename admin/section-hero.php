@@ -4,18 +4,12 @@ require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
 
-$section_group = 'hero';
-
 /* ---- Handle actions ---- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (verify_csrf()) {
-        $action = $_POST['action'] ?? 'save_content';
+        $action = $_POST['action'] ?? '';
 
-        if ($action === 'save_content') {
-            save_content_group();
-            set_flash('success', 'Hero content saved.');
-        }
-        elseif ($action === 'add_slide') {
+        if ($action === 'add_slide') {
             $img = handle_upload('slide_image', '');
             $stmt = db()->prepare("INSERT INTO hero_slides (image, eyebrow, title, description, btn_text, btn_link, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)");
             $maxOrder = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM hero_slides")->fetchColumn();
@@ -63,32 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$blocks = content_group($section_group);
 $slides = db()->query("SELECT * FROM hero_slides ORDER BY sort_order, id")->fetchAll();
 
 require_once __DIR__ . '/layout-top.php';
 ?>
-
-<!-- Hero default text content -->
-<form method="post" enctype="multipart/form-data">
-    <?= csrf_field() ?>
-    <input type="hidden" name="action" value="save_content">
-    <div class="card">
-        <div class="card-head-row">
-            <div><h2>Hero Text &amp; Button (default)</h2>
-            <p class="card-sub" style="margin:4px 0 0;">Used for any slide below that doesn't have its own custom text.</p></div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-        <?php foreach ($blocks as $block) render_content_field($block); ?>
-    </div>
-</form>
 
 <!-- Slides -->
 <div class="card">
     <div class="card-head-row">
         <h2>Slides</h2>
     </div>
-    <p class="card-sub">Each slide has its own image and text — when the slider changes, the image and text change together. Leave a text field blank to use the default text above. Click a slide to edit it.</p>
+    <p class="card-sub">Each slide has its own image and text — when the slider changes, the image and text change together. Click a slide to edit it.</p>
 
     <?php foreach ($slides as $i => $s):
         $slideLabel = $s['title'] ?: $s['eyebrow'] ?: ('Slide ' . ($i + 1));

@@ -11,7 +11,7 @@ function nav_active($file) {
 
 $homePageSections = [
     'section-header.php'      => 'Header & Navigation',
-    'section-hero.php'        => 'Hero Text & Button',
+    'section-hero.php'        => 'Hero Slider',
     'section-journey.php'     => 'Journey Section',
     'section-collection.php'  => 'Gemstones Collection',
     'section-factory.php'     => 'Factory & Laboratories',

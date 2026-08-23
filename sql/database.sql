@@ -200,7 +200,10 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('footer_copyright','Ruwanpura Gems @2026, All Right reserved by Creativelements','footer','Footer Copyright','text',10);
 
 -- Hero slides
-INSERT INTO `hero_slides` (`image`,`sort_order`) VALUES ('',1),('',2),('',3);
+INSERT INTO `hero_slides` (`image`,`eyebrow`,`title`,`description`,`btn_text`,`btn_link`,`sort_order`) VALUES
+('','SRI LANKA · EST. 1985','World\'s Most Extraordinary Gemstones','Discover the finest sapphires on Earth — gems celebrated for their breathtaking colors, impressive sizes, and timeless allure.','Discover More','#collection',1),
+('',NULL,NULL,NULL,NULL,NULL,2),
+('',NULL,NULL,NULL,NULL,NULL,3);
 
 -- Gemstones
 INSERT INTO `gemstones` (`name`,`sort_order`) VALUES
