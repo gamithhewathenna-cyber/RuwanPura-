@@ -154,6 +154,21 @@ CREATE TABLE IF NOT EXISTS `memberships` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ---------------------------------------------------------------------
+-- Table: contact_messages  (Contact Us page - submitted enquiries)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `contact_messages` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `full_name` VARCHAR(150) DEFAULT NULL,
+  `phone` VARCHAR(60) DEFAULT NULL,
+  `email` VARCHAR(190) DEFAULT NULL,
+  `company` VARCHAR(150) DEFAULT NULL,
+  `message` TEXT DEFAULT NULL,
+  `is_read` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- =====================================================================
 -- DEFAULT DATA
 -- =====================================================================
@@ -278,7 +293,17 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('membership_eyebrow','MEMBERSHIPS','membership','Eyebrow','text',1),
 ('membership_title','Professional standing, worldwide','membership','Title','text',2),
 ('membership_p1','Ruwanpura Gems is defined by a commitment to the highest tiers of professional integrity and ethical trade. Our global standing is reinforced through active membership in the world\'s most respected jewelry and trade organizations.','membership','Paragraph 1','textarea',3),
-('membership_p2','By aligning with these prestigious institutions, Ruwanpura Gems ensures a complete "Mine-to-Market" chain of custody that is backed by global certification and recognized authority. Our clients—ranging from wholesale buyers to private collectors—can acquire every stone with absolute confidence in its quality and provenance.','membership','Paragraph 2','textarea',4);
+('membership_p2','By aligning with these prestigious institutions, Ruwanpura Gems ensures a complete "Mine-to-Market" chain of custody that is backed by global certification and recognized authority. Our clients—ranging from wholesale buyers to private collectors—can acquire every stone with absolute confidence in its quality and provenance.','membership','Paragraph 2','textarea',4),
+-- Contact: Hero band
+('contact_hero_eyebrow','EST. 1985','contact_hero','Hero Eyebrow','text',1),
+('contact_hero_title','Contact Us','contact_hero','Hero Title','text',2),
+('contact_hero_quote','Lorem ipsum dolor sit amet consectetur. Id adipiscing lacinia pretium duis lorem justo.','contact_hero','Hero Quote','textarea',3),
+-- Contact: Info + form
+('contact_heading','Let\'s Find Your Perfect Gem','contact','Heading','text',1),
+('contact_p1','Whether you\'re searching for a rare coloured gemstone, sourcing stones for a jewellery collection, or simply want expert advice, we\'d love to hear from you.','contact','Paragraph 1','textarea',2),
+('contact_p2','Have a gemstone in mind? Tell us what you\'re looking for and our team will be happy to assist you.','contact','Paragraph 2','textarea',3),
+('contact_form_intro','Comments, questions, or looking for something special? Drop us a note, and our gemstone experts will be happy to assist you.','contact','Form Intro Text','textarea',4),
+('contact_map_embed','','contact','Map Embed URL (Google Maps "Embed a map" src)','link',5);
 
 -- Hero slides
 INSERT INTO `hero_slides` (`image`,`eyebrow`,`title`,`description`,`btn_text`,`btn_link`,`sort_order`) VALUES

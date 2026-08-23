@@ -34,6 +34,14 @@ $aboutPageSections = [
 ];
 $onAboutPage = array_key_exists($current, $aboutPageSections);
 
+$contactPageSections = [
+    'section-contact-hero.php' => 'Hero Band',
+    'section-contact.php'      => 'Page Content',
+];
+$onContactPage = array_key_exists($current, $contactPageSections);
+
+$unreadMessages = count_unread_messages();
+
 // $page_title should be set before including
 $page_title = $page_title ?? 'Dashboard';
 ?>
@@ -70,7 +78,19 @@ $page_title = $page_title ?? 'Dashboard';
                 About Us
             </a>
 
+            <a href="<?= BASE_URL ?>admin/section-contact-hero.php" class="side-link <?= $onContactPage ? 'active' : '' ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>
+                Contact Us
+            </a>
+
             <div class="nav-group-label">System</div>
+            <a href="<?= BASE_URL ?>admin/messages.php" class="side-link <?= nav_active('messages.php') ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg>
+                Messages
+                <?php if ($unreadMessages > 0): ?>
+                    <span class="badge on" style="margin-left:auto;"><?= (int)$unreadMessages ?></span>
+                <?php endif; ?>
+            </a>
             <a href="<?= BASE_URL ?>admin/settings.php" class="side-link <?= nav_active('settings.php') ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
                 Website Settings
@@ -124,6 +144,14 @@ $page_title = $page_title ?? 'Dashboard';
             <?php if ($onAboutPage): ?>
                 <div class="home-tabs">
                     <?php foreach ($aboutPageSections as $file => $label): ?>
+                        <a href="<?= BASE_URL ?>admin/<?= $file ?>" class="home-tab <?= nav_active($file) ?>"><?= e($label) ?></a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($onContactPage): ?>
+                <div class="home-tabs">
+                    <?php foreach ($contactPageSections as $file => $label): ?>
                         <a href="<?= BASE_URL ?>admin/<?= $file ?>" class="home-tab <?= nav_active($file) ?>"><?= e($label) ?></a>
                     <?php endforeach; ?>
                 </div>

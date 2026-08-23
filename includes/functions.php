@@ -166,6 +166,18 @@ function get_memberships()
     return db()->query("SELECT * FROM memberships WHERE is_active=1 ORDER BY sort_order, id")->fetchAll();
 }
 
+/* ------------------------------------------------------------------ */
+/*  Contact messages                                                   */
+/* ------------------------------------------------------------------ */
+function count_unread_messages()
+{
+    try {
+        return (int) db()->query("SELECT COUNT(*) FROM contact_messages WHERE is_read = 0")->fetchColumn();
+    } catch (PDOException $e) {
+        return 0; // table not migrated yet
+    }
+}
+
 /* Image URL for a repeatable row image column */
 function row_img($file, $placeholder = '')
 {
