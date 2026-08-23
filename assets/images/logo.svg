@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8c489"/>
+      <stop offset="0.5" stop-color="#c99a5b"/>
+      <stop offset="1" stop-color="#9c6f33"/>
+    </linearGradient>
+  </defs>
+  <!-- diamonds on crown tips -->
+  <g fill="#dfe6ee" stroke="#b9c4d0" stroke-width="0.5">
+    <circle cx="55" cy="30" r="6"/><circle cx="75" cy="24" r="6"/>
+    <circle cx="100" cy="21" r="7"/><circle cx="125" cy="24" r="6"/>
+    <circle cx="145" cy="30" r="6"/>
+  </g>
+  <!-- crown body -->
+  <path d="M45 92 L40 45 L62 68 L80 38 L100 66 L120 38 L138 68 L160 45 L155 92 Z"
+        fill="url(#gold)" stroke="#8a5f2b" stroke-width="1.5"/>
+  <!-- crown base band -->
+  <rect x="45" y="92" width="110" height="16" rx="3" fill="url(#gold)" stroke="#8a5f2b" stroke-width="1.5"/>
+  <!-- center R -->
+  <rect x="88" y="90" width="24" height="20" rx="2" fill="#1a3a6b"/>
+  <text x="100" y="105" font-family="Georgia,serif" font-size="16" font-weight="bold" fill="#e8c489" text-anchor="middle">R</text>
+  <!-- brand text -->
+  <text x="100" y="130" font-family="Georgia,serif" font-size="15" font-weight="600" fill="#9c6f33" text-anchor="middle" letter-spacing="1">Ruwanpura Gems</text>
+</svg>
