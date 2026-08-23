@@ -111,10 +111,10 @@ ul { list-style: none; }
 .nav-left, .nav-right {
     display: flex;
     align-items: center;
-    gap: 34px;
+    gap: 56px;
 }
-.nav-left { flex: 1; justify-content: flex-end; padding-right: 20px; }
-.nav-right { flex: 1; padding-left: 20px; }
+.nav-left { flex: 1; justify-content: flex-end; padding-right: 40px; }
+.nav-right { flex: 1; padding-left: 40px; }
 .nav-logo { flex: 0 0 auto; }
 .nav-logo img { height: 80px; width: auto; }
 
