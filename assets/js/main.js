@@ -33,44 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (slides.length > 1) setInterval(next, 6000);
     })();
 
-    /* ---- Collection carousel (pages through 5 gemstones at a time, auto-advances) ---- */
-    (function () {
-        var track = document.querySelector('.collection-track');
-        if (!track) return;
-        var cards = Array.prototype.slice.call(track.children);
-        if (cards.length === 0) return;
-        var perView = 5;
-        var start = 0;
-        var next = document.querySelector('.collection-arrow.next');
-        var prev = document.querySelector('.collection-arrow.prev');
-        var timer;
-
-        function render() {
-            cards.forEach(function (c, i) {
-                var visible = i >= start && i < start + perView;
-                c.style.display = visible ? '' : 'none';
-            });
-            if (prev) prev.style.visibility = start > 0 ? 'visible' : 'hidden';
-        }
-        function goNext() {
-            start = (start + perView < cards.length) ? start + perView : 0;
-            render();
-        }
-        function goPrev() {
-            start = Math.max(start - perView, 0);
-            render();
-        }
-        function restartAuto() {
-            clearInterval(timer);
-            timer = setInterval(goNext, 5000);
-        }
-
-        if (next) next.addEventListener('click', function () { goNext(); restartAuto(); });
-        if (prev) prev.addEventListener('click', function () { goPrev(); restartAuto(); });
-
-        render();
-        restartAuto();
-    })();
+    /* Collection ("Explore Our Gemstones") is a pure CSS infinite marquee now — see .collection-track in style.css */
 
     /* ---- Testimonials slider (auto-advances, loops back to the start) ---- */
     (function () {

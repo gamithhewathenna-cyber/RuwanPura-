@@ -86,26 +86,27 @@ $testimonials = get_testimonials();
             <div class="eyebrow"><?= e(c('collection_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('collection_title')) ?></h2>
         </div>
-        <div class="collection-slider">
-            <button class="collection-arrow prev" aria-label="Previous">‹</button>
-            <div class="collection-track">
-                <?php if ($gemstones): foreach ($gemstones as $g): ?>
-                    <a href="<?= BASE_URL ?>gemstone.php?slug=<?= urlencode($g['slug']) ?>" class="gem-card">
-                        <div class="gem-thumb">
-                            <?php if ($g['thumb']): ?>
-                                <img src="<?= UPLOAD_URL . e($g['thumb']) ?>" alt="<?= e($g['name']) ?>">
-                            <?php else: ?>
-                                <img src="<?= BASE_URL ?>assets/images/gem-placeholder.png" alt="<?= e($g['name']) ?>">
-                            <?php endif; ?>
-                        </div>
-                        <div class="gem-name"><?= e($g['name']) ?></div>
-                    </a>
-                <?php endforeach; else: ?>
-                    <p style="color:var(--muted);grid-column:1/-1;text-align:center;">Gemstones will appear here once added to the catalogue.</p>
-                <?php endif; ?>
+        <?php if ($gemstones): ?>
+            <div class="collection-slider">
+                <div class="collection-track">
+                    <?php // Rendered twice back-to-back so the CSS animation can loop seamlessly ?>
+                    <?php foreach (array_merge($gemstones, $gemstones) as $g): ?>
+                        <a href="<?= BASE_URL ?>gemstone.php?slug=<?= urlencode($g['slug']) ?>" class="gem-card">
+                            <div class="gem-thumb">
+                                <?php if ($g['thumb']): ?>
+                                    <img src="<?= UPLOAD_URL . e($g['thumb']) ?>" alt="<?= e($g['name']) ?>">
+                                <?php else: ?>
+                                    <img src="<?= BASE_URL ?>assets/images/gem-placeholder.png" alt="<?= e($g['name']) ?>">
+                                <?php endif; ?>
+                            </div>
+                            <div class="gem-name"><?= e($g['name']) ?></div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
             </div>
-            <button class="collection-arrow next" aria-label="Next">›</button>
-        </div>
+        <?php else: ?>
+            <p style="color:var(--muted);text-align:center;">Gemstones will appear here once added to the catalogue.</p>
+        <?php endif; ?>
     </div>
 </section>
 
