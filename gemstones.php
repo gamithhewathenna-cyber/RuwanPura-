@@ -140,11 +140,24 @@ include __DIR__ . '/includes/header.php';
                         <div class="catalogue-pagination">
                             <?php
                                 $qs = $_GET;
-                                for ($pg = 1; $pg <= $result['pages']; $pg++):
-                                    $qs['page'] = $pg;
+                                $curPage = $result['page'];
                             ?>
-                                <a href="?<?= e(http_build_query($qs)) ?>" class="<?= $pg === $result['page'] ? 'active' : '' ?>"><?= $pg ?></a>
+
+                            <?php if ($curPage > 1): $qs['page'] = $curPage - 1; ?>
+                                <a href="?<?= e(http_build_query($qs)) ?>" class="page-nav">&laquo; Previous</a>
+                            <?php else: ?>
+                                <span class="page-nav disabled">&laquo; Previous</span>
+                            <?php endif; ?>
+
+                            <?php for ($pg = 1; $pg <= $result['pages']; $pg++): $qs['page'] = $pg; ?>
+                                <a href="?<?= e(http_build_query($qs)) ?>" class="<?= $pg === $curPage ? 'active' : '' ?>"><?= $pg ?></a>
                             <?php endfor; ?>
+
+                            <?php if ($curPage < $result['pages']): $qs['page'] = $curPage + 1; ?>
+                                <a href="?<?= e(http_build_query($qs)) ?>" class="page-nav">Next &raquo;</a>
+                            <?php else: ?>
+                                <span class="page-nav disabled">Next &raquo;</span>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 <?php else: ?>
