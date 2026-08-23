@@ -343,6 +343,44 @@ function get_product_images($productId)
     return $stmt->fetchAll();
 }
 
+/* "You May Also Like" — same-category gemstones first, topped up with other latest active products */
+function get_related_products($product, $limit = 4)
+{
+    $limit = max(1, (int) $limit);
+    $thumbSql = "(SELECT image FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order, id LIMIT 1) AS thumb";
+
+    try {
+        $items = [];
+
+        if (!empty($product['category_id'])) {
+            $stmt = db()->prepare("SELECT p.*, $thumbSql
+                    FROM products p
+                    WHERE p.is_active = 1 AND p.id <> ? AND p.category_id = ?
+                    ORDER BY p.created_at DESC, p.id DESC
+                    LIMIT $limit");
+            $stmt->execute([(int) $product['id'], (int) $product['category_id']]);
+            $items = $stmt->fetchAll();
+        }
+
+        if (count($items) < $limit) {
+            $need       = $limit - count($items);
+            $excludeIds = array_merge([(int) $product['id']], array_map('intval', array_column($items, 'id')));
+            $in         = implode(',', array_fill(0, count($excludeIds), '?'));
+            $stmt2 = db()->prepare("SELECT p.*, $thumbSql
+                    FROM products p
+                    WHERE p.is_active = 1 AND p.id NOT IN ($in)
+                    ORDER BY p.created_at DESC, p.id DESC
+                    LIMIT $need");
+            $stmt2->execute($excludeIds);
+            $items = array_merge($items, $stmt2->fetchAll());
+        }
+
+        return $items;
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
 /* URL-safe slug from a string */
 function slugify($text)
 {

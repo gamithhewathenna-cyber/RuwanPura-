@@ -880,7 +880,7 @@ ul { list-style: none; }
 .catalogue-pagination span.disabled { color: #ccc; border-color: #f0f0f0; cursor: default; }
 
 /* --- Product detail --- */
-.product-detail { padding: 50px 0 90px; }
+.product-detail { padding: 50px 0 60px; }
 .back-link { display: inline-block; font-size: 14px; color: var(--muted); margin-bottom: 30px; }
 .back-link:hover { color: var(--gold); }
 .product-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
@@ -912,6 +912,9 @@ ul { list-style: none; }
 .product-cert p { font-size: 14px; color: var(--muted); }
 .add-to-cart-btn { border: none; cursor: pointer; width: 100%; }
 .add-to-cart-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+.related-products { padding: 40px 0 90px; border-top: 1px solid var(--line); }
+.related-title { font-family: var(--serif); font-size: 30px; font-weight: 600; color: var(--ink); margin-bottom: 28px; }
 
 /* --- Cart / enquiry page --- */
 .cart-page { padding: 60px 0 90px; }

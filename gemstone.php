@@ -19,12 +19,13 @@ if (!$product) {
     exit;
 }
 
-$images        = get_product_images($product['id']);
-$statusLabels  = product_status_labels();
-$categoryName  = lookup_name('gem_categories', $product['category_id']);
-$shapeName     = lookup_name('gem_shapes', $product['shape_id']);
-$treatmentName = lookup_name('gem_treatments', $product['treatment_id']);
-$originName    = lookup_name('gem_origins', $product['origin_id']);
+$images          = get_product_images($product['id']);
+$statusLabels    = product_status_labels();
+$categoryName    = lookup_name('gem_categories', $product['category_id']);
+$shapeName       = lookup_name('gem_shapes', $product['shape_id']);
+$treatmentName   = lookup_name('gem_treatments', $product['treatment_id']);
+$originName      = lookup_name('gem_origins', $product['origin_id']);
+$relatedProducts = get_related_products($product, 4);
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -90,5 +91,40 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 </section>
+
+<?php if ($relatedProducts): ?>
+<!-- ================= YOU MAY ALSO LIKE ================= -->
+<section class="related-products">
+    <div class="container">
+        <h2 class="related-title">You May Also Like</h2>
+        <div class="product-grid">
+            <?php foreach ($relatedProducts as $rp): ?>
+                <a href="<?= BASE_URL ?>gemstone.php?slug=<?= urlencode($rp['slug']) ?>" class="product-card">
+                    <div class="product-card-img">
+                        <?php if ($rp['thumb']): ?>
+                            <img src="<?= UPLOAD_URL . e($rp['thumb']) ?>" alt="<?= e($rp['name']) ?>">
+                        <?php else: ?>
+                            <div class="product-card-noimg">No Image</div>
+                        <?php endif; ?>
+                        <span class="product-status-badge status-<?= e($rp['status']) ?>"><?= e($statusLabels[$rp['status']]) ?></span>
+                    </div>
+                    <div class="product-card-body">
+                        <h3><?= e($rp['name']) ?></h3>
+                        <p class="product-card-meta">
+                            <?php
+                                $relMeta = [];
+                                if ($rp['weight'] !== null) $relMeta[] = $rp['weight'] . ' ct';
+                                $relShape = lookup_name('gem_shapes', $rp['shape_id']);
+                                if ($relShape) $relMeta[] = $relShape;
+                                echo e(implode(' · ', $relMeta));
+                            ?>
+                        </p>
+                    </div>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
