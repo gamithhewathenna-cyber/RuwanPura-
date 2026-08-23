@@ -17,9 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         elseif ($action === 'add_slide') {
             $img = handle_upload('slide_image', '');
-            $stmt = db()->prepare("INSERT INTO hero_slides (image, sort_order, is_active) VALUES (?, ?, 1)");
+            $stmt = db()->prepare("INSERT INTO hero_slides (image, eyebrow, title, description, btn_text, btn_link, sort_order, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, 1)");
             $maxOrder = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM hero_slides")->fetchColumn();
-            $stmt->execute([$img, $maxOrder]);
+            $stmt->execute([
+                $img,
+                trim($_POST['eyebrow'] ?? ''),
+                trim($_POST['title'] ?? ''),
+                trim($_POST['description'] ?? ''),
+                trim($_POST['btn_text'] ?? ''),
+                trim($_POST['btn_link'] ?? ''),
+                $maxOrder,
+            ]);
             set_flash('success', 'Slide added.');
         }
         elseif ($action === 'update_slide') {
@@ -28,8 +36,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $row->execute([$id]);
             $old = $row->fetchColumn();
             $img = handle_upload('slide_image', $old);
-            $stmt = db()->prepare("UPDATE hero_slides SET image=?, is_active=? WHERE id=?");
-            $stmt->execute([$img, isset($_POST['is_active']) ? 1 : 0, $id]);
+            $stmt = db()->prepare("UPDATE hero_slides SET image=?, eyebrow=?, title=?, description=?, btn_text=?, btn_link=?, is_active=? WHERE id=?");
+            $stmt->execute([
+                $img,
+                trim($_POST['eyebrow'] ?? ''),
+                trim($_POST['title'] ?? ''),
+                trim($_POST['description'] ?? ''),
+                trim($_POST['btn_text'] ?? ''),
+                trim($_POST['btn_link'] ?? ''),
+                isset($_POST['is_active']) ? 1 : 0,
+                $id,
+            ]);
             set_flash('success', 'Slide updated.');
         }
         elseif ($action === 'delete_slide') {
@@ -52,14 +69,14 @@ $slides = db()->query("SELECT * FROM hero_slides ORDER BY sort_order, id")->fetc
 require_once __DIR__ . '/layout-top.php';
 ?>
 
-<!-- Hero text content -->
+<!-- Hero default text content -->
 <form method="post" enctype="multipart/form-data">
     <?= csrf_field() ?>
     <input type="hidden" name="action" value="save_content">
     <div class="card">
         <div class="card-head-row">
-            <div><h2>Hero Text &amp; Button</h2>
-            <p class="card-sub" style="margin:4px 0 0;">The headline area on the top-left of the home page.</p></div>
+            <div><h2>Hero Text &amp; Button (default)</h2>
+            <p class="card-sub" style="margin:4px 0 0;">Used for any slide below that doesn't have its own custom text.</p></div>
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
         <?php foreach ($blocks as $block) render_content_field($block); ?>
@@ -69,64 +86,114 @@ require_once __DIR__ . '/layout-top.php';
 <!-- Slides -->
 <div class="card">
     <div class="card-head-row">
-        <h2>Slider Images</h2>
+        <h2>Slides</h2>
     </div>
-    <p class="card-sub">These images rotate in the hero slider on the right side.</p>
+    <p class="card-sub">Each slide has its own image and text — when the slider changes, the image and text change together. Leave a text field blank to use the default text above.</p>
 
-    <table class="items-table">
-        <thead><tr><th>Image</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>
-        <tbody>
-        <?php foreach ($slides as $s): ?>
-            <tr>
-                <td>
-                    <?php if ($s['image']): ?>
-                        <img class="thumb" src="<?= UPLOAD_URL . e($s['image']) ?>">
-                    <?php else: ?>
-                        <span class="badge">No image</span>
-                    <?php endif; ?>
-                </td>
-                <td>
-                    <span class="badge <?= $s['is_active'] ? 'on' : 'off' ?>"><?= $s['is_active'] ? 'Active' : 'Hidden' ?></span>
-                </td>
-                <td class="row-actions">
-                    <!-- edit form (replace image / toggle) -->
-                    <form method="post" enctype="multipart/form-data" style="display:flex;gap:8px;align-items:center;">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="action" value="update_slide">
-                        <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
-                        <label class="btn btn-sm" style="position:relative;overflow:hidden;">
-                            Replace
-                            <input type="file" name="slide_image" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;" onchange="this.form.submit()">
+    <?php foreach ($slides as $s): ?>
+        <div class="slide-editor">
+            <form method="post" enctype="multipart/form-data">
+                <?= csrf_field() ?>
+                <input type="hidden" name="action" value="update_slide">
+                <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
+                <div class="slide-editor-grid">
+                    <div class="slide-editor-image">
+                        <div class="img-field">
+                            <div class="img-preview" id="slidePrev<?= (int)$s['id'] ?>">
+                                <?php if ($s['image']): ?>
+                                    <img src="<?= UPLOAD_URL . e($s['image']) ?>">
+                                <?php else: ?>
+                                    No image
+                                <?php endif; ?>
+                            </div>
+                            <div class="upload-btn-wrap">
+                                <button type="button" class="btn btn-sm">Replace Image</button>
+                                <input type="file" name="slide_image" accept="image/*" data-preview="slidePrev<?= (int)$s['id'] ?>">
+                            </div>
+                        </div>
+                        <label style="display:flex;gap:6px;align-items:center;font-size:13px;margin-top:12px;">
+                            <input type="checkbox" name="is_active" <?= $s['is_active'] ? 'checked' : '' ?>> Show this slide
                         </label>
-                        <label style="display:flex;gap:5px;align-items:center;font-size:13px;">
-                            <input type="checkbox" name="is_active" <?= $s['is_active'] ? 'checked' : '' ?> onchange="this.form.submit()"> Show
-                        </label>
-                    </form>
-                    <form method="post" onsubmit="return confirm('Delete this slide?')">
-                        <?= csrf_field() ?>
-                        <input type="hidden" name="action" value="delete_slide">
-                        <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
-                        <button class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+                    </div>
+                    <div class="slide-editor-fields">
+                        <div class="form-group">
+                            <label>Eyebrow <span class="hint">(small label above the title)</span></label>
+                            <input type="text" name="eyebrow" class="form-control" value="<?= e($s['eyebrow']) ?>" placeholder="<?= e(c('hero_eyebrow')) ?>">
+                        </div>
+                        <div class="form-group">
+                            <label>Title</label>
+                            <textarea name="title" class="form-control" rows="2" placeholder="<?= e(c('hero_title')) ?>"><?= e($s['title']) ?></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea name="description" class="form-control" rows="2" placeholder="<?= e(c('hero_desc')) ?>"><?= e($s['description']) ?></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Button Text</label>
+                                <input type="text" name="btn_text" class="form-control" value="<?= e($s['btn_text']) ?>" placeholder="<?= e(c('hero_btn_text')) ?>">
+                            </div>
+                            <div class="form-group">
+                                <label>Button Link</label>
+                                <input type="text" name="btn_link" class="form-control" value="<?= e($s['btn_link']) ?>" placeholder="<?= e(c('hero_btn_link', '#')) ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-actions" style="margin-top:12px;">
+                    <button class="btn btn-sm btn-primary">Save Slide</button>
+                </div>
+            </form>
+            <form method="post" onsubmit="return confirm('Delete this slide?')" style="margin-top:8px;">
+                <?= csrf_field() ?>
+                <input type="hidden" name="action" value="delete_slide">
+                <input type="hidden" name="id" value="<?= (int)$s['id'] ?>">
+                <button class="btn btn-sm btn-danger">Delete Slide</button>
+            </form>
+        </div>
+        <div class="section-divider"></div>
+    <?php endforeach; ?>
 
-    <div class="section-divider"></div>
     <form method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
         <input type="hidden" name="action" value="add_slide">
         <h2 style="font-size:15px;margin-bottom:14px;">Add New Slide</h2>
-        <div class="img-field">
-            <div class="img-preview" id="newSlidePrev">No image</div>
-            <div class="upload-btn-wrap">
-                <button type="button" class="btn btn-sm">Choose Image</button>
-                <input type="file" name="slide_image" accept="image/*" data-preview="newSlidePrev" required>
+        <div class="slide-editor-grid">
+            <div class="slide-editor-image">
+                <div class="img-field">
+                    <div class="img-preview" id="newSlidePrev">No image</div>
+                    <div class="upload-btn-wrap">
+                        <button type="button" class="btn btn-sm">Choose Image</button>
+                        <input type="file" name="slide_image" accept="image/*" data-preview="newSlidePrev" required>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Add Slide</button>
+            <div class="slide-editor-fields">
+                <div class="form-group">
+                    <label>Eyebrow</label>
+                    <input type="text" name="eyebrow" class="form-control" placeholder="<?= e(c('hero_eyebrow')) ?>">
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <textarea name="title" class="form-control" rows="2" placeholder="<?= e(c('hero_title')) ?>"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" class="form-control" rows="2" placeholder="<?= e(c('hero_desc')) ?>"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Button Text</label>
+                        <input type="text" name="btn_text" class="form-control" placeholder="<?= e(c('hero_btn_text')) ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Button Link</label>
+                        <input type="text" name="btn_link" class="form-control" placeholder="<?= e(c('hero_btn_link', '#')) ?>">
+                    </div>
+                </div>
+            </div>
         </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:8px;">Add Slide</button>
     </form>
 </div>
 

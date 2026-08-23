@@ -18,10 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
     /* ---- Hero slider ---- */
     (function () {
         var slides = document.querySelectorAll('.hero-slide');
+        var textSlides = document.querySelectorAll('.hero-text-slide');
         if (slides.length === 0) return;
         var idx = 0;
         function show(i) {
             slides.forEach(function (s, k) { s.classList.toggle('active', k === i); });
+            textSlides.forEach(function (t, k) { t.classList.toggle('active', k === i); });
         }
         function next() { idx = (idx + 1) % slides.length; show(idx); }
         function prev() { idx = (idx - 1 + slides.length) % slides.length; show(idx); }

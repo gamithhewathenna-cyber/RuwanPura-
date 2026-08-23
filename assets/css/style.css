@@ -177,6 +177,13 @@ ul { list-style: none; }
     margin-bottom: 30px;
 }
 
+.hero-text-slide { display: none; }
+.hero-text-slide.active { display: block; animation: heroTextIn .6s ease; }
+@keyframes heroTextIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 .hero-slider {
     position: relative;
     border-radius: 14px;

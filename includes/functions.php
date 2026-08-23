@@ -116,6 +116,13 @@ function row_img($file, $placeholder = '')
     return $placeholder;
 }
 
+/* Per-slide text field, falling back to a default (e.g. the global hero content block) when blank */
+function slide_text($slide, $field, $default = '')
+{
+    $val = $slide[$field] ?? null;
+    return ($val !== null && $val !== '') ? $val : $default;
+}
+
 /* ------------------------------------------------------------------ */
 /*  File uploads                                                       */
 /* ------------------------------------------------------------------ */

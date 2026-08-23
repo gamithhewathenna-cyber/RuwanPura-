@@ -53,10 +53,21 @@ $testimonials = get_testimonials();
     <div class="container">
         <div class="hero-grid">
             <div class="hero-text">
-                <div class="hero-eyebrow"><?= e(c('hero_eyebrow')) ?></div>
-                <h1 class="hero-title"><?= e(c('hero_title')) ?></h1>
-                <p class="hero-desc"><?= e(c('hero_desc')) ?></p>
-                <a href="<?= e(c('hero_btn_link', '#')) ?>" class="btn-dark"><?= e(c('hero_btn_text')) ?></a>
+                <?php if ($heroSlides): foreach ($heroSlides as $i => $s): ?>
+                    <div class="hero-text-slide<?= $i === 0 ? ' active' : '' ?>">
+                        <div class="hero-eyebrow"><?= e(slide_text($s, 'eyebrow', c('hero_eyebrow'))) ?></div>
+                        <h1 class="hero-title"><?= e(slide_text($s, 'title', c('hero_title'))) ?></h1>
+                        <p class="hero-desc"><?= e(slide_text($s, 'description', c('hero_desc'))) ?></p>
+                        <a href="<?= e(slide_text($s, 'btn_link', c('hero_btn_link', '#'))) ?>" class="btn-dark"><?= e(slide_text($s, 'btn_text', c('hero_btn_text'))) ?></a>
+                    </div>
+                <?php endforeach; else: ?>
+                    <div class="hero-text-slide active">
+                        <div class="hero-eyebrow"><?= e(c('hero_eyebrow')) ?></div>
+                        <h1 class="hero-title"><?= e(c('hero_title')) ?></h1>
+                        <p class="hero-desc"><?= e(c('hero_desc')) ?></p>
+                        <a href="<?= e(c('hero_btn_link', '#')) ?>" class="btn-dark"><?= e(c('hero_btn_text')) ?></a>
+                    </div>
+                <?php endif; ?>
             </div>
 
             <div class="hero-slider">
