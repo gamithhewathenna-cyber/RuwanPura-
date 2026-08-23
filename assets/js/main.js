@@ -33,27 +33,31 @@ document.addEventListener('DOMContentLoaded', function () {
         if (slides.length > 1) setInterval(next, 6000);
     })();
 
-    /* ---- Collection carousel (shifts visible window on small counts) ---- */
+    /* ---- Collection carousel (pages through 5 gemstones at a time) ---- */
     (function () {
         var track = document.querySelector('.collection-track');
         if (!track) return;
         var cards = Array.prototype.slice.call(track.children);
-        if (cards.length <= 4) return; // no need to slide
+        var perView = 5;
+        if (cards.length <= perView) return; // no need to page
         var start = 0;
-        var perView = 4;
+        var next = document.querySelector('.collection-arrow.next');
+        var prev = document.querySelector('.collection-arrow.prev');
         function render() {
             cards.forEach(function (c, i) {
                 var visible = i >= start && i < start + perView;
                 c.style.display = visible ? '' : 'none';
             });
+            if (prev) prev.style.visibility = start > 0 ? 'visible' : 'hidden';
+            if (next) next.style.visibility = (start + perView < cards.length) ? 'visible' : 'hidden';
         }
-        var next = document.querySelector('.collection-arrow.next');
-        var prev = document.querySelector('.collection-arrow.prev');
         if (next) next.addEventListener('click', function () {
-            if (start + perView < cards.length) { start++; render(); }
+            start = Math.min(start + perView, cards.length - perView);
+            render();
         });
         if (prev) prev.addEventListener('click', function () {
-            if (start > 0) { start--; render(); }
+            start = Math.max(start - perView, 0);
+            render();
         });
         render();
     })();

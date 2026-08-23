@@ -267,8 +267,8 @@ ul { list-style: none; }
 .collection-slider { position: relative; }
 .collection-track {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
 }
 .gem-card { text-align: center; }
 .gem-thumb {
