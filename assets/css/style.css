@@ -187,7 +187,6 @@ ul { list-style: none; }
 .hero-slider {
     position: relative;
     border-radius: 14px;
-    overflow: hidden;
 }
 .hero-slides { position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 16/11; background:#111; }
 .hero-slide {
@@ -211,12 +210,8 @@ ul { list-style: none; }
     z-index: 3;
     text-shadow: 0 2px 10px rgba(0,0,0,.5);
 }
-.hero-arrow.prev { left: -8px; }
-.hero-arrow.next { right: -8px; }
-@media(min-width:1000px){
-  .hero-arrow.prev { left: 6px; }
-  .hero-arrow.next { right: 6px; }
-}
+.hero-arrow.prev { left: 14px; }
+.hero-arrow.next { right: 14px; }
 
 /* =====================================================================
    JOURNEY
