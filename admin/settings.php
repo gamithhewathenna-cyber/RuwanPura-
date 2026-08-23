@@ -26,6 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             update_setting('site_logo', $newLogo);
         }
 
+        // Maintenance mode
+        update_setting('maintenance_mode', isset($_POST['maintenance_mode']) ? '1' : '0');
+        update_setting('maintenance_message', trim($_POST['maintenance_message'] ?? ''));
+
         set_flash('success', 'Settings saved successfully.');
     }
     header('Location: ' . $_SERVER['PHP_SELF']);
@@ -99,6 +103,23 @@ require_once __DIR__ . '/layout-top.php';
         <div class="form-group">
             <label>Admin Email Address</label>
             <input type="email" name="admin_email" class="form-control" value="<?= e(setting('admin_email')) ?>">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Maintenance Mode</h2>
+        <p class="card-sub">Temporarily take the public website offline while you make changes. Logged-in admins can still browse the site normally.</p>
+
+        <div class="form-group">
+            <label class="switch-label">
+                <input type="checkbox" name="maintenance_mode" value="1" <?= setting('maintenance_mode') === '1' ? 'checked' : '' ?>>
+                Enable maintenance mode
+            </label>
+        </div>
+
+        <div class="form-group">
+            <label>Message shown to visitors</label>
+            <textarea name="maintenance_message" class="form-control" rows="3"><?= e(setting('maintenance_message', "We're currently performing scheduled maintenance. Please check back soon.")) ?></textarea>
         </div>
     </div>
 

@@ -1,5 +1,44 @@
 <?php
 require_once __DIR__ . '/includes/functions.php';
+
+if (setting('maintenance_mode') === '1' && empty($_SESSION['admin_id'])) {
+    http_response_code(503);
+    header('Retry-After: 3600');
+    $siteName = setting('site_name', 'Ruwanpura Gems');
+    $primary  = setting('theme_primary', '#c99a5b');
+    $dark     = setting('theme_dark', '#0d0d0d');
+    $message  = setting('maintenance_message', "We're currently performing scheduled maintenance. Please check back soon.");
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Under Maintenance — <?= e($siteName) ?></title>
+        <style>
+            body {
+                margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+                background: <?= e($dark) ?>; color: #f5f1e8; font-family: Georgia, 'Times New Roman', serif;
+                text-align: center; padding: 24px; box-sizing: border-box;
+            }
+            .maint-box { max-width: 560px; }
+            .maint-logo { max-height: 64px; margin-bottom: 28px; }
+            h1 { font-size: 28px; letter-spacing: 1px; margin: 0 0 16px; color: <?= e($primary) ?>; }
+            p { font-size: 16px; line-height: 1.7; color: #d8d2c4; }
+        </style>
+    </head>
+    <body>
+        <div class="maint-box">
+            <img class="maint-logo" src="<?= logo_url() ?>" alt="<?= e($siteName) ?>">
+            <h1>We'll be right back</h1>
+            <p><?= e_nl($message) ?></p>
+        </div>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
 include __DIR__ . '/includes/header.php';
 
 $heroSlides   = get_hero_slides();

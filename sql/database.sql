@@ -126,7 +126,9 @@ INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 ('theme_primary','#c99a5b'),
 ('theme_dark','#0d0d0d'),
 ('admin_email','admin@ruwanpuragems.com'),
-('site_name','Ruwanpura Gems');
+('site_name','Ruwanpura Gems'),
+('maintenance_mode','0'),
+('maintenance_message','We\'re currently performing scheduled maintenance. Please check back soon.');
 
 -- Content blocks -------------------------------------------------------
 INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_label`,`block_type`,`sort_order`) VALUES
