@@ -1,15 +1,16 @@
 <?php
 /**
- * Ruwanpura Gems - Central Configuration
+ * Ruwanpura Gems - Central Configuration (sample)
  * ---------------------------------------------------------------
- * Edit the database credentials below to match your cPanel setup.
+ * Copy this file to config.php and fill in your real credentials.
+ * config.php is gitignored so real credentials never get committed.
  * ---------------------------------------------------------------
  */
 
 // ---- Database credentials (change these on your cPanel) ----
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'ruwanpura_gems');
-define('DB_USER', 'root');
+define('DB_NAME', '');
+define('DB_USER', '');
 define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
 
