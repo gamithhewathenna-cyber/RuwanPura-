@@ -10,12 +10,18 @@ function nav_active($file) {
 }
 
 $homePageSections = [
-    'section-header.php', 'section-hero.php', 'section-journey.php',
-    'section-collection.php', 'section-factory.php', 'section-branches.php',
-    'section-events.php', 'section-testimonials.php', 'section-cta.php',
-    'section-footer.php',
+    'section-header.php'      => 'Header & Navigation',
+    'section-hero.php'        => 'Hero Text & Button',
+    'section-journey.php'     => 'Journey Section',
+    'section-collection.php'  => 'Gemstones Collection',
+    'section-factory.php'     => 'Factory & Laboratories',
+    'section-branches.php'    => 'Our Branches',
+    'section-events.php'      => 'Exhibitions & Logos',
+    'section-testimonials.php'=> 'Testimonials',
+    'section-cta.php'         => 'Call To Action',
+    'section-footer.php'      => 'Footer',
 ];
-$homePageOpen = in_array($current, $homePageSections, true);
+$onHomePage = array_key_exists($current, $homePageSections);
 // $page_title should be set before including
 $page_title = $page_title ?? 'Dashboard';
 ?>
@@ -42,53 +48,10 @@ $page_title = $page_title ?? 'Dashboard';
                 Dashboard
             </a>
 
-            <button type="button" class="side-link nav-accordion-toggle" id="homeAccordionToggle" aria-expanded="<?= $homePageOpen ? 'true' : 'false' ?>" aria-controls="homeAccordionMenu">
+            <a href="<?= BASE_URL ?>admin/section-header.php" class="side-link <?= $onHomePage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
                 Home Page
-                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-            <div class="nav-submenu <?= $homePageOpen ? 'open' : '' ?>" id="homeAccordionMenu">
-                <a href="<?= BASE_URL ?>admin/section-header.php" class="side-link <?= nav_active('section-header.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M3 12h18M3 16h12"/></svg>
-                    Header &amp; Navigation
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-hero.php" class="side-link <?= nav_active('section-hero.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 14l4-4 5 5 3-3 6 6"/><circle cx="8" cy="9" r="1.5"/></svg>
-                    Hero Text &amp; Button
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-journey.php" class="side-link <?= nav_active('section-journey.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                    Journey Section
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-collection.php" class="side-link <?= nav_active('section-collection.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 3 8 9l4 12 4-12-4-6"/></svg>
-                    Gemstones Collection
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-factory.php" class="side-link <?= nav_active('section-factory.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 20h20V9l-6 4V9l-6 4V4H4a2 2 0 0 0-2 2z"/></svg>
-                    Factory &amp; Laboratories
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-branches.php" class="side-link <?= nav_active('section-branches.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>
-                    Our Branches
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-events.php" class="side-link <?= nav_active('section-events.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>
-                    Exhibitions &amp; Logos
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-testimonials.php" class="side-link <?= nav_active('section-testimonials.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    Testimonials
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-cta.php" class="side-link <?= nav_active('section-cta.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M8 12h8"/></svg>
-                    Call To Action
-                </a>
-                <a href="<?= BASE_URL ?>admin/section-footer.php" class="side-link <?= nav_active('section-footer.php') ?>">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="16" width="18" height="4" rx="1"/><path d="M3 8h18M3 12h12"/></svg>
-                    Footer
-                </a>
-            </div>
+            </a>
 
             <div class="nav-group-label">System</div>
             <a href="<?= BASE_URL ?>admin/settings.php" class="side-link <?= nav_active('settings.php') ?>">
@@ -131,4 +94,12 @@ $page_title = $page_title ?? 'Dashboard';
         <div class="content">
             <?php if ($flash): ?>
                 <div class="flash <?= e($flash['type']) ?>"><?= e($flash['msg']) ?></div>
+            <?php endif; ?>
+
+            <?php if ($onHomePage): ?>
+                <div class="home-tabs">
+                    <?php foreach ($homePageSections as $file => $label): ?>
+                        <a href="<?= BASE_URL ?>admin/<?= $file ?>" class="home-tab <?= nav_active($file) ?>"><?= e($label) ?></a>
+                    <?php endforeach; ?>
+                </div>
             <?php endif; ?>
