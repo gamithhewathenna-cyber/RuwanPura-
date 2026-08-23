@@ -105,7 +105,7 @@ ul { list-style: none; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 88px;
+    height: 100px;
     gap: 20px;
 }
 .nav-left, .nav-right {
@@ -116,7 +116,7 @@ ul { list-style: none; }
 .nav-left { flex: 1; justify-content: flex-end; padding-right: 20px; }
 .nav-right { flex: 1; padding-left: 20px; }
 .nav-logo { flex: 0 0 auto; }
-.nav-logo img { height: 62px; width: auto; }
+.nav-logo img { height: 80px; width: auto; }
 
 .nav a.nav-link, .nav .nav-link {
     font-size: 15px;
@@ -587,7 +587,7 @@ ul { list-style: none; }
     .nav-left { justify-content: flex-start; padding: 0; }
     .nav-menu {
         position: fixed;
-        top: 88px; left: 0; right: 0;
+        top: 100px; left: 0; right: 0;
         background: #fff;
         flex-direction: column;
         align-items: flex-start;
