@@ -21,6 +21,21 @@ document.querySelectorAll('input[type=file][data-preview]').forEach(function(inp
         }
     });
 });
+
+// If a full <iframe> embed snippet gets pasted into the map embed field,
+// extract just the src URL before the form is submitted — some hosts block
+// requests whose body contains raw <iframe>/<script> tags.
+document.querySelectorAll('input[name="content[contact_map_embed]"]').forEach(function(inp){
+    var form = inp.closest('form');
+    if (!form) return;
+    form.addEventListener('submit', function(){
+        var val = inp.value || '';
+        if (val.indexOf('<iframe') !== -1) {
+            var m = val.match(/src=["']([^"']+)["']/i);
+            if (m) inp.value = m[1];
+        }
+    });
+});
 </script>
 </body>
 </html>
