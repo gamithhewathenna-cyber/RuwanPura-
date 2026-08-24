@@ -1,3 +1,23 @@
+<?php $trustBadges = get_trust_badges(); ?>
+<?php if ($trustBadges): ?>
+<!-- ================= TRUST BADGES ================= -->
+<section class="trust-badges">
+    <div class="container">
+        <div class="trust-badges-grid reveal">
+            <?php foreach ($trustBadges as $tb): ?>
+                <div class="trust-badge">
+                    <?php if ($tb['icon']): ?>
+                        <i class="trust-badge-icon <?= e($tb['icon']) ?>"></i>
+                    <?php endif; ?>
+                    <h4><?= e($tb['title']) ?></h4>
+                    <p><?= e($tb['description']) ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
 <!-- ================= FOOTER ================= -->
 <footer class="site-footer" id="contact">
     <div class="container">

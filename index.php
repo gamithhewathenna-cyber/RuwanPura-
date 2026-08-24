@@ -6,7 +6,6 @@ include __DIR__ . '/includes/header.php';
 
 $heroSlides   = get_hero_slides();
 $legacyStats  = get_legacy_stats();
-$trustBadges  = get_trust_badges();
 $gemstones    = get_latest_products(10);
 $branches     = get_branches();
 $partners     = get_partners();
@@ -280,24 +279,5 @@ $testimonials = get_testimonials();
 </section>
 
 <?php include __DIR__ . '/includes/cta-banner.php'; ?>
-
-<?php if ($trustBadges): ?>
-<!-- ================= TRUST BADGES ================= -->
-<section class="trust-badges">
-    <div class="container">
-        <div class="trust-badges-grid reveal">
-            <?php foreach ($trustBadges as $tb): ?>
-                <div class="trust-badge">
-                    <?php if ($tb['icon']): ?>
-                        <i class="trust-badge-icon <?= e($tb['icon']) ?>"></i>
-                    <?php endif; ?>
-                    <h4><?= e($tb['title']) ?></h4>
-                    <p><?= e($tb['description']) ?></p>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
