@@ -55,7 +55,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <?php if (c('announcement_text')): ?>
 <!-- ================= ANNOUNCEMENT BAR ================= -->
-<div class="announcement-bar" id="announcementBar" data-key="<?= e(md5(c('announcement_text'))) ?>">
+<div class="announcement-bar" id="announcementBar">
     <div class="announcement-track">
         <?php // Rendered twice back-to-back so the CSS animation can loop seamlessly ?>
         <?php for ($i = 0; $i < 2; $i++): ?>

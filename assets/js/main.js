@@ -3,21 +3,17 @@
    ===================================================================== */
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* ---- Announcement bar dismiss (remembered for the session; reappears if the admin changes the text) ---- */
+    /* ---- Announcement bar dismiss ----
+       Closing it only hides it for the page currently being viewed — it always
+       shows again on the next page. (Previously this was remembered per browser
+       session via sessionStorage, which made it look like it was randomly
+       "hiding" as visitors browsed from page to page after an earlier dismiss.) */
     (function () {
         var bar = document.getElementById('announcementBar');
         var closeBtn = document.getElementById('announcementClose');
         if (!bar || !closeBtn) return;
-        var key = 'announcementDismissed_' + (bar.getAttribute('data-key') || '');
-        try {
-            if (sessionStorage.getItem(key)) {
-                bar.style.display = 'none';
-                return;
-            }
-        } catch (e) {}
         closeBtn.addEventListener('click', function () {
             bar.style.display = 'none';
-            try { sessionStorage.setItem(key, '1'); } catch (e) {}
         });
     })();
 
