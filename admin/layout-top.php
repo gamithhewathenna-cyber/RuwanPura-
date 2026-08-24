@@ -10,6 +10,7 @@ function nav_active($file) {
 }
 
 $homePageSections = [
+    'section-announcement.php' => 'Announcement Bar',
     'section-header.php'      => 'Header & Navigation',
     'section-hero.php'        => 'Hero Slider',
     'section-journey.php'     => 'Journey Section',

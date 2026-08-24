@@ -3,6 +3,24 @@
    ===================================================================== */
 document.addEventListener('DOMContentLoaded', function () {
 
+    /* ---- Announcement bar dismiss (remembered for the session; reappears if the admin changes the text) ---- */
+    (function () {
+        var bar = document.getElementById('announcementBar');
+        var closeBtn = document.getElementById('announcementClose');
+        if (!bar || !closeBtn) return;
+        var key = 'announcementDismissed_' + (bar.getAttribute('data-key') || '');
+        try {
+            if (sessionStorage.getItem(key)) {
+                bar.style.display = 'none';
+                return;
+            }
+        } catch (e) {}
+        closeBtn.addEventListener('click', function () {
+            bar.style.display = 'none';
+            try { sessionStorage.setItem(key, '1'); } catch (e) {}
+        });
+    })();
+
     /* ---- Mobile menu toggle ---- */
     var toggle = document.querySelector('.menu-toggle');
     var menu = document.querySelector('.nav-menu');

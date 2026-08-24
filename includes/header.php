@@ -53,6 +53,20 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </head>
 <body>
 
+<?php if (c('announcement_text')): ?>
+<!-- ================= ANNOUNCEMENT BAR ================= -->
+<div class="announcement-bar" id="announcementBar" data-key="<?= e(md5(c('announcement_text'))) ?>">
+    <div class="container announcement-bar-inner">
+        <?php if (c('announcement_link')): ?>
+            <a href="<?= e(c('announcement_link')) ?>" class="announcement-text"><?= e(c('announcement_text')) ?></a>
+        <?php else: ?>
+            <span class="announcement-text"><?= e(c('announcement_text')) ?></span>
+        <?php endif; ?>
+        <button type="button" class="announcement-close" id="announcementClose" aria-label="Dismiss announcement">&times;</button>
+    </div>
+</div>
+<?php endif; ?>
+
 <!-- ================= HEADER ================= -->
 <header class="site-header">
     <div class="container">

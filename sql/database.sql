@@ -331,6 +331,9 @@ INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 
 -- Content blocks -------------------------------------------------------
 INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_label`,`block_type`,`sort_order`) VALUES
+-- Announcement bar
+('announcement_text','','announcement','Announcement Text (leave blank to hide the bar)','textarea',1),
+('announcement_link','','announcement','Announcement Link (optional)','link',2),
 -- Header / nav
 ('nav_home','Home','header','Nav: Home Label','text',1),
 ('nav_gemstones','Our Gemstones','header','Nav: Gemstones Label','text',2),
