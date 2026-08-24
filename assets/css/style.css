@@ -396,22 +396,20 @@ ul { list-style: none; }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 30px;
+    gap: 54px;
     flex-wrap: wrap;
 }
 .events-logos .logo-item {
     flex: 1;
-    min-width: 110px;
+    min-width: 130px;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 70px;
-    filter: grayscale(1);
-    opacity: .8;
-    transition: .3s;
+    height: 90px;
+    transition: transform .3s ease;
 }
-.events-logos .logo-item:hover { filter: grayscale(0); opacity: 1; }
-.events-logos img { max-height: 56px; width: auto; object-fit: contain; }
+.events-logos .logo-item:hover { transform: translateY(-5px) scale(1.06); }
+.events-logos img { max-height: 76px; width: auto; object-fit: contain; }
 .logo-fallback {
     font-weight: 700;
     color: #333;
@@ -1095,8 +1093,9 @@ ul { list-style: none; }
     .section-title { font-size: 34px; }
     .journey-title, .factory-title, .cta-title { font-size: 34px; }
     .gem-card { width: 130px; }
-    .events-logos { gap: 20px; }
-    .events-logos .logo-item { min-width: 40%; }
+    .events-logos { gap: 28px; }
+    .events-logos .logo-item { min-width: 40%; height: 70px; }
+    .events-logos img { max-height: 58px; }
     .testi-card { flex-basis: 84vw; }
     .footer-grid { grid-template-columns: 1fr; }
     .footer-bottom { flex-direction: column; align-items: flex-start; }
