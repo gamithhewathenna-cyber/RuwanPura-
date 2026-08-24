@@ -252,6 +252,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
+    /* ---- Desktop catalogue filters: apply instantly on change ----
+       Mobile keeps the drawer's deliberate "pick several, then tap Show
+       Products" flow (checking innerWidth here rather than always
+       auto-submitting, since an instant reload after the very first tap
+       would make it impossible to select more than one filter on mobile). */
+    (function () {
+        var form = document.getElementById('filterForm');
+        if (!form) return;
+        var checkboxes = form.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                if (window.innerWidth > 980) form.submit();
+            });
+        });
+    })();
+
     /* ---- Sitewide scroll reveal: .reveal / .reveal-fade / .timeline-item ---- */
     (function () {
         var items = document.querySelectorAll('.reveal, .reveal-fade, .timeline-item');
