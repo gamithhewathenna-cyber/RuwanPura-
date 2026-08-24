@@ -1393,7 +1393,17 @@ body.drawer-open { overflow: hidden; }
     .trust-badges-grid { grid-template-columns: repeat(3, 1fr); row-gap: 28px; }
     .trust-badge:nth-child(3n+1) { border-left: none; }
 
-    .legacy-grid { grid-template-columns: repeat(2, 1fr); gap: 34px 20px; }
+    /* One row, two items visible at a time, auto-looping (see main.js) */
+    .legacy-grid {
+        display: flex;
+        grid-template-columns: none;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .legacy-grid::-webkit-scrollbar { display: none; }
+    .legacy-item { flex: 0 0 50%; scroll-snap-align: start; }
 
     .journey-grid { grid-template-columns: 1fr; gap: 30px; }
     .journey-img { order: -1; }
@@ -1543,7 +1553,6 @@ body.drawer-open { overflow: hidden; }
     .hero-title { font-size: 42px; }
     .trust-badges-grid { grid-template-columns: 1fr; row-gap: 24px; }
     .trust-badge { border-left: none !important; padding: 0 10px; }
-    .legacy-grid { grid-template-columns: 1fr; gap: 30px; }
     .section-title { font-size: 34px; }
     .journey-title, .factory-title, .cta-title { font-size: 34px; }
     .why-title { font-size: 30px; }
