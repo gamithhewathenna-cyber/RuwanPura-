@@ -516,6 +516,22 @@ function get_related_posts($post, $limit = 3)
     }
 }
 
+/* Latest published posts for the "Recent Articles" sidebar widget, excluding the current post */
+function get_recent_posts($excludeId = 0, $limit = 5)
+{
+    $limit = max(1, (int) $limit);
+    try {
+        $stmt = db()->prepare("SELECT * FROM blog_posts
+                WHERE status='published' AND published_at <= NOW() AND id <> ?
+                ORDER BY published_at DESC, id DESC
+                LIMIT $limit");
+        $stmt->execute([(int) $excludeId]);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
 /* Render blog body text as paragraphs (blank-line separated), escaped for safety */
 function render_blog_content($text)
 {
