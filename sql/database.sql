@@ -222,6 +222,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `weight` DECIMAL(8,2) DEFAULT NULL COMMENT 'Carat weight',
   `description` TEXT DEFAULT NULL,
   `certificate_info` TEXT DEFAULT NULL,
+  `video` VARCHAR(255) DEFAULT NULL COMMENT 'Optional MP4 shown in the product gallery',
   `status` ENUM('available','reserved','sold','unavailable') NOT NULL DEFAULT 'available',
   `is_active` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Shown on the website',
   `sort_order` INT(11) NOT NULL DEFAULT 0,

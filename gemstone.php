@@ -20,6 +20,7 @@ if (!$product) {
 }
 
 $images          = get_product_images($product['id']);
+$hasVideo        = !empty($product['video']);
 $statusLabels    = product_status_labels();
 $categoryName    = lookup_name('gem_categories', $product['category_id']);
 $shapeName       = lookup_name('gem_shapes', $product['shape_id']);
@@ -48,19 +49,50 @@ include __DIR__ . '/includes/header.php';
                 <div class="product-gallery-main">
                     <?php if ($images): ?>
                         <img id="mainProductImage" src="<?= UPLOAD_URL . e($images[0]['image']) ?>" alt="<?= e($product['name']) ?>">
-                    <?php else: ?>
+                    <?php endif; ?>
+                    <?php if ($hasVideo): ?>
+                        <video id="mainProductVideo" src="<?= UPLOAD_URL . e($product['video']) ?>" controls playsinline <?= $images ? 'style="display:none;"' : '' ?>></video>
+                    <?php endif; ?>
+                    <?php if (!$images && !$hasVideo): ?>
                         <div class="product-card-noimg" style="height:100%;">No Image</div>
                     <?php endif; ?>
                 </div>
-                <?php if (count($images) > 1): ?>
+                <?php if (count($images) > 1 || $hasVideo): ?>
                     <div class="product-gallery-thumbs">
                         <?php foreach ($images as $i => $img): ?>
                             <img src="<?= UPLOAD_URL . e($img['image']) ?>" class="<?= $i === 0 ? 'active' : '' ?>"
-                                 onclick="document.getElementById('mainProductImage').src=this.src;document.querySelectorAll('.product-gallery-thumbs img').forEach(function(t){t.classList.remove('active');});this.classList.add('active');">
+                                 onclick="showProductImage(this, '<?= UPLOAD_URL . e($img['image']) ?>')">
                         <?php endforeach; ?>
+                        <?php if ($hasVideo): ?>
+                            <div class="product-gallery-thumb-video <?= !$images ? 'active' : '' ?>" onclick="showProductVideo(this)">
+                                <video src="<?= UPLOAD_URL . e($product['video']) ?>" muted playsinline preload="metadata"></video>
+                                <span class="thumb-play-icon">&#9658;</span>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
             </div>
+
+            <?php if (count($images) > 1 || $hasVideo): ?>
+            <script>
+                function showProductImage(el, src) {
+                    var img = document.getElementById('mainProductImage');
+                    if (img) { img.src = src; img.style.display = ''; }
+                    var vid = document.getElementById('mainProductVideo');
+                    if (vid) { vid.pause(); vid.style.display = 'none'; }
+                    document.querySelectorAll('.product-gallery-thumbs img, .product-gallery-thumbs .product-gallery-thumb-video').forEach(function (t) { t.classList.remove('active'); });
+                    el.classList.add('active');
+                }
+                function showProductVideo(el) {
+                    var img = document.getElementById('mainProductImage');
+                    if (img) img.style.display = 'none';
+                    var vid = document.getElementById('mainProductVideo');
+                    if (vid) vid.style.display = '';
+                    document.querySelectorAll('.product-gallery-thumbs img, .product-gallery-thumbs .product-gallery-thumb-video').forEach(function (t) { t.classList.remove('active'); });
+                    el.classList.add('active');
+                }
+            </script>
+            <?php endif; ?>
 
             <div class="product-info reveal">
                 <span class="product-status-badge status-<?= e($product['status']) ?>"><?= e($statusLabels[$product['status']]) ?></span>

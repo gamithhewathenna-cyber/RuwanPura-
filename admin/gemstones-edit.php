@@ -42,14 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($id) {
-                $slug = unique_slug('products', $name, $id);
-                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
-                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
+                $slug  = unique_slug('products', $name, $id);
+                $video = handle_video_upload('video', $product['video'] ?? '');
+                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=?, video=? WHERE id=?");
+                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $video, $id]);
             } else {
-                $slug = unique_slug('products', $name);
-                $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
-                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
+                $slug  = unique_slug('products', $name);
+                $video = handle_video_upload('video', '');
+                $ord   = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
+                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order, video) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord, $video]);
                 $id = (int) db()->lastInsertId();
             }
 
@@ -125,7 +127,7 @@ $images       = $id ? get_product_images($id) : [];
 require_once __DIR__ . '/layout-top.php';
 ?>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <?= csrf_field() ?>
     <input type="hidden" name="action" value="save">
 
@@ -212,6 +214,15 @@ require_once __DIR__ . '/layout-top.php';
         <div class="form-group">
             <label>Certificate Information <span class="hint">(lab name, certificate number, etc. — optional)</span></label>
             <textarea name="certificate_info" class="form-control" rows="2"><?= e($product['certificate_info'] ?? '') ?></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Product Video <span class="hint">(MP4, shown in the gallery alongside the images — optional)</span></label>
+            <?php if (!empty($product['video'])): ?>
+                <video src="<?= UPLOAD_URL . e($product['video']) ?>" controls style="width:220px;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:10px;display:block;"></video>
+            <?php endif; ?>
+            <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
+            <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 80MB.</div>
         </div>
 
         <div class="form-group">
