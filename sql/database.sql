@@ -505,11 +505,11 @@ INSERT INTO `legacy_stats` (`icon`,`stat_value`,`stat_label`,`description`,`sort
 
 -- Trust badges (home page, below the hero slider)
 INSERT INTO `trust_badges` (`icon`,`title`,`description`,`sort_order`) VALUES
-('badge-shipping.svg','Worldwide Shipping','Secure delivery to customers worldwide.',1),
-('badge-gemstones.svg','Authentic Gemstones','Carefully selected natural gemstones.',2),
-('badge-guidance.svg','Expert Guidance','Personal assistance from our gem experts.',3),
-('badge-heritage.svg','Sri Lankan Heritage','Rooted in Sri Lanka\'s gem heritage.',4),
-('badge-trust.svg','Trusted & Transparent','Clear details for confident purchases.',5);
+('fa-solid fa-globe','Worldwide Shipping','Secure delivery to customers worldwide.',1),
+('fa-solid fa-gem','Authentic Gemstones','Carefully selected natural gemstones.',2),
+('fa-solid fa-headset','Expert Guidance','Personal assistance from our gem experts.',3),
+('fa-solid fa-location-dot','Sri Lankan Heritage','Rooted in Sri Lanka\'s gem heritage.',4),
+('fa-solid fa-shield-halved','Trusted & Transparent','Clear details for confident purchases.',5);
 
 -- Hero slides
 INSERT INTO `hero_slides` (`image`,`eyebrow`,`title`,`description`,`btn_text`,`btn_link`,`sort_order`) VALUES

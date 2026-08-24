@@ -10,28 +10,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'] ?? '';
 
         if ($action === 'add') {
-            $icon = handle_upload('icon', '');
+            $icon = trim($_POST['icon'] ?? '');
             $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM trust_badges")->fetchColumn();
             $stmt = db()->prepare("INSERT INTO trust_badges (icon, title, description, sort_order, is_active) VALUES (?,?,?,?,1)");
             $stmt->execute([$icon, trim($_POST['title'] ?? ''), trim($_POST['description'] ?? ''), $ord]);
             set_flash('success', 'Badge added.');
         }
         elseif ($action === 'update') {
-            $id  = (int) $_POST['id'];
-            $row = db()->prepare("SELECT icon FROM trust_badges WHERE id=?");
-            $row->execute([$id]);
-            $old  = $row->fetchColumn();
-            $icon = handle_upload('icon', $old);
+            $id   = (int) $_POST['id'];
+            $icon = trim($_POST['icon'] ?? '');
             $stmt = db()->prepare("UPDATE trust_badges SET icon=?, title=?, description=?, is_active=? WHERE id=?");
             $stmt->execute([$icon, trim($_POST['title'] ?? ''), trim($_POST['description'] ?? ''), isset($_POST['is_active']) ? 1 : 0, $id]);
             set_flash('success', 'Badge updated.');
         }
         elseif ($action === 'delete') {
-            $id  = (int) $_POST['id'];
-            $row = db()->prepare("SELECT icon FROM trust_badges WHERE id=?");
-            $row->execute([$id]);
-            $old = $row->fetchColumn();
-            if ($old && file_exists(UPLOAD_DIR . '/' . $old)) @unlink(UPLOAD_DIR . '/' . $old);
+            $id = (int) $_POST['id'];
             db()->prepare("DELETE FROM trust_badges WHERE id=?")->execute([$id]);
             set_flash('success', 'Badge deleted.');
         }
@@ -47,10 +40,10 @@ require_once __DIR__ . '/layout-top.php';
 
 <div class="card">
     <h2>Trust Badges</h2>
-    <p class="card-sub">The small icon strip shown on the home page just below the hero slider. Recommended icon: a simple line-style SVG or PNG, square, transparent background.</p>
+    <p class="card-sub">The small icon strip shown on the home page just below the hero slider. Icons use <a href="https://fontawesome.com/search?ic=free" target="_blank" rel="noopener">Font Awesome</a> — browse free icons there, then copy the class shown under an icon (e.g. <code>fa-solid fa-globe</code>) into the Icon field below.</p>
 
     <?php foreach ($items as $b): ?>
-        <form method="post" enctype="multipart/form-data" style="border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;">
+        <form method="post" style="border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="id" value="<?= (int) $b['id'] ?>">
@@ -65,14 +58,12 @@ require_once __DIR__ . '/layout-top.php';
                 </div>
             </div>
             <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
-                <div class="img-field">
-                    <div class="img-preview" style="width:56px;height:56px;">
-                        <?php if ($b['icon']): ?><img src="<?= UPLOAD_URL . e($b['icon']) ?>"><?php else: ?><span style="font-size:10px;">Icon</span><?php endif; ?>
-                    </div>
-                    <div class="upload-btn-wrap">
-                        <button type="button" class="btn btn-sm">Icon</button>
-                        <input type="file" name="icon" accept="image/*,.svg">
-                    </div>
+                <div style="width:44px;height:44px;border-radius:8px;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <i class="<?= e($b['icon']) ?>" style="color:#c99a5b;font-size:20px;"></i>
+                </div>
+                <div class="form-group" style="margin-bottom:0;flex:1;min-width:200px;">
+                    <label>Icon <span class="hint">(Font Awesome class, e.g. fa-solid fa-globe)</span></label>
+                    <input type="text" name="icon" class="form-control" value="<?= e($b['icon']) ?>">
                 </div>
                 <label style="font-size:13px;"><input type="checkbox" name="is_active" <?= $b['is_active'] ? 'checked' : '' ?>> Show</label>
                 <button class="btn btn-sm btn-primary">Save</button>
@@ -85,7 +76,7 @@ require_once __DIR__ . '/layout-top.php';
     <?php endif; ?>
 
     <div class="section-divider"></div>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         <?= csrf_field() ?>
         <input type="hidden" name="action" value="add">
         <h2 style="font-size:15px;margin-bottom:14px;">Add New Badge</h2>
@@ -100,14 +91,8 @@ require_once __DIR__ . '/layout-top.php';
             </div>
         </div>
         <div class="form-group" style="margin-bottom:14px;">
-            <label>Icon <span class="hint">(simple line-style SVG or PNG, square)</span></label>
-            <div class="img-field">
-                <div class="img-preview" id="newIconPrev" style="width:56px;height:56px;">Icon</div>
-                <div class="upload-btn-wrap">
-                    <button type="button" class="btn btn-sm">Choose Icon</button>
-                    <input type="file" name="icon" accept="image/*,.svg" data-preview="newIconPrev">
-                </div>
-            </div>
+            <label>Icon <span class="hint">(Font Awesome class, e.g. fa-solid fa-globe)</span></label>
+            <input type="text" name="icon" class="form-control" placeholder="fa-solid fa-globe">
         </div>
         <button type="submit" class="btn btn-primary">Add Badge</button>
     </form>

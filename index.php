@@ -289,7 +289,7 @@ $testimonials = get_testimonials();
             <?php foreach ($trustBadges as $tb): ?>
                 <div class="trust-badge">
                     <?php if ($tb['icon']): ?>
-                        <img class="trust-badge-icon" src="<?= UPLOAD_URL . e($tb['icon']) ?>" alt="">
+                        <i class="trust-badge-icon <?= e($tb['icon']) ?>"></i>
                     <?php endif; ?>
                     <h4><?= e($tb['title']) ?></h4>
                     <p><?= e($tb['description']) ?></p>
