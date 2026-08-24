@@ -217,19 +217,25 @@ require_once __DIR__ . '/layout-top.php';
         </div>
 
         <div class="form-group">
-            <label>Product Video <span class="hint">(MP4, shown in the gallery alongside the images — optional)</span></label>
-            <?php if (!empty($product['video'])): ?>
-                <video src="<?= UPLOAD_URL . e($product['video']) ?>" controls style="width:220px;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:10px;display:block;"></video>
-            <?php endif; ?>
-            <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
-            <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 30MB. Use a white background, matching the product photos.</div>
-        </div>
-
-        <div class="form-group">
             <label class="switch-label">
                 <input type="checkbox" name="is_active" value="1" <?= (!$product || $product['is_active']) ? 'checked' : '' ?>>
                 Show this gemstone on the website
             </label>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Product Video</h2>
+        <p class="card-sub">Optional MP4 shown in the gallery alongside the images, at the same size and aspect ratio. Use a white background, matching the product photos.</p>
+
+        <?php if (!empty($product['video'])): ?>
+            <video src="<?= UPLOAD_URL . e($product['video']) ?>" controls style="width:220px;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:14px;display:block;"></video>
+        <?php endif; ?>
+
+        <div class="form-group">
+            <label>Video File</label>
+            <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
+            <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 30MB.</div>
         </div>
     </div>
 </form>
