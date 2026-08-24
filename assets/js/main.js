@@ -225,46 +225,113 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
-    /* ---- Mobile filter drawer (Gemstones catalogue page only) ---- */
+    /* ---- Gemstone catalogue filters: drawer + instant no-reload updates ----
+       Checking a filter fetches just the results fragment (count + grid +
+       pagination) and swaps it in via the Fetch API, updating the URL with
+       the History API so the page never actually reloads — while still
+       working as plain links/forms if JS fails. Desktop applies the instant
+       a checkbox changes; mobile keeps the drawer's deliberate "pick several,
+       then tap Show Products" flow, since instant-apply on the very first tap
+       would make it impossible to select more than one filter there. */
     (function () {
+        var form = document.getElementById('filterForm');
+        var resultsEl = document.getElementById('catalogueResults');
+        if (!form || !resultsEl) return;
+
         var toggleBtn = document.getElementById('filtersToggleBtn');
         var closeBtn = document.getElementById('filtersCloseBtn');
         var drawer = document.getElementById('catalogueFilters');
         var backdrop = document.getElementById('filtersBackdrop');
-        if (!toggleBtn || !drawer || !backdrop) return;
 
         function openDrawer() {
+            if (!drawer) return;
             drawer.classList.add('open');
-            backdrop.classList.add('open');
+            if (backdrop) backdrop.classList.add('open');
             document.body.classList.add('drawer-open');
         }
         function closeDrawer() {
+            if (!drawer) return;
             drawer.classList.remove('open');
-            backdrop.classList.remove('open');
+            if (backdrop) backdrop.classList.remove('open');
             document.body.classList.remove('drawer-open');
         }
-
-        toggleBtn.addEventListener('click', openDrawer);
+        if (toggleBtn) toggleBtn.addEventListener('click', openDrawer);
         if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-        backdrop.addEventListener('click', closeDrawer);
+        if (backdrop) backdrop.addEventListener('click', closeDrawer);
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') closeDrawer();
         });
-    })();
 
-    /* ---- Desktop catalogue filters: apply instantly on change ----
-       Mobile keeps the drawer's deliberate "pick several, then tap Show
-       Products" flow (checking innerWidth here rather than always
-       auto-submitting, since an instant reload after the very first tap
-       would make it impossible to select more than one filter on mobile). */
-    (function () {
-        var form = document.getElementById('filterForm');
-        if (!form) return;
-        var checkboxes = form.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(function (cb) {
+        function updateBadge() {
+            var count = form.querySelectorAll('input[type="checkbox"]:checked').length;
+            var badge = toggleBtn ? toggleBtn.querySelector('.filter-count-badge') : null;
+            if (count > 0) {
+                if (!badge && toggleBtn) {
+                    badge = document.createElement('span');
+                    badge.className = 'filter-count-badge';
+                    toggleBtn.appendChild(badge);
+                }
+                if (badge) badge.textContent = count;
+            } else if (badge) {
+                badge.remove();
+            }
+        }
+
+        function applyFilters(queryString) {
+            var url = 'gemstones.php' + (queryString ? '?' + queryString : '');
+            resultsEl.classList.add('is-loading');
+            fetch('filter-products.php' + (queryString ? '?' + queryString : ''), { credentials: 'same-origin' })
+                .then(function (res) { return res.ok ? res.text() : Promise.reject(new Error('bad response')); })
+                .then(function (html) {
+                    resultsEl.innerHTML = html;
+                    resultsEl.querySelectorAll('.reveal, .reveal-fade').forEach(function (el) {
+                        el.classList.add('in-view');
+                    });
+                    window.history.pushState({ gemFilters: true }, '', url);
+                    updateBadge();
+                    closeDrawer();
+                })
+                .catch(function () {
+                    window.location = url; // JS/network failure — fall back to a normal navigation
+                })
+                .then(function () {
+                    resultsEl.classList.remove('is-loading');
+                });
+        }
+
+        function formQueryString() {
+            return new URLSearchParams(new FormData(form)).toString();
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            applyFilters(formQueryString());
+        });
+
+        form.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
             cb.addEventListener('change', function () {
-                if (window.innerWidth > 980) form.submit();
+                if (window.innerWidth > 980) applyFilters(formQueryString());
             });
+        });
+
+        document.querySelectorAll('.catalogue-clear, .filters-clear-mobile').forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                form.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+                applyFilters('');
+            });
+        });
+
+        resultsEl.addEventListener('click', function (e) {
+            var link = e.target.closest('.catalogue-pagination a');
+            if (!link) return;
+            e.preventDefault();
+            applyFilters(link.getAttribute('href').replace(/^\?/, ''));
+            resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        window.addEventListener('popstate', function () {
+            applyFilters(window.location.search.replace(/^\?/, ''));
         });
     })();
 

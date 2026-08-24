@@ -272,6 +272,21 @@ function product_status_labels()
     ];
 }
 
+/* Build the $filters array for get_products() from $_GET — shared by gemstones.php
+   (full page load) and filter-products.php (AJAX partial reload) so both read the
+   same query-string shape identically. */
+function product_filters_from_get()
+{
+    return [
+        'category'  => array_map('intval', $_GET['category'] ?? []),
+        'shape'     => array_map('intval', $_GET['shape'] ?? []),
+        'treatment' => array_map('intval', $_GET['treatment'] ?? []),
+        'origin'    => array_map('intval', $_GET['origin'] ?? []),
+        'weight'    => array_values(array_intersect((array) ($_GET['weight'] ?? []), array_keys(weight_ranges()))),
+        'status'    => array_values(array_intersect((array) ($_GET['status'] ?? []), array_keys(product_status_labels()))),
+    ];
+}
+
 /* Filtered + paginated product listing for the catalogue page */
 function get_products($filters = [], $page = 1, $perPage = 12)
 {
