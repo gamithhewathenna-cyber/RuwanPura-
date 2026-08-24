@@ -152,6 +152,7 @@ a, button, .btn-dark, input, select, textarea {
 .nav a.nav-link:hover { color: var(--gold); }
 .nav a.nav-link.active { color: var(--gold); }
 .nav .caret { font-size: 10px; color: #444; }
+.nav a.nav-link.nav-link-mobile-only { display: none; } /* shown only inside the mobile dropdown — see max-width:980px */
 
 .nav-icons { display: flex; align-items: center; gap: 18px; }
 .nav-icons a { color: var(--ink); display: inline-flex; }
@@ -1037,10 +1038,14 @@ a, button, .btn-dark, input, select, textarea {
     .hero-arrow-outer { display: none; }
     .hero-arrow-inner { display: flex; }
 
+    /* Shrink logo + header bar a little so the row has room to breathe on phones/tablets */
+    .nav { height: 88px; }
+    .nav-logo img { height: 60px; }
+
     .nav-left { justify-content: flex-start; padding: 0; }
     .nav-menu {
         position: fixed;
-        top: 100px; left: 0; right: 0;
+        top: 88px; left: 0; right: 0;
         background: #fff;
         flex-direction: column;
         align-items: flex-start;
@@ -1051,12 +1056,29 @@ a, button, .btn-dark, input, select, textarea {
         transform: translateY(-140%);
         transition: transform .35s;
         z-index: 90;
+        max-height: calc(100vh - 88px);
+        max-height: calc(100dvh - 88px); /* accounts for iOS Safari's collapsing address bar */
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
     .nav-menu.open { transform: translateY(0); }
-    .menu-toggle { display: inline-flex; }
+    .nav a.nav-link.nav-link-mobile-only { display: inline-flex; } /* mirror links live only in the dropdown on mobile */
+    .menu-toggle { display: inline-flex; padding: 8px; margin: -8px; } /* bigger tap target, same visual icon size */
     .nav { justify-content: space-between; }
     .nav-left, .nav-right { flex: initial; }
-    .nav-right { gap: 20px; }
+    .nav-right { gap: 14px; }
+    .nav-right > a.nav-link { display: none; } /* the inline News/Contact links — duplicated into the dropdown above instead */
+    .nav-icons { gap: 14px; }
+
+    /* Prevent iOS Safari from auto-zooming the page when a form field is focused
+       (it does this automatically for any text input under 16px). */
+    .contact-form input, .contact-form textarea { font-size: 16px; }
+
+    /* Bigger, easier-to-tap touch targets */
+    .cart-item-remove { width: 36px; height: 36px; font-size: 20px; }
+    .filter-check input { width: 18px; height: 18px; }
+
+    .testi-track { -webkit-overflow-scrolling: touch; }
 
     .hero-grid { grid-template-columns: 1fr; gap: 40px; }
     .hero-title { font-size: 54px; }

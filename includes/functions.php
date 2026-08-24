@@ -109,7 +109,7 @@ function maybe_show_maintenance_page()
         <title>Under Maintenance — <?= e($siteName) ?></title>
         <style>
             body {
-                margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+                margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center;
                 background: <?= e($dark) ?>; color: #f5f1e8; font-family: Georgia, 'Times New Roman', serif;
                 text-align: center; padding: 24px; box-sizing: border-box;
             }

@@ -42,6 +42,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <a href="<?= BASE_URL ?>index.php" class="nav-link<?= $currentPage === 'index.php' ? ' active' : '' ?>"><?= e(c('nav_home')) ?></a>
                 <a href="<?= BASE_URL ?>gemstones.php" class="nav-link<?= in_array($currentPage, ['gemstones.php', 'gemstone.php'], true) ? ' active' : '' ?>"><?= e(c('nav_gemstones')) ?></a>
                 <a href="<?= BASE_URL ?>about.php" class="nav-link<?= $currentPage === 'about.php' ? ' active' : '' ?>"><?= e(c('nav_about')) ?></a>
+                <!-- Mobile-only: these two mirror the links in .nav-right, which are hidden on
+                     small screens so the header doesn't overflow. Desktop is unaffected — this
+                     class is display:none outside the mobile breakpoint. -->
+                <a href="<?= BASE_URL ?>index.php#events" class="nav-link nav-link-mobile-only"><?= e(c('nav_news')) ?></a>
+                <a href="<?= BASE_URL ?>contact.php" class="nav-link nav-link-mobile-only<?= $currentPage === 'contact.php' ? ' active' : '' ?>"><?= e(c('nav_contact')) ?></a>
             </div>
 
             <a class="nav-logo" href="<?= BASE_URL ?>index.php">
