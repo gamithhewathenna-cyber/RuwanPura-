@@ -30,6 +30,14 @@ $relatedProducts = get_related_products($product, 4);
 include __DIR__ . '/includes/header.php';
 ?>
 
+<!-- ================= PRODUCT HEADER ================= -->
+<section class="about-hero">
+    <div class="container reveal">
+        <h1 class="about-hero-title"><?= e($categoryName ?: 'Gemstone') ?></h1>
+        <p class="product-header-subtitle"><?= e($product['name']) ?></p>
+    </div>
+</section>
+
 <!-- ================= PRODUCT DETAIL ================= -->
 <section class="product-detail">
     <div class="container">

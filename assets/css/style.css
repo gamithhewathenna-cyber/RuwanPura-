@@ -613,6 +613,14 @@ a, button, .btn-dark, input, select, textarea {
     line-height: 1.6;
 }
 
+.product-header-subtitle {
+    font-family: var(--sans);
+    font-size: 15px;
+    letter-spacing: .5px;
+    color: var(--gold);
+    margin-top: 4px;
+}
+
 /* --- The Radical Evolution --- */
 .evolution { padding: 80px 0; }
 .evolution-grid {
