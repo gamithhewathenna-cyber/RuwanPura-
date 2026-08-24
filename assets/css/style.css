@@ -291,7 +291,7 @@ a.announcement-text:hover { color: var(--gold); }
 /* =====================================================================
    TRUST BADGES
    ===================================================================== */
-.trust-badges { padding: 36px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.trust-badges { padding: 36px 0; background: #2b2b2b; }
 .trust-badges-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -299,12 +299,12 @@ a.announcement-text:hover { color: var(--gold); }
 .trust-badge {
     text-align: center;
     padding: 10px 20px;
-    border-left: 1px solid var(--line);
+    border-left: 1px solid rgba(255,255,255,.15);
 }
 .trust-badge:first-child { border-left: none; }
-.trust-badge-icon { width: 34px; height: 34px; margin: 0 auto 14px; display: block; }
-.trust-badge h4 { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-.trust-badge p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.trust-badge-icon { width: 34px; height: 34px; margin: 0 auto 14px; display: block; filter: brightness(0) invert(1); }
+.trust-badge h4 { font-family: var(--serif); font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+.trust-badge p { font-size: 12.5px; color: rgba(255,255,255,.65); line-height: 1.5; }
 
 /* =====================================================================
    JOURNEY
