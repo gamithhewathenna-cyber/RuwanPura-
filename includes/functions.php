@@ -682,10 +682,10 @@ function handle_upload($fileField, $oldFile = '', $allowed = null, $maxBytes = n
     return $oldFile;
 }
 
-/* Video file upload (mp4/webm/mov), up to 80MB */
-function handle_video_upload($fileField, $oldFile = '')
+/* Video file upload (mp4/webm/mov), up to 80MB by default */
+function handle_video_upload($fileField, $oldFile = '', $maxBytes = null)
 {
-    return handle_upload($fileField, $oldFile, ['mp4', 'webm', 'mov'], 80 * 1024 * 1024);
+    return handle_upload($fileField, $oldFile, ['mp4', 'webm', 'mov'], $maxBytes ?? (80 * 1024 * 1024));
 }
 
 /* ------------------------------------------------------------------ */

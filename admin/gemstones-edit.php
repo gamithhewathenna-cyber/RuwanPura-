@@ -43,12 +43,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($id) {
                 $slug  = unique_slug('products', $name, $id);
-                $video = handle_video_upload('video', $product['video'] ?? '');
+                $video = handle_video_upload('video', $product['video'] ?? '', 30 * 1024 * 1024);
                 $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=?, video=? WHERE id=?");
                 $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $video, $id]);
             } else {
                 $slug  = unique_slug('products', $name);
-                $video = handle_video_upload('video', '');
+                $video = handle_video_upload('video', '', 30 * 1024 * 1024);
                 $ord   = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
                 $stmt = db()->prepare("INSERT INTO products (name, slug, sku, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order, video) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord, $video]);
@@ -222,7 +222,7 @@ require_once __DIR__ . '/layout-top.php';
                 <video src="<?= UPLOAD_URL . e($product['video']) ?>" controls style="width:220px;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:10px;display:block;"></video>
             <?php endif; ?>
             <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
-            <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 80MB.</div>
+            <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 30MB. Use a white background, matching the product photos.</div>
         </div>
 
         <div class="form-group">
