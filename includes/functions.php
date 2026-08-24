@@ -453,7 +453,7 @@ function slide_text($slide, $field, $default = '')
 /* ------------------------------------------------------------------ */
 /*  File uploads                                                       */
 /* ------------------------------------------------------------------ */
-function handle_upload($fileField, $oldFile = '')
+function handle_upload($fileField, $oldFile = '', $allowed = null, $maxBytes = null)
 {
     if (empty($_FILES[$fileField]) || $_FILES[$fileField]['error'] === UPLOAD_ERR_NO_FILE) {
         return $oldFile; // nothing uploaded, keep existing
@@ -463,14 +463,14 @@ function handle_upload($fileField, $oldFile = '')
         return $oldFile;
     }
 
-    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+    $allowed = $allowed ?? ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($ext, $allowed)) {
         return $oldFile; // reject invalid type
     }
 
-    // size limit 8MB
-    if ($file['size'] > 8 * 1024 * 1024) {
+    $maxBytes = $maxBytes ?? (8 * 1024 * 1024); // default 8MB
+    if ($file['size'] > $maxBytes) {
         return $oldFile;
     }
 
@@ -489,6 +489,12 @@ function handle_upload($fileField, $oldFile = '')
         return $newName;
     }
     return $oldFile;
+}
+
+/* Video file upload (mp4/webm/mov), up to 80MB */
+function handle_video_upload($fileField, $oldFile = '')
+{
+    return handle_upload($fileField, $oldFile, ['mp4', 'webm', 'mov'], 80 * 1024 * 1024);
 }
 
 /* ------------------------------------------------------------------ */

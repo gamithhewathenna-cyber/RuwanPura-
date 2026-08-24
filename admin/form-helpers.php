@@ -22,7 +22,7 @@ function image_size_hint($key)
         'cta_image'      => '1920 × 800px',
         'evolution_image'      => '900 × 675px',
         'evolution_badge_image'=> '500 × 350px, transparent PNG',
-        'video_thumbnail'      => '1600 × 800px',
+        'video_thumbnail'      => '1080 × 1920px, portrait',
         'awards_image'         => '700 × 900px',
         'gubelin_image'        => '900 × 1100px',
     ];
@@ -70,6 +70,25 @@ function render_content_field($block)
             echo '<input type="hidden" name="image_keys[]" value="' . e($key) . '">';
             break;
 
+        case 'video':
+            $vPreviewId = 'prev_' . $key;
+            echo '<div class="img-field">';
+            echo '  <div class="img-preview" id="' . $vPreviewId . '" style="width:110px;height:160px;">';
+            if ($val) {
+                echo '<video src="' . UPLOAD_URL . e($val) . '" style="width:100%;height:100%;object-fit:cover;" muted></video>';
+            } else {
+                echo 'No video';
+            }
+            echo '  </div>';
+            echo '  <div class="upload-btn-wrap">';
+            echo '    <button type="button" class="btn btn-sm">Choose Video (MP4)</button>';
+            echo '    <input type="file" name="video_' . e($key) . '" accept="video/mp4,video/webm,video/quicktime">';
+            echo '  </div>';
+            echo '</div>';
+            echo '<div class="hint" style="margin-top:8px;">MP4/WebM/MOV, up to 80MB. Recommended: portrait, e.g. 1080 × 1920px.</div>';
+            echo '<input type="hidden" name="video_keys[]" value="' . e($key) . '">';
+            break;
+
         case 'link':
             echo '<input type="text" name="content[' . e($key) . ']" class="form-control" value="' . e($val) . '" placeholder="e.g. #contact or https://...">';
             break;
@@ -95,6 +114,17 @@ function save_content_group()
             $field = 'image_' . $key;
             $old   = c($key);
             $new   = handle_upload($field, $old);
+            if ($new !== $old) {
+                update_content($key, $new);
+            }
+        }
+    }
+    // Save videos (only those with an uploaded file)
+    if (!empty($_POST['video_keys']) && is_array($_POST['video_keys'])) {
+        foreach ($_POST['video_keys'] as $key) {
+            $field = 'video_' . $key;
+            $old   = c($key);
+            $new   = handle_video_upload($field, $old);
             if ($new !== $old) {
                 update_content($key, $new);
             }

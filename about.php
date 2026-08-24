@@ -68,31 +68,39 @@ $memberships  = get_memberships();
         <div class="eyebrow"><?= e(c('video_eyebrow')) ?></div>
 
         <?php $videoEmbedUrl = video_embed_url(c('video_url')); ?>
-        <div class="video-frame">
-            <?php if ($videoEmbedUrl): ?>
-                <iframe src="<?= e($videoEmbedUrl) ?>" title="<?= e(c('video_heading')) ?>" loading="lazy"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowfullscreen></iframe>
-            <?php elseif (c('video_thumbnail')): ?>
-                <img src="<?= c_img('video_thumbnail') ?>" alt="">
-                <span class="play-btn" aria-hidden="true">&#9658;</span>
-            <?php else: ?>
-                <div class="contact-map-placeholder">Video</div>
-            <?php endif; ?>
-        </div>
-
-        <h2 class="video-heading"><?= e(c('video_heading')) ?></h2>
-        <p><?= e(c('video_p1')) ?></p>
-        <p><?= e(c('video_p2')) ?></p>
-
-        <div class="video-cards">
-            <div class="video-card">
-                <h3><?= e(c('video_card1_title')) ?></h3>
-                <p><?= e(c('video_card1_desc')) ?></p>
+        <div class="video-split">
+            <div class="video-frame-portrait">
+                <?php if (c('video_file')): ?>
+                    <video controls playsinline preload="metadata" <?= c('video_thumbnail') ? 'poster="' . c_img('video_thumbnail') . '"' : '' ?>>
+                        <source src="<?= c_img('video_file') ?>" type="video/mp4">
+                    </video>
+                <?php elseif ($videoEmbedUrl): ?>
+                    <iframe src="<?= e($videoEmbedUrl) ?>" title="<?= e(c('video_heading')) ?>" loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen></iframe>
+                <?php elseif (c('video_thumbnail')): ?>
+                    <img src="<?= c_img('video_thumbnail') ?>" alt="">
+                    <span class="play-btn" aria-hidden="true">&#9658;</span>
+                <?php else: ?>
+                    <div class="contact-map-placeholder">Video</div>
+                <?php endif; ?>
             </div>
-            <div class="video-card">
-                <h3><?= e(c('video_card2_title')) ?></h3>
-                <p><?= e(c('video_card2_desc')) ?></p>
+
+            <div class="video-text">
+                <h2 class="video-heading"><?= e(c('video_heading')) ?></h2>
+                <p><?= e(c('video_p1')) ?></p>
+                <p><?= e(c('video_p2')) ?></p>
+
+                <div class="video-cards">
+                    <div class="video-card">
+                        <h3><?= e(c('video_card1_title')) ?></h3>
+                        <p><?= e(c('video_card1_desc')) ?></p>
+                    </div>
+                    <div class="video-card">
+                        <h3><?= e(c('video_card2_title')) ?></h3>
+                        <p><?= e(c('video_card2_desc')) ?></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
