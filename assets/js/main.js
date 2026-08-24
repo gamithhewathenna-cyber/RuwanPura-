@@ -15,22 +15,67 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* ---- Hero slider ---- */
+    /* ---- Hero slider: image + text slide together as one unit ---- */
     (function () {
         var slides = document.querySelectorAll('.hero-slide');
         var textSlides = document.querySelectorAll('.hero-text-slide');
+        var heroText = document.querySelector('.hero-text');
         if (slides.length === 0) return;
         var idx = 0;
-        function show(i) {
-            slides.forEach(function (s, k) { s.classList.toggle('active', k === i); });
-            textSlides.forEach(function (t, k) { t.classList.toggle('active', k === i); });
+
+        function setHeroTextHeight() {
+            var active = textSlides[idx];
+            if (heroText && active) heroText.style.height = active.offsetHeight + 'px';
         }
-        function next() { idx = (idx + 1) % slides.length; show(idx); }
-        function prev() { idx = (idx - 1 + slides.length) % slides.length; show(idx); }
-        show(0);
-        document.querySelectorAll('.hero-arrow.next').forEach(function (b) { b.addEventListener('click', next); });
-        document.querySelectorAll('.hero-arrow.prev').forEach(function (b) { b.addEventListener('click', prev); });
-        if (slides.length > 1) setInterval(next, 6000);
+
+        function place(el, parked) {
+            el.classList.remove('active', 'park-left');
+            if (parked) el.classList.add('park-left');
+        }
+
+        function go(newIdx, direction) {
+            var oldIdx = idx;
+            if (newIdx === oldIdx) return;
+
+            [slides, textSlides].forEach(function (group) {
+                var oldEl = group[oldIdx];
+                var newEl = group[newIdx];
+                if (!oldEl || !newEl) return;
+
+                // Put the incoming slide at its correct starting side with no
+                // transition first (so it doesn't visibly fly in from wherever
+                // it was last left), then flip both slides on the next frame
+                // so the move actually animates.
+                newEl.style.transition = 'none';
+                place(newEl, direction === 'prev');
+                void newEl.offsetWidth;
+                newEl.style.transition = '';
+
+                requestAnimationFrame(function () {
+                    place(oldEl, direction === 'next');
+                    newEl.classList.add('active');
+                });
+            });
+
+            idx = newIdx;
+            setHeroTextHeight();
+        }
+
+        function next() { go((idx + 1) % slides.length, 'next'); }
+        function prev() { go((idx - 1 + slides.length) % slides.length, 'prev'); }
+
+        setHeroTextHeight();
+        window.addEventListener('resize', setHeroTextHeight);
+
+        var timer;
+        function restartAuto() {
+            clearInterval(timer);
+            if (slides.length > 1) timer = setInterval(next, 6000);
+        }
+
+        document.querySelectorAll('.hero-arrow.next').forEach(function (b) { b.addEventListener('click', function () { next(); restartAuto(); }); });
+        document.querySelectorAll('.hero-arrow.prev').forEach(function (b) { b.addEventListener('click', function () { prev(); restartAuto(); }); });
+        restartAuto();
     })();
 
     /* Collection ("Explore Our Gemstones") is a pure CSS infinite marquee now — see .collection-track in style.css */
