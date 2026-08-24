@@ -80,6 +80,95 @@ document.addEventListener('DOMContentLoaded', function () {
         restartAuto();
     })();
 
+    /* ---- Gemstone search-as-you-type (catalogue page only) ---- */
+    (function () {
+        var input = document.getElementById('gemSearchInput');
+        var panel = document.getElementById('gemSearchResults');
+        if (!input || !panel) return;
+
+        var debounceTimer;
+        var requestSeq = 0;
+
+        function closePanel() {
+            panel.classList.remove('open');
+            panel.innerHTML = '';
+        }
+
+        function renderResults(items) {
+            panel.innerHTML = '';
+            if (!items.length) {
+                var empty = document.createElement('div');
+                empty.className = 'search-empty';
+                empty.textContent = 'No gemstones found';
+                panel.appendChild(empty);
+            } else {
+                items.forEach(function (item) {
+                    var a = document.createElement('a');
+                    a.href = item.url;
+                    a.className = 'search-result-item';
+
+                    var thumb = document.createElement('span');
+                    thumb.className = 'search-result-thumb';
+                    if (item.thumb) {
+                        var img = document.createElement('img');
+                        img.src = item.thumb;
+                        img.alt = '';
+                        thumb.appendChild(img);
+                    }
+
+                    var name = document.createElement('span');
+                    name.className = 'search-result-name';
+                    name.textContent = item.name;
+
+                    a.appendChild(thumb);
+                    a.appendChild(name);
+                    panel.appendChild(a);
+                });
+            }
+            panel.classList.add('open');
+        }
+
+        function runSearch(query) {
+            var seq = ++requestSeq;
+            fetch('search-products.php?q=' + encodeURIComponent(query))
+                .then(function (res) { return res.ok ? res.json() : []; })
+                .then(function (data) {
+                    if (seq !== requestSeq) return; // a newer request started meanwhile — ignore this stale one
+                    renderResults(Array.isArray(data) ? data : []);
+                })
+                .catch(function () { /* silently ignore network errors */ });
+        }
+
+        input.addEventListener('input', function () {
+            var query = input.value.trim();
+            clearTimeout(debounceTimer);
+            if (query.length === 0) {
+                requestSeq++; // invalidate any in-flight request
+                closePanel();
+                return;
+            }
+            debounceTimer = setTimeout(function () { runSearch(query); }, 250);
+        });
+
+        input.addEventListener('focus', function () {
+            if (input.value.trim().length > 0 && panel.innerHTML !== '') {
+                panel.classList.add('open');
+            }
+        });
+
+        // Close the dropdown on outside clicks. Clicks on a result <a> still
+        // navigate normally — this only hides the panel, it doesn't block them.
+        document.addEventListener('click', function (e) {
+            if (!panel.contains(e.target) && e.target !== input) {
+                closePanel();
+            }
+        });
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closePanel();
+        });
+    })();
+
     /* ---- Sitewide scroll reveal: .reveal / .reveal-fade / .timeline-item ---- */
     (function () {
         var items = document.querySelectorAll('.reveal, .reveal-fade, .timeline-item');

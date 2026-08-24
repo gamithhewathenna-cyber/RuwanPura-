@@ -856,6 +856,45 @@ a, button, .btn-dark, input, select, textarea {
 }
 
 .catalogue { padding: 60px 0 90px; }
+
+.catalogue-search-wrap { display: flex; justify-content: center; margin-bottom: 44px; }
+.catalogue-search { position: relative; width: 100%; max-width: 520px; }
+.catalogue-search-icon {
+    position: absolute; left: 17px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; color: var(--muted); pointer-events: none;
+}
+.catalogue-search input {
+    width: 100%; padding: 15px 18px 15px 48px; border: 1px solid var(--line);
+    border-radius: 30px; font-family: inherit; font-size: 15px; color: var(--ink);
+    background: #fff;
+}
+.catalogue-search input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,154,91,.15); }
+
+.catalogue-search-results {
+    display: none;
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+    background: #fff; border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,.12);
+    max-height: 360px; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 40;
+}
+.catalogue-search-results.open { display: block; }
+.search-result-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; border-bottom: 1px solid var(--line);
+    transition: background .15s;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: #faf7f2; }
+.search-result-thumb {
+    width: 42px; height: 42px; border-radius: 8px; overflow: hidden;
+    background: #f3f3f3; flex: 0 0 42px;
+}
+.search-result-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.search-result-name { font-size: 14px; color: var(--ink); font-weight: 500; }
+.search-empty { padding: 18px 14px; text-align: center; color: var(--muted); font-size: 14px; }
+
 .catalogue-layout { display: grid; grid-template-columns: 260px 1fr; gap: 50px; align-items: start; }
 
 .catalogue-filters {
@@ -1072,7 +1111,7 @@ a, button, .btn-dark, input, select, textarea {
 
     /* Prevent iOS Safari from auto-zooming the page when a form field is focused
        (it does this automatically for any text input under 16px). */
-    .contact-form input, .contact-form textarea { font-size: 16px; }
+    .contact-form input, .contact-form textarea, .catalogue-search input { font-size: 16px; }
 
     /* Bigger, easier-to-tap touch targets */
     .cart-item-remove { width: 36px; height: 36px; font-size: 20px; }

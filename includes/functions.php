@@ -381,6 +381,29 @@ function get_related_products($product, $limit = 4)
     }
 }
 
+/* Search-as-you-type: name contains the query, "starts with" matches ranked first */
+function search_products($query, $limit = 8)
+{
+    $query = trim((string) $query);
+    if ($query === '') return [];
+    $limit = max(1, (int) $limit);
+
+    try {
+        $stmt = db()->prepare("
+            SELECT p.name, p.slug,
+                   (SELECT image FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order, id LIMIT 1) AS thumb
+            FROM products p
+            WHERE p.is_active = 1 AND p.name LIKE ?
+            ORDER BY (p.name LIKE ?) DESC, p.name ASC
+            LIMIT $limit
+        ");
+        $stmt->execute(['%' . $query . '%', $query . '%']);
+        return $stmt->fetchAll();
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
 /* URL-safe slug from a string */
 function slugify($text)
 {
