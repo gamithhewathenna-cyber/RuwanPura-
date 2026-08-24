@@ -25,6 +25,7 @@ function image_size_hint($key)
         'video_thumbnail'      => '1080 × 1920px, portrait',
         'awards_image'         => '700 × 900px',
         'gubelin_image'        => '900 × 1100px',
+        'why_image'            => '900 × 1125px, portrait (4:5)',
     ];
     return $hints[$key] ?? '';
 }

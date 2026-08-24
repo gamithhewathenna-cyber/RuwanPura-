@@ -16,6 +16,7 @@ $homePageSections = [
     'section-collection.php'  => 'Gemstones Collection',
     'section-factory.php'     => 'Factory & Laboratories',
     'section-branches.php'    => 'Our Branches',
+    'section-why-choose.php'  => 'Why Choose Us',
     'section-events.php'      => 'Exhibitions & Logos',
     'section-testimonials.php'=> 'Testimonials',
     'section-cta.php'         => 'Call To Action',

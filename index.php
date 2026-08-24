@@ -160,6 +160,44 @@ $testimonials = get_testimonials();
     </div>
 </section>
 
+<!-- ================= WHY CHOOSE US ================= -->
+<section class="why-choose">
+    <div class="container">
+        <div class="why-grid">
+            <div class="why-content reveal">
+                <div class="eyebrow left"><?= e(c('why_eyebrow')) ?></div>
+                <h2 class="why-title"><?= e(c('why_title')) ?></h2>
+                <p class="why-desc"><?= e(c('why_desc')) ?></p>
+                <div class="why-features">
+                    <div class="why-feature">
+                        <h4><?= e(c('why_item1_title')) ?></h4>
+                        <p><?= e(c('why_item1_desc')) ?></p>
+                    </div>
+                    <div class="why-feature">
+                        <h4><?= e(c('why_item2_title')) ?></h4>
+                        <p><?= e(c('why_item2_desc')) ?></p>
+                    </div>
+                    <div class="why-feature">
+                        <h4><?= e(c('why_item3_title')) ?></h4>
+                        <p><?= e(c('why_item3_desc')) ?></p>
+                    </div>
+                    <div class="why-feature">
+                        <h4><?= e(c('why_item4_title')) ?></h4>
+                        <p><?= e(c('why_item4_desc')) ?></p>
+                    </div>
+                </div>
+            </div>
+            <div class="why-image reveal-fade">
+                <?php if (c('why_image')): ?>
+                    <img src="<?= c_img('why_image') ?>" alt="<?= e(c('why_title')) ?>">
+                <?php else: ?>
+                    <div class="map-placeholder">Why Choose Ruwanpura Gems</div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ================= EVENTS ================= -->
 <section class="events" id="events">
     <div class="container">

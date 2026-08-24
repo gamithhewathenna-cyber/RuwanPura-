@@ -9,7 +9,7 @@ require_once __DIR__ . '/form-helpers.php';
 
 $__sectionRoleMap = [
     'header' => 'home', 'hero' => 'home', 'journey' => 'home', 'collection' => 'home',
-    'factory' => 'home', 'branches' => 'home', 'events' => 'home', 'testimonials' => 'home',
+    'factory' => 'home', 'branches' => 'home', 'why_choose' => 'home', 'events' => 'home', 'testimonials' => 'home',
     'cta' => 'home', 'footer' => 'home',
     'about_hero' => 'about', 'about_evolution' => 'about', 'history' => 'about',
     'about_video' => 'about', 'awards' => 'about', 'gubelin' => 'about', 'membership' => 'about',
