@@ -851,10 +851,6 @@ a, button, .btn-dark, input, select, textarea {
    ===================================================================== */
 .catalogue-hero { background: var(--dark); color: #fff; padding: 60px 0 44px; text-align: center; }
 .catalogue-hero .eyebrow { justify-content: center !important; }
-.catalogue-hero-title {
-    font-family: var(--serif); font-weight: 600; color: #fff;
-    font-size: 46px; margin-top: 10px; text-align: center !important;
-}
 .catalogue-hero-desc {
     color: #ccc; font-size: 16px; max-width: 620px; margin: 16px auto 0 !important; line-height: 1.7; text-align: center !important;
 }
@@ -1158,7 +1154,6 @@ a, button, .btn-dark, input, select, textarea {
     .contact-form .form-row-2 { grid-template-columns: 1fr; }
     .contact-heading { font-size: 28px; }
 
-    .catalogue-hero-title { font-size: 32px; }
     .product-grid, .related-products .product-grid { grid-template-columns: 1fr; }
     .product-title { font-size: 30px; }
     .product-specs { grid-template-columns: 1fr 1fr; }

@@ -28,7 +28,7 @@ include __DIR__ . '/includes/header.php';
 <section class="catalogue-hero">
     <div class="container reveal">
         <div class="eyebrow">OUR COLLECTION</div>
-        <h1 class="catalogue-hero-title">Gemstone Catalogue</h1>
+        <h1 class="about-hero-title catalogue-hero-title">Gemstone Catalogue</h1>
         <p class="catalogue-hero-desc">Discover a curated collection of exceptional natural gemstones, selected for their beauty, rarity, and timeless character.</p>
     </div>
 </section>
