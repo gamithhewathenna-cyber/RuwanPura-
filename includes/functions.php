@@ -459,6 +459,31 @@ function video_embed_url($url)
     return $url;
 }
 
+/* Best-effort flag emoji for a phone number, based on its leading +country code.
+   Longer/more specific codes are checked first to avoid mismatching a shorter prefix. */
+function phone_flag($phone)
+{
+    $phone = trim((string) $phone);
+    if ($phone === '' || $phone[0] !== '+') return '';
+
+    static $codes = [
+        '+971' => '🇦🇪', '+966' => '🇸🇦', '+960' => '🇲🇻', '+886' => '🇹🇼',
+        '+852' => '🇭🇰', '+853' => '🇲🇴', '+673' => '🇧🇳',
+        '+94'  => '🇱🇰', '+66'  => '🇹🇭', '+65'  => '🇸🇬', '+95'  => '🇲🇲',
+        '+91'  => '🇮🇳', '+92'  => '🇵🇰', '+86'  => '🇨🇳', '+81'  => '🇯🇵',
+        '+82'  => '🇰🇷', '+84'  => '🇻🇳', '+63'  => '🇵🇭', '+62'  => '🇮🇩',
+        '+61'  => '🇦🇺', '+64'  => '🇳🇿', '+44'  => '🇬🇧', '+49'  => '🇩🇪',
+        '+33'  => '🇫🇷', '+39'  => '🇮🇹', '+34'  => '🇪🇸', '+31'  => '🇳🇱',
+        '+41'  => '🇨🇭', '+27'  => '🇿🇦',
+        '+1'   => '🇺🇸',
+    ];
+
+    foreach ($codes as $code => $flag) {
+        if (strpos($phone, $code) === 0) return $flag;
+    }
+    return '';
+}
+
 /* Image URL for a repeatable row image column */
 function row_img($file, $placeholder = '')
 {

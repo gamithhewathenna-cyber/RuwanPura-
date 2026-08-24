@@ -69,8 +69,8 @@ include __DIR__ . '/includes/header.php';
                     </div>
                     <div>
                         <h4>Phone</h4>
-                        <p><?= e(c('footer_phone1')) ?></p>
-                        <p><?= e(c('footer_phone2')) ?></p>
+                        <p><?= e(phone_flag(c('footer_phone1'))) ?> <?= e(c('footer_phone1')) ?></p>
+                        <p><?= e(phone_flag(c('footer_phone2'))) ?> <?= e(c('footer_phone2')) ?></p>
                     </div>
                 </div>
                 <div class="contact-detail">
