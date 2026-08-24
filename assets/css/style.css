@@ -420,7 +420,7 @@ ul { list-style: none; }
 /* =====================================================================
    TESTIMONIALS
    ===================================================================== */
-.testimonials { padding: 50px 0 80px; }
+.testimonials { padding: 60px 0 90px; background: #f7f7f7; }
 .testi-head { position: relative; margin-bottom: 40px; }
 .testi-quote-mark {
     font-family: var(--serif);
@@ -451,9 +451,10 @@ ul { list-style: none; }
 .testi-card {
     flex: 0 0 300px;
     scroll-snap-align: start;
-    background: #f6f6f6;
+    background: #fff;
     border-radius: 10px;
     padding: 28px 26px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.05);
 }
 .testi-card.dark { background: var(--dark); color: #fff; }
 .testi-card .quote { font-size: 14.5px; margin-bottom: 22px; }
