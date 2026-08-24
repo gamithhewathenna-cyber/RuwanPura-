@@ -1124,8 +1124,8 @@ a, button, .btn-dark, input, select, textarea {
     /* Bigger, easier-to-tap touch targets */
     .cart-item-remove { width: 36px; height: 36px; font-size: 20px; }
     .filter-check input { width: 18px; height: 18px; }
-    .catalogue-search-icon { width: 22px; height: 22px; left: 18px; }
-    .catalogue-search input { padding: 16px 18px 16px 52px; }
+    .catalogue-search-icon { width: 24px; height: 24px; left: 18px; }
+    .catalogue-search input { padding: 16px 18px 16px 54px; }
 
     .testi-track { -webkit-overflow-scrolling: touch; }
 

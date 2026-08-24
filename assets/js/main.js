@@ -90,8 +90,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var requestSeq = 0;
 
         function closePanel() {
+            // Only hide it — don't clear the markup here. If this fires while a tap
+            // on a result link is still being processed (timing varies by browser),
+            // wiping the DOM out from under that link could stop the navigation.
             panel.classList.remove('open');
-            panel.innerHTML = '';
         }
 
         function renderResults(items) {
@@ -130,13 +132,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function runSearch(query) {
             var seq = ++requestSeq;
-            fetch('search-products.php?q=' + encodeURIComponent(query))
-                .then(function (res) { return res.ok ? res.json() : []; })
+            fetch('search-products.php?q=' + encodeURIComponent(query), { credentials: 'same-origin' })
+                .then(function (res) { return res.ok ? res.json() : Promise.reject(new Error('bad response')); })
                 .then(function (data) {
                     if (seq !== requestSeq) return; // a newer request started meanwhile — ignore this stale one
                     renderResults(Array.isArray(data) ? data : []);
                 })
-                .catch(function () { /* silently ignore network errors */ });
+                .catch(function () {
+                    if (seq !== requestSeq) return;
+                    panel.innerHTML = '';
+                    var err = document.createElement('div');
+                    err.className = 'search-empty';
+                    err.textContent = 'Search is unavailable right now — please try again.';
+                    panel.appendChild(err);
+                    panel.classList.add('open');
+                });
         }
 
         input.addEventListener('input', function () {
