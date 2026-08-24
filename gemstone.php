@@ -135,4 +135,6 @@ include __DIR__ . '/includes/header.php';
 </section>
 <?php endif; ?>
 
+<?php include __DIR__ . '/includes/cta-banner.php'; ?>
+
 <?php include __DIR__ . '/includes/footer.php'; ?>
