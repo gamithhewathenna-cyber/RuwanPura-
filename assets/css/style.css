@@ -1393,17 +1393,16 @@ body.drawer-open { overflow: hidden; }
     .trust-badges-grid { grid-template-columns: repeat(3, 1fr); row-gap: 28px; }
     .trust-badge:nth-child(3n+1) { border-left: none; }
 
-    /* One row, two items visible at a time, auto-looping (see main.js) */
-    .legacy-grid {
-        display: flex;
-        grid-template-columns: none;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-    }
-    .legacy-grid::-webkit-scrollbar { display: none; }
-    .legacy-item { flex: 0 0 50%; scroll-snap-align: start; }
+    /* Static 2-column grid — two stats per row, two rows, no animation */
+    .legacy-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 14px; }
+    .legacy-item { padding: 14px 8px; }
+    .legacy-item:hover { transform: none; }
+    .legacy-icon { font-size: 22px; margin-bottom: 10px; }
+    .legacy-item:hover .legacy-icon { transform: none; }
+    .legacy-value { font-size: 20px; margin-bottom: 4px; }
+    .legacy-item:hover .legacy-value { transform: none; }
+    .legacy-label { font-size: 12.5px; margin-bottom: 4px; }
+    .legacy-desc { font-size: 11px; }
 
     .journey-grid { grid-template-columns: 1fr; gap: 30px; }
     .journey-img { order: -1; }

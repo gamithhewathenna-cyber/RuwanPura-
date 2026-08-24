@@ -126,30 +126,6 @@ document.addEventListener('DOMContentLoaded', function () {
         restartAuto();
     })();
 
-    /* ---- Legacy stats: on mobile, auto-looping carousel showing two at a time ----
-       Desktop/tablet keeps the static 4-column grid — this only takes effect once
-       the CSS switches .legacy-grid to a horizontally-scrolling flex row (see the
-       max-width:980px rules in style.css). */
-    (function () {
-        var track = document.querySelector('.legacy-grid');
-        if (!track || window.innerWidth > 980) return;
-
-        function atEnd() {
-            return track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-        }
-        function next() {
-            if (atEnd()) {
-                track.scrollTo({ left: 0, behavior: 'smooth' });
-            } else {
-                track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
-            }
-        }
-
-        if (track.scrollWidth - track.clientWidth > 0) {
-            setInterval(next, 3500);
-        }
-    })();
-
     /* ---- Gemstone search-as-you-type (catalogue page only) ---- */
     (function () {
         var input = document.getElementById('gemSearchInput');
