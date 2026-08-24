@@ -42,20 +42,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($id) {
-                $slug  = unique_slug('products', $name, $id);
-                $video = handle_video_upload('video', $product['video'] ?? '', 30 * 1024 * 1024);
-                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=?, video=? WHERE id=?");
-                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $video, $id]);
+                $slug = unique_slug('products', $name, $id);
+                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
+                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
             } else {
-                $slug  = unique_slug('products', $name);
-                $video = handle_video_upload('video', '', 30 * 1024 * 1024);
-                $ord   = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
-                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order, video) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord, $video]);
+                $slug = unique_slug('products', $name);
+                $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
+                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
                 $id = (int) db()->lastInsertId();
             }
 
             set_flash('success', 'Gemstone saved.');
+            header('Location: ' . BASE_URL . 'admin/gemstones-edit.php?id=' . $id);
+            exit;
+        }
+        elseif ($action === 'upload_video' && $id) {
+            $video = handle_video_upload('video', $product['video'] ?? '', 30 * 1024 * 1024);
+            db()->prepare("UPDATE products SET video=? WHERE id=?")->execute([$video, $id]);
+            set_flash('success', 'Video updated.');
             header('Location: ' . BASE_URL . 'admin/gemstones-edit.php?id=' . $id);
             exit;
         }
@@ -223,21 +228,6 @@ require_once __DIR__ . '/layout-top.php';
             </label>
         </div>
     </div>
-
-    <div class="card">
-        <h2>Product Video</h2>
-        <p class="card-sub">Optional MP4 shown in the gallery alongside the images, at the same size and aspect ratio. Use a white background, matching the product photos.</p>
-
-        <?php if (!empty($product['video'])): ?>
-            <video src="<?= UPLOAD_URL . e($product['video']) ?>" controls style="width:220px;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:14px;display:block;"></video>
-        <?php endif; ?>
-
-        <div class="form-group">
-            <label>Video File</label>
-            <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
-            <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 30MB.</div>
-        </div>
-    </div>
 </form>
 
 <div class="card">
@@ -284,6 +274,30 @@ require_once __DIR__ . '/layout-top.php';
         </form>
     <?php else: ?>
         <p class="card-sub">Save the gemstone first, then come back here to upload images.</p>
+    <?php endif; ?>
+</div>
+
+<div class="card">
+    <h2>Product Video</h2>
+    <p class="card-sub">Optional MP4 shown in the gallery alongside the images, at the same size and aspect ratio. Use a white background, matching the product photos.</p>
+
+    <?php if (!empty($product['video'])): ?>
+        <video src="<?= UPLOAD_URL . e($product['video']) ?>" controls style="width:220px;aspect-ratio:1/1;object-fit:cover;border-radius:8px;margin-bottom:14px;display:block;"></video>
+    <?php endif; ?>
+
+    <?php if ($product): ?>
+        <form method="post" enctype="multipart/form-data">
+            <?= csrf_field() ?>
+            <input type="hidden" name="action" value="upload_video">
+            <div class="form-group">
+                <label>Video File</label>
+                <input type="file" name="video" accept="video/mp4,video/webm,video/quicktime">
+                <div class="hint" style="margin-top:6px;">Uploading a new file replaces the current video. Up to 30MB.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload Video</button>
+        </form>
+    <?php else: ?>
+        <p class="card-sub">Save the gemstone first, then come back here to upload a video.</p>
     <?php endif; ?>
 </div>
 
