@@ -189,7 +189,7 @@ $testimonials = get_testimonials();
             </div>
             <div class="why-image reveal-fade">
                 <?php if (c('why_image')): ?>
-                    <img src="<?= c_img('why_image') ?>" alt="<?= e(c('why_title')) ?>">
+                    <img class="parallax" data-speed="0.12" src="<?= c_img('why_image') ?>" alt="<?= e(c('why_title')) ?>">
                 <?php else: ?>
                     <div class="map-placeholder">Why Choose Ruwanpura Gems</div>
                 <?php endif; ?>
