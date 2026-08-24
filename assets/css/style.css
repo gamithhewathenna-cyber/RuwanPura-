@@ -1390,8 +1390,14 @@ body.drawer-open { overflow: hidden; }
     .hero-title { font-size: 54px; }
     .hero-desc { max-width: 100%; }
 
-    .trust-badges-grid { grid-template-columns: repeat(3, 1fr); row-gap: 28px; }
-    .trust-badge:nth-child(3n+1) { border-left: none; }
+    /* Static 2-column grid — no animation, smaller icons/text */
+    .trust-badges-grid { grid-template-columns: repeat(2, 1fr); row-gap: 24px; }
+    .trust-badge { border-left: none; padding: 8px 10px; }
+    .trust-badge:hover { transform: none; }
+    .trust-badge-icon { font-size: 22px; margin-bottom: 8px; }
+    .trust-badge:hover .trust-badge-icon { color: #fff; transform: none; }
+    .trust-badge h4 { font-size: 13px; }
+    .trust-badge p { font-size: 11px; }
 
     /* Static 2-column grid — two stats per row, two rows, no animation */
     .legacy-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 14px; }
@@ -1550,8 +1556,6 @@ body.drawer-open { overflow: hidden; }
 
 @media (max-width: 560px) {
     .hero-title { font-size: 42px; }
-    .trust-badges-grid { grid-template-columns: 1fr; row-gap: 24px; }
-    .trust-badge { border-left: none !important; padding: 0 10px; }
     .section-title { font-size: 34px; }
     .journey-title, .factory-title, .cta-title { font-size: 34px; }
     .why-title { font-size: 30px; }
