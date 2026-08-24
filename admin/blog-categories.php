@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Gemstone Insights: Categories';
+$page_title = 'Insights: Categories';
 require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
@@ -53,7 +53,7 @@ require_once __DIR__ . '/layout-top.php';
     <div class="card-head-row">
         <h2>Blog Categories</h2>
     </div>
-    <p class="card-sub">These group posts on the Gemstone Insights page and appear as filters for visitors.</p>
+    <p class="card-sub">These group posts on the Insights page and appear as filters for visitors.</p>
 
     <table class="items-table">
         <thead><tr><th>Name</th><th>Active</th><th style="text-align:right">Actions</th></tr></thead>

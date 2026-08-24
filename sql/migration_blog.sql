@@ -58,16 +58,16 @@ INSERT INTO `blog_categories` (`name`, `slug`, `sort_order`) VALUES
 ON DUPLICATE KEY UPDATE `name` = VALUES(`name`);
 
 -- ---------------------------------------------------------------------
--- Rename the "News & Blogs" nav label to "Gemstone Insights"
+-- Rename the "News & Blogs" nav label to "Insights"
 -- ---------------------------------------------------------------------
-UPDATE `content_blocks` SET `block_value` = 'Gemstone Insights' WHERE `block_key` = 'nav_news';
+UPDATE `content_blocks` SET `block_value` = 'Insights' WHERE `block_key` = 'nav_news';
 
 -- ---------------------------------------------------------------------
 -- Hero band content blocks for the new blog.php listing page
--- (editable afterwards from Admin -> Gemstone Insights -> Hero Band)
+-- (editable afterwards from Admin -> Insights -> Hero Band)
 -- ---------------------------------------------------------------------
 INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_label`,`block_type`,`sort_order`) VALUES
 ('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
-('blog_hero_title','Gemstone Insights','blog_hero','Hero Title','text',2),
+('blog_hero_title','Insights','blog_hero','Hero Title','text',2),
 ('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3)
 ON DUPLICATE KEY UPDATE `block_value` = `block_value`;

@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Gemstone Insights: Posts';
+$page_title = 'Insights: Posts';
 require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
@@ -65,7 +65,7 @@ require_once __DIR__ . '/layout-top.php';
             Add Post
         </a>
     </div>
-    <p class="card-sub">Every article on the Gemstone Insights page. Click a title to edit it.</p>
+    <p class="card-sub">Every article on the Insights page. Click a title to edit it.</p>
 
     <table class="items-table">
         <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Author</th><th>Published</th><th>Status</th><th style="text-align:right">Actions</th></tr></thead>

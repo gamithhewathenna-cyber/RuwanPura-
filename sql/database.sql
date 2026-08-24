@@ -335,7 +335,7 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('nav_home','Home','header','Nav: Home Label','text',1),
 ('nav_gemstones','Our Gemstones','header','Nav: Gemstones Label','text',2),
 ('nav_about','About us','header','Nav: About Label','text',3),
-('nav_news','Gemstone Insights','header','Nav: News Label','text',4),
+('nav_news','Insights','header','Nav: News Label','text',4),
 ('nav_contact','Contact Us','header','Nav: Contact Label','text',5),
 -- Hero
 ('hero_eyebrow','SRI LANKA · EST. 1985','hero','Hero Eyebrow','text',1),
@@ -447,7 +447,7 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('contact_map_embed','','contact','Map Embed URL (Google Maps "Embed a map" src)','link',5),
 -- Blog: Hero band
 ('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
-('blog_hero_title','Gemstone Insights','blog_hero','Hero Title','text',2),
+('blog_hero_title','Insights','blog_hero','Hero Title','text',2),
 ('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3);
 
 -- Hero slides

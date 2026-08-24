@@ -87,7 +87,7 @@ require_once __DIR__ . '/layout-top.php';
     <div class="card">
         <div class="card-head-row">
             <div><h2><?= $post ? 'Edit Post' : 'Add Post' ?></h2>
-            <p class="card-sub" style="margin:4px 0 0;">Core article content shown on Gemstone Insights.</p></div>
+            <p class="card-sub" style="margin:4px 0 0;">Core article content shown on Insights.</p></div>
             <button type="submit" class="btn btn-primary">Save Post</button>
         </div>
 

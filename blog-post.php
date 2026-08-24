@@ -12,7 +12,7 @@ if (!$post) {
     <section class="container" style="padding:120px 0;text-align:center;">
         <h1 class="section-title">Article Not Found</h1>
         <p style="color:var(--muted);margin-top:14px;">This article may have been unpublished or removed.</p>
-        <a href="<?= BASE_URL ?>blog.php" class="btn-dark" style="margin-top:24px;display:inline-block;">Back to Gemstone Insights</a>
+        <a href="<?= BASE_URL ?>blog.php" class="btn-dark" style="margin-top:24px;display:inline-block;">Back to Insights</a>
     </section>
     <?php
     include __DIR__ . '/includes/footer.php';
@@ -74,7 +74,7 @@ include __DIR__ . '/includes/header.php';
             </div>
         <?php endif; ?>
 
-        <a href="<?= BASE_URL ?>blog.php" class="back-link" style="display:block;max-width:760px;margin:0 auto 24px;">&larr; Back to Gemstone Insights</a>
+        <a href="<?= BASE_URL ?>blog.php" class="back-link" style="display:block;max-width:760px;margin:0 auto 24px;">&larr; Back to Insights</a>
 
         <div class="blog-post-body reveal">
             <?= render_blog_content($post['content']) ?>

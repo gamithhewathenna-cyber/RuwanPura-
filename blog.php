@@ -13,7 +13,7 @@ $filters = $activeCatId ? ['category' => $activeCatId] : [];
 $page    = max(1, (int) ($_GET['page'] ?? 1));
 $result  = get_blog_posts($filters, $page, 9);
 
-$pageTitle       = $activeCat ? $activeCat['name'] . ' — ' . c('blog_hero_title', 'Gemstone Insights') : c('blog_hero_title', 'Gemstone Insights');
+$pageTitle       = $activeCat ? $activeCat['name'] . ' — ' . c('blog_hero_title', 'Insights') : c('blog_hero_title', 'Insights');
 $pageDescription = c('blog_hero_desc');
 $canonicalUrl    = site_url('blog.php' . ($activeCatId ? '?category=' . $activeCatId : ''));
 
@@ -24,7 +24,7 @@ include __DIR__ . '/includes/header.php';
 <section class="catalogue-hero">
     <div class="container reveal">
         <div class="eyebrow"><?= e(c('blog_hero_eyebrow')) ?></div>
-        <h1 class="about-hero-title catalogue-hero-title"><?= e(c('blog_hero_title', 'Gemstone Insights')) ?></h1>
+        <h1 class="about-hero-title catalogue-hero-title"><?= e(c('blog_hero_title', 'Insights')) ?></h1>
         <p class="catalogue-hero-desc"><?= e(c('blog_hero_desc')) ?></p>
     </div>
 </section>
