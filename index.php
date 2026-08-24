@@ -64,9 +64,9 @@ $testimonials = get_testimonials();
 <!-- ================= LEGACY IN NUMBERS ================= -->
 <section class="legacy-stats">
     <div class="container">
-        <div class="legacy-grid reveal">
+        <div class="legacy-grid">
             <?php foreach ($legacyStats as $ls): ?>
-                <div class="legacy-item">
+                <div class="legacy-item reveal">
                     <?php if ($ls['icon']): ?>
                         <img class="legacy-icon" src="<?= UPLOAD_URL . e($ls['icon']) ?>" alt="">
                     <?php endif; ?>
