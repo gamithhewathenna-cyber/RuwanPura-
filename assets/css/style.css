@@ -1197,12 +1197,15 @@ body.drawer-open { overflow: hidden; }
 
     .catalogue-layout { grid-template-columns: 1fr; gap: 30px; }
 
-    /* Filters become a slide-up bottom drawer, opened via the Filters button */
+    /* Filters become a slide-up bottom drawer, opened via the Filters button —
+       search bar and the Filters toggle sit side by side in one row on mobile */
+    .catalogue-toolbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .catalogue-toolbar-row .catalogue-search-wrap { flex: 1 1 auto; min-width: 0; margin-bottom: 0; }
     .catalogue-filter-toggle {
         display: inline-flex; align-items: center; gap: 8px;
         background: #fff; border: 1px solid var(--line); border-radius: 30px;
         padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--ink);
-        cursor: pointer; margin-bottom: 24px;
+        cursor: pointer; margin-bottom: 0; flex: 0 0 auto; white-space: nowrap;
     }
     .catalogue-filter-toggle svg { width: 18px; height: 18px; }
     .filter-count-badge {
