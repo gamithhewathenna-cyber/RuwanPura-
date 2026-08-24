@@ -3,20 +3,6 @@
    ===================================================================== */
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* ---- Announcement bar dismiss ----
-       Closing it only hides it for the page currently being viewed — it always
-       shows again on the next page. (Previously this was remembered per browser
-       session via sessionStorage, which made it look like it was randomly
-       "hiding" as visitors browsed from page to page after an earlier dismiss.) */
-    (function () {
-        var bar = document.getElementById('announcementBar');
-        var closeBtn = document.getElementById('announcementClose');
-        if (!bar || !closeBtn) return;
-        closeBtn.addEventListener('click', function () {
-            bar.style.display = 'none';
-        });
-    })();
-
     /* ---- Mobile menu toggle ---- */
     var toggle = document.querySelector('.menu-toggle');
     var menu = document.querySelector('.nav-menu');

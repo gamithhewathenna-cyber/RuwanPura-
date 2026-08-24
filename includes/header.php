@@ -55,18 +55,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <?php if (c('announcement_text')): ?>
 <!-- ================= ANNOUNCEMENT BAR ================= -->
-<div class="announcement-bar" id="announcementBar">
+<div class="announcement-bar">
     <div class="announcement-track">
-        <?php // Rendered twice back-to-back so the CSS animation can loop seamlessly ?>
-        <?php for ($i = 0; $i < 2; $i++): ?>
-            <?php if (c('announcement_link')): ?>
-                <a href="<?= e(c('announcement_link')) ?>" class="announcement-text"><?= e(c('announcement_text')) ?></a>
-            <?php else: ?>
-                <span class="announcement-text"><?= e(c('announcement_text')) ?></span>
-            <?php endif; ?>
-        <?php endfor; ?>
+        <?php if (c('announcement_link')): ?>
+            <a href="<?= e(c('announcement_link')) ?>" class="announcement-text"><?= e(c('announcement_text')) ?></a>
+        <?php else: ?>
+            <span class="announcement-text"><?= e(c('announcement_text')) ?></span>
+        <?php endif; ?>
     </div>
-    <button type="button" class="announcement-close" id="announcementClose" aria-label="Dismiss announcement">&times;</button>
 </div>
 <?php endif; ?>
 
