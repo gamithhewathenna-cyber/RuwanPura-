@@ -46,7 +46,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- ================= CONTACT HERO ================= -->
 <section class="about-hero">
-    <div class="container">
+    <div class="container reveal">
         <div class="eyebrow"><?= e(c('contact_hero_eyebrow')) ?></div>
         <h1 class="about-hero-title contact-hero-title"><?= e(c('contact_hero_title')) ?></h1>
         <p class="about-hero-quote">&ldquo;<?= e(c('contact_hero_quote')) ?>&rdquo;</p>
@@ -58,7 +58,7 @@ include __DIR__ . '/includes/header.php';
 <section class="contact-main">
     <div class="container">
         <div class="contact-grid">
-            <div class="contact-info">
+            <div class="contact-info reveal">
                 <h2 class="contact-heading"><?= e(c('contact_heading')) ?></h2>
                 <p><?= e(c('contact_p1')) ?></p>
                 <p><?= e(c('contact_p2')) ?></p>
@@ -93,7 +93,7 @@ include __DIR__ . '/includes/header.php';
                 </div>
             </div>
 
-            <div class="contact-form-wrap">
+            <div class="contact-form-wrap reveal">
                 <p class="contact-form-intro"><?= e(c('contact_form_intro')) ?></p>
 
                 <?php if ($formSuccess): ?>

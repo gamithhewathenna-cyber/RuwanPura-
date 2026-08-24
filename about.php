@@ -11,7 +11,7 @@ $memberships  = get_memberships();
 
 <!-- ================= ABOUT HERO ================= -->
 <section class="about-hero">
-    <div class="container">
+    <div class="container reveal">
         <div class="eyebrow"><?= e(c('about_hero_eyebrow')) ?></div>
         <h1 class="about-hero-title"><?= e(c('about_hero_title')) ?></h1>
         <p class="about-hero-quote">&ldquo;<?= e(c('about_hero_quote')) ?>&rdquo;</p>
@@ -22,13 +22,13 @@ $memberships  = get_memberships();
 <section class="evolution">
     <div class="container">
         <div class="evolution-grid">
-            <div class="evolution-content">
+            <div class="evolution-content reveal">
                 <h2 class="evolution-title"><?= e(c('evolution_title')) ?></h2>
                 <p><?= e(c('evolution_p1')) ?></p>
                 <p><?= e(c('evolution_p2')) ?></p>
                 <p><?= e(c('evolution_p3')) ?></p>
             </div>
-            <div class="evolution-img">
+            <div class="evolution-img reveal-fade">
                 <?php if (c('evolution_image')): ?>
                     <img src="<?= c_img('evolution_image') ?>" alt="<?= e(c('evolution_title')) ?>">
                 <?php else: ?>
@@ -45,11 +45,10 @@ $memberships  = get_memberships();
 <!-- ================= OUR GLOBAL JOURNEY ================= -->
 <section class="history">
     <div class="container">
-        <div class="history-head">
+        <div class="history-head reveal">
             <div class="eyebrow"><?= e(c('history_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('history_title')) ?></h2>
         </div>
-        <noscript><style>.timeline-item{opacity:1!important;transform:none!important;}</style></noscript>
         <div class="timeline">
             <?php foreach ($milestones as $m): ?>
                 <div class="timeline-item">
@@ -69,7 +68,7 @@ $memberships  = get_memberships();
 
         <?php $videoEmbedUrl = video_embed_url(c('video_url')); ?>
         <div class="video-split">
-            <div class="video-frame-portrait">
+            <div class="video-frame-portrait reveal-fade">
                 <?php if (c('video_file')): ?>
                     <video controls playsinline preload="metadata" <?= c('video_thumbnail') ? 'poster="' . c_img('video_thumbnail') . '"' : '' ?>>
                         <source src="<?= c_img('video_file') ?>" type="video/mp4">
@@ -86,7 +85,7 @@ $memberships  = get_memberships();
                 <?php endif; ?>
             </div>
 
-            <div class="video-text">
+            <div class="video-text reveal">
                 <h2 class="video-heading"><?= e(c('video_heading')) ?></h2>
                 <p><?= e(c('video_p1')) ?></p>
                 <p><?= e(c('video_p2')) ?></p>
@@ -109,19 +108,19 @@ $memberships  = get_memberships();
 <!-- ================= NATIONAL INDUSTRY EXCELLENCE ================= -->
 <section class="awards">
     <div class="container">
-        <div class="awards-head">
+        <div class="awards-head reveal">
             <div class="eyebrow"><?= e(c('awards_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('awards_title')) ?></h2>
         </div>
         <div class="awards-grid">
-            <div class="awards-img">
+            <div class="awards-img reveal-fade">
                 <?php if (c('awards_image')): ?>
                     <img src="<?= c_img('awards_image') ?>" alt="Award trophy">
                 <?php else: ?>
                     <div class="img-placeholder">Award</div>
                 <?php endif; ?>
             </div>
-            <div class="awards-list">
+            <div class="awards-list reveal">
                 <?php foreach ($achievements as $a): ?>
                     <div class="branch-item">
                         <span class="dot">●</span>
@@ -140,7 +139,7 @@ $memberships  = get_memberships();
 <section class="gubelin">
     <div class="container">
         <div class="gubelin-grid">
-            <div class="gubelin-content">
+            <div class="gubelin-content reveal">
                 <div class="eyebrow left"><?= e(c('gubelin_eyebrow')) ?></div>
                 <h2 class="gubelin-title"><?= e(c('gubelin_title')) ?></h2>
                 <p class="gubelin-subtitle"><?= e(c('gubelin_subtitle')) ?></p>
@@ -156,7 +155,7 @@ $memberships  = get_memberships();
                     </div>
                 </div>
             </div>
-            <div class="gubelin-img">
+            <div class="gubelin-img reveal-fade">
                 <?php if (c('gubelin_image')): ?>
                     <img src="<?= c_img('gubelin_image') ?>" alt="Gübelin certificate">
                 <?php else: ?>
@@ -170,12 +169,12 @@ $memberships  = get_memberships();
 <!-- ================= PROFESSIONAL STANDING / MEMBERSHIPS ================= -->
 <section class="membership">
     <div class="container">
-        <div class="membership-head">
+        <div class="membership-head reveal">
             <div class="eyebrow"><?= e(c('membership_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('membership_title')) ?></h2>
             <p><?= e(c('membership_p1')) ?></p>
         </div>
-        <div class="membership-logos">
+        <div class="membership-logos reveal-fade">
             <?php foreach ($memberships as $m): ?>
                 <div class="membership-item">
                     <?php if ($m['logo']): ?>

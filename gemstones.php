@@ -26,7 +26,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- ================= CATALOGUE HERO ================= -->
 <section class="catalogue-hero">
-    <div class="container">
+    <div class="container reveal">
         <div class="eyebrow left">OUR COLLECTION</div>
         <h1 class="catalogue-hero-title">Gemstone Catalogue</h1>
     </div>
@@ -109,7 +109,7 @@ include __DIR__ . '/includes/header.php';
                 </div>
 
                 <?php if ($result['items']): ?>
-                    <div class="product-grid">
+                    <div class="product-grid reveal">
                         <?php foreach ($result['items'] as $p): ?>
                             <a href="<?= BASE_URL ?>gemstone.php?slug=<?= urlencode($p['slug']) ?>" class="product-card">
                                 <div class="product-card-img">

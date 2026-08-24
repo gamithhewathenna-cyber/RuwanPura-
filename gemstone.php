@@ -36,7 +36,7 @@ include __DIR__ . '/includes/header.php';
         <a href="<?= BASE_URL ?>gemstones.php" class="back-link">&larr; Back to Catalogue</a>
 
         <div class="product-detail-grid">
-            <div class="product-gallery">
+            <div class="product-gallery reveal-fade">
                 <div class="product-gallery-main">
                     <?php if ($images): ?>
                         <img id="mainProductImage" src="<?= UPLOAD_URL . e($images[0]['image']) ?>" alt="<?= e($product['name']) ?>">
@@ -54,7 +54,7 @@ include __DIR__ . '/includes/header.php';
                 <?php endif; ?>
             </div>
 
-            <div class="product-info">
+            <div class="product-info reveal">
                 <span class="product-status-badge status-<?= e($product['status']) ?>"><?= e($statusLabels[$product['status']]) ?></span>
                 <h1 class="product-title"><?= e($product['name']) ?></h1>
                 <?php if ($product['sku']): ?><p class="product-sku">SKU: <?= e($product['sku']) ?></p><?php endif; ?>
@@ -97,7 +97,7 @@ include __DIR__ . '/includes/header.php';
 <section class="related-products">
     <div class="container">
         <h2 class="related-title">You May Also Like</h2>
-        <div class="product-grid">
+        <div class="product-grid reveal">
             <?php foreach ($relatedProducts as $rp): ?>
                 <a href="<?= BASE_URL ?>gemstone.php?slug=<?= urlencode($rp['slug']) ?>" class="product-card">
                     <div class="product-card-img">

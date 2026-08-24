@@ -80,9 +80,9 @@ document.addEventListener('DOMContentLoaded', function () {
         restartAuto();
     })();
 
-    /* ---- Our Global Journey timeline: reveal items as they scroll into view ---- */
+    /* ---- Sitewide scroll reveal: .reveal / .reveal-fade / .timeline-item ---- */
     (function () {
-        var items = document.querySelectorAll('.timeline-item');
+        var items = document.querySelectorAll('.reveal, .reveal-fade, .timeline-item');
         if (items.length === 0) return;
 
         if (typeof IntersectionObserver === 'undefined') {
@@ -91,6 +91,16 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Stagger delay based on position among reveal-siblings sharing the same parent,
+        // so each section cascades in on its own rather than accumulating one long delay.
+        var groupCounts = new Map();
+        items.forEach(function (item) {
+            var parent = item.parentElement;
+            var n = groupCounts.get(parent) || 0;
+            item.style.transitionDelay = Math.min(n * 90, 450) + 'ms';
+            groupCounts.set(parent, n + 1);
+        });
+
         var observer = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (entry.isIntersecting) {
@@ -98,12 +108,35 @@ document.addEventListener('DOMContentLoaded', function () {
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-        items.forEach(function (item, i) {
-            item.style.transitionDelay = Math.min(i * 90, 450) + 'ms';
-            observer.observe(item);
-        });
+        items.forEach(function (item) { observer.observe(item); });
+    })();
+
+    /* ---- Subtle parallax on select feature images (desktop only) ---- */
+    (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (window.innerWidth < 768) return;
+
+        var els = Array.prototype.slice.call(document.querySelectorAll('.parallax'));
+        if (!els.length) return;
+
+        var ticking = false;
+        function update() {
+            var vh = window.innerHeight;
+            els.forEach(function (el) {
+                var rect = el.getBoundingClientRect();
+                if (rect.bottom < -100 || rect.top > vh + 100) return; // well off-screen, skip
+                var speed = parseFloat(el.getAttribute('data-speed')) || 0.15;
+                var offset = (rect.top + rect.height / 2 - vh / 2) * speed;
+                el.style.transform = 'scale(1.12) translateY(' + offset.toFixed(1) + 'px)';
+            });
+            ticking = false;
+        }
+        window.addEventListener('scroll', function () {
+            if (!ticking) { requestAnimationFrame(update); ticking = true; }
+        }, { passive: true });
+        update();
     })();
 
 });

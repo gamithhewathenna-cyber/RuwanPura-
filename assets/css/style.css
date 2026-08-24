@@ -36,11 +36,32 @@ img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 
+/* Smooth, corporate-style base transitions on common interactive elements */
+a, button, .btn-dark, input, select, textarea {
+    transition: color .25s ease, background-color .25s ease, border-color .25s ease,
+                box-shadow .25s ease, transform .25s ease, opacity .25s ease;
+}
+
 .container {
     max-width: var(--container);
     margin: 0 auto;
     padding: 0 24px;
 }
+
+/* =====================================================================
+   SCROLL REVEAL (sitewide) — fades/slides content in as it enters view.
+   Applied via JS (IntersectionObserver) toggling .in-view — see main.js.
+   ===================================================================== */
+.reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity .8s cubic-bezier(.16,.84,.44,1), transform .8s cubic-bezier(.16,.84,.44,1);
+    will-change: opacity, transform;
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+/* Fade-only variant, no vertical slide (for large images / full-bleed art) */
+.reveal-fade { opacity: 0; transform: none; transition: opacity 1s ease; will-change: opacity; }
+.reveal-fade.in-view { opacity: 1; }
 
 /* Section eyebrow (small gold spaced text with side lines) */
 .eyebrow {
@@ -302,7 +323,9 @@ ul { list-style: none; }
 
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
-    .timeline-item { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .timeline-item,
+    .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .parallax { transform: none !important; }
 }
 
 /* =====================================================================
@@ -508,7 +531,7 @@ ul { list-style: none; }
     background: linear-gradient(90deg, rgba(0,0,0,.85) 0%, rgba(0,0,0,.5) 50%, rgba(0,0,0,.7) 100%);
     z-index: 1;
 }
-.cta-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.cta-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; will-change: transform; }
 .cta-inner { position: relative; z-index: 2; }
 .cta-top {
     display: grid;

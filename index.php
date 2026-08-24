@@ -62,14 +62,14 @@ $testimonials = get_testimonials();
 <section class="journey" id="journey">
     <div class="container">
         <div class="journey-grid">
-            <div class="journey-img">
+            <div class="journey-img reveal-fade">
                 <?php if (c('journey_image')): ?>
                     <img src="<?= c_img('journey_image') ?>" alt="Sapphire">
                 <?php else: ?>
                     <img src="<?= BASE_URL ?>assets/images/journey-placeholder.png" alt="Sapphire">
                 <?php endif; ?>
             </div>
-            <div class="journey-content">
+            <div class="journey-content reveal">
                 <div class="eyebrow"><?= e(c('journey_eyebrow')) ?></div>
                 <h2 class="journey-title"><?= e(c('journey_title')) ?></h2>
                 <p><?= e(c('journey_p1')) ?></p>
@@ -82,7 +82,7 @@ $testimonials = get_testimonials();
 <!-- ================= COLLECTION ================= -->
 <section class="collection" id="collection">
     <div class="container">
-        <div class="collection-head">
+        <div class="collection-head reveal">
             <div class="eyebrow"><?= e(c('collection_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('collection_title')) ?></h2>
         </div>
@@ -118,10 +118,10 @@ $testimonials = get_testimonials();
 <section class="factory">
     <div class="container">
         <div class="factory-grid">
-            <div class="factory-images">
+            <div class="factory-images reveal-fade">
                 <img class="fac-single" src="<?= c('factory_image1') ? c_img('factory_image1') : BASE_URL.'assets/images/factory1.jpg' ?>" alt="Factory & Laboratories">
             </div>
-            <div class="factory-content">
+            <div class="factory-content reveal">
                 <div class="eyebrow left"><?= e(c('factory_eyebrow')) ?></div>
                 <h2 class="factory-title"><?= e(c('factory_title')) ?></h2>
                 <p><?= e(c('factory_p1')) ?></p>
@@ -135,7 +135,7 @@ $testimonials = get_testimonials();
 <section class="branches">
     <div class="container">
         <div class="branches-grid">
-            <div class="branches-left">
+            <div class="branches-left reveal">
                 <div class="eyebrow left"><?= e(c('branches_eyebrow')) ?></div>
                 <h2 class="branches-title"><?= e(c('branches_title')) ?></h2>
                 <p class="branches-desc"><?= e(c('branches_desc')) ?></p>
@@ -149,7 +149,7 @@ $testimonials = get_testimonials();
                     </div>
                 <?php endforeach; ?>
             </div>
-            <div class="branches-map">
+            <div class="branches-map reveal-fade">
                 <?php if (c('branches_map')): ?>
                     <img src="<?= c_img('branches_map') ?>" alt="Global branches map">
                 <?php else: ?>
@@ -163,7 +163,7 @@ $testimonials = get_testimonials();
 <!-- ================= EVENTS ================= -->
 <section class="events" id="events">
     <div class="container">
-        <div class="events-head">
+        <div class="events-head reveal">
             <div class="eyebrow"><?= e(c('events_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('events_title')) ?></h2>
             <p class="events-desc"><?= e(c('events_desc')) ?></p>
@@ -185,7 +185,7 @@ $testimonials = get_testimonials();
 <!-- ================= TESTIMONIALS ================= -->
 <section class="testimonials">
     <div class="container">
-        <div class="testi-head">
+        <div class="testi-head reveal">
             <div class="testi-quote-mark">“</div>
             <div class="eyebrow"><?= e(c('testi_eyebrow')) ?></div>
             <h2 class="testi-title"><?= e(c('testi_title')) ?></h2>
@@ -224,11 +224,11 @@ $testimonials = get_testimonials();
     <div class="container">
         <div class="cta-box">
             <?php if (c('cta_image')): ?>
-                <img class="cta-bg" src="<?= c_img('cta_image') ?>" alt="">
+                <img class="cta-bg parallax" data-speed="0.12" src="<?= c_img('cta_image') ?>" alt="">
             <?php else: ?>
-                <img class="cta-bg" src="<?= BASE_URL ?>assets/images/cta-placeholder.jpg" alt="">
+                <img class="cta-bg parallax" data-speed="0.12" src="<?= BASE_URL ?>assets/images/cta-placeholder.jpg" alt="">
             <?php endif; ?>
-            <div class="cta-inner">
+            <div class="cta-inner reveal">
                 <div class="cta-top">
                     <h2 class="cta-title"><?= e(c('cta_title')) ?></h2>
                     <p class="cta-desc"><?= e(c('cta_desc')) ?></p>
