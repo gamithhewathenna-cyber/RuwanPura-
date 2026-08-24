@@ -59,25 +59,6 @@ $testimonials = get_testimonials();
     </div>
 </section>
 
-<?php if ($trustBadges): ?>
-<!-- ================= TRUST BADGES ================= -->
-<section class="trust-badges">
-    <div class="container">
-        <div class="trust-badges-grid reveal">
-            <?php foreach ($trustBadges as $tb): ?>
-                <div class="trust-badge">
-                    <?php if ($tb['icon']): ?>
-                        <img class="trust-badge-icon" src="<?= UPLOAD_URL . e($tb['icon']) ?>" alt="">
-                    <?php endif; ?>
-                    <h4><?= e($tb['title']) ?></h4>
-                    <p><?= e($tb['description']) ?></p>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
-<?php endif; ?>
-
 <!-- ================= JOURNEY ================= -->
 <section class="journey" id="journey">
     <div class="container">
@@ -278,5 +259,24 @@ $testimonials = get_testimonials();
 </section>
 
 <?php include __DIR__ . '/includes/cta-banner.php'; ?>
+
+<?php if ($trustBadges): ?>
+<!-- ================= TRUST BADGES ================= -->
+<section class="trust-badges">
+    <div class="container">
+        <div class="trust-badges-grid reveal">
+            <?php foreach ($trustBadges as $tb): ?>
+                <div class="trust-badge">
+                    <?php if ($tb['icon']): ?>
+                        <img class="trust-badge-icon" src="<?= UPLOAD_URL . e($tb['icon']) ?>" alt="">
+                    <?php endif; ?>
+                    <h4><?= e($tb['title']) ?></h4>
+                    <p><?= e($tb['description']) ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
