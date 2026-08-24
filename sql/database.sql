@@ -270,6 +270,45 @@ CREATE TABLE IF NOT EXISTS `enquiry_items` (
   KEY `enquiry_id` (`enquiry_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ---------------------------------------------------------------------
+-- Gemstone Insights (blog)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blog_categories` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(120) NOT NULL,
+  `slug` VARCHAR(140) NOT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `blog_posts` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(220) NOT NULL,
+  `slug` VARCHAR(240) NOT NULL,
+  `category_id` INT(11) DEFAULT NULL,
+  `excerpt` VARCHAR(400) DEFAULT NULL,
+  `content` TEXT DEFAULT NULL,
+  `featured_image` VARCHAR(255) DEFAULT NULL,
+  `author_name` VARCHAR(150) DEFAULT NULL,
+  `status` ENUM('draft','published') NOT NULL DEFAULT 'draft',
+  `published_at` DATETIME DEFAULT NULL,
+  `seo_title` VARCHAR(220) DEFAULT NULL,
+  `seo_description` VARCHAR(400) DEFAULT NULL,
+  `seo_keyphrase` VARCHAR(190) DEFAULT NULL,
+  `canonical_url` VARCHAR(255) DEFAULT NULL,
+  `og_title` VARCHAR(220) DEFAULT NULL,
+  `og_description` VARCHAR(400) DEFAULT NULL,
+  `og_image` VARCHAR(255) DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `category_id` (`category_id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- =====================================================================
 -- DEFAULT DATA
 -- =====================================================================
@@ -296,7 +335,7 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('nav_home','Home','header','Nav: Home Label','text',1),
 ('nav_gemstones','Our Gemstones','header','Nav: Gemstones Label','text',2),
 ('nav_about','About us','header','Nav: About Label','text',3),
-('nav_news','News & Blogs','header','Nav: News Label','text',4),
+('nav_news','Gemstone Insights','header','Nav: News Label','text',4),
 ('nav_contact','Contact Us','header','Nav: Contact Label','text',5),
 -- Hero
 ('hero_eyebrow','SRI LANKA · EST. 1985','hero','Hero Eyebrow','text',1),
@@ -405,7 +444,11 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('contact_p1','Whether you\'re searching for a rare coloured gemstone, sourcing stones for a jewellery collection, or simply want expert advice, we\'d love to hear from you.','contact','Paragraph 1','textarea',2),
 ('contact_p2','Have a gemstone in mind? Tell us what you\'re looking for and our team will be happy to assist you.','contact','Paragraph 2','textarea',3),
 ('contact_form_intro','Comments, questions, or looking for something special? Drop us a note, and our gemstone experts will be happy to assist you.','contact','Form Intro Text','textarea',4),
-('contact_map_embed','','contact','Map Embed URL (Google Maps "Embed a map" src)','link',5);
+('contact_map_embed','','contact','Map Embed URL (Google Maps "Embed a map" src)','link',5),
+-- Blog: Hero band
+('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
+('blog_hero_title','Gemstone Insights','blog_hero','Hero Title','text',2),
+('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3);
 
 -- Hero slides
 INSERT INTO `hero_slides` (`image`,`eyebrow`,`title`,`description`,`btn_text`,`btn_link`,`sort_order`) VALUES
@@ -480,3 +523,9 @@ INSERT INTO `gem_treatments` (`name`,`sort_order`) VALUES
 
 INSERT INTO `gem_origins` (`name`,`sort_order`) VALUES
 ('Sri Lanka',1),('Madagascar',2),('Mozambique',3),('Thailand',4);
+
+-- Blog categories (Gemstone Insights)
+INSERT INTO `blog_categories` (`name`,`slug`,`sort_order`) VALUES
+('Gemstone Education','gemstone-education',1),
+('Buying Guides','buying-guides',2),
+('Company News','company-news',3);

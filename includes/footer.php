@@ -15,6 +15,7 @@
                     <li><a href="<?= BASE_URL ?>index.php"><?= e(c('nav_home')) ?></a></li>
                     <li><a href="<?= BASE_URL ?>gemstones.php"><?= e(c('nav_gemstones')) ?></a></li>
                     <li><a href="<?= BASE_URL ?>about.php"><?= e(c('nav_about')) ?></a></li>
+                    <li><a href="<?= BASE_URL ?>blog.php"><?= e(c('nav_news')) ?></a></li>
                     <li><a href="<?= BASE_URL ?>contact.php"><?= e(c('nav_contact')) ?></a></li>
                 </ul>
             </div>

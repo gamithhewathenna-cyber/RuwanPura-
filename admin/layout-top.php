@@ -50,6 +50,19 @@ $gemPageSections = [
 ];
 $onGemPage = in_array($current, ['gemstones-list.php', 'gemstones-edit.php', 'gem-taxonomy.php', 'enquiries.php'], true);
 
+$blogPageSections = [
+    ['file' => 'section-blog-hero.php', 'label' => 'Hero Band'],
+    ['file' => 'blog-list.php',         'label' => 'Posts'],
+    ['file' => 'blog-categories.php',   'label' => 'Categories'],
+];
+$onBlogPage = in_array($current, ['section-blog-hero.php', 'blog-list.php', 'blog-edit.php', 'blog-categories.php'], true);
+
+function blog_tab_active($section) {
+    $cur = basename($_SERVER['PHP_SELF']);
+    if ($section['file'] === 'blog-list.php' && $cur === 'blog-edit.php') return true;
+    return $cur === $section['file'];
+}
+
 function gem_tab_active($section) {
     $cur = basename($_SERVER['PHP_SELF']);
     if ($section['file'] === 'gemstones-list.php' && $cur === 'gemstones-edit.php') return true;
@@ -73,6 +86,8 @@ if ($onHomePage) {
     require_role('contact');
 } elseif ($onGemPage) {
     require_role('gemstones');
+} elseif ($onBlogPage) {
+    require_role('blog');
 } elseif (isset($adminOnlySections[$current])) {
     require_role($adminOnlySections[$current]);
 }
@@ -132,6 +147,13 @@ $page_title = $page_title ?? 'Dashboard';
             <a href="<?= BASE_URL ?>admin/section-contact-hero.php" class="side-link <?= $onContactPage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>
                 Contact Us
+            </a>
+            <?php endif; ?>
+
+            <?php if (role_can('blog')): ?>
+            <a href="<?= BASE_URL ?>admin/blog-list.php" class="side-link <?= $onBlogPage ? 'active' : '' ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h8M9 11h8"/></svg>
+                Gemstone Insights
             </a>
             <?php endif; ?>
 
@@ -232,6 +254,14 @@ $page_title = $page_title ?? 'Dashboard';
                                 <span class="badge on" style="margin-left:6px;"><?= (int)$unreadEnquiries ?></span>
                             <?php endif; ?>
                         </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($onBlogPage): ?>
+                <div class="home-tabs">
+                    <?php foreach ($blogPageSections as $section): ?>
+                        <a href="<?= BASE_URL ?>admin/<?= $section['file'] ?>" class="home-tab <?= blog_tab_active($section) ? 'active' : '' ?>"><?= e($section['label']) ?></a>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>

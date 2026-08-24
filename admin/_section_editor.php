@@ -14,6 +14,7 @@ $__sectionRoleMap = [
     'about_hero' => 'about', 'about_evolution' => 'about', 'history' => 'about',
     'about_video' => 'about', 'awards' => 'about', 'gubelin' => 'about', 'membership' => 'about',
     'contact_hero' => 'contact', 'contact' => 'contact',
+    'blog_hero' => 'blog',
 ];
 require_role($__sectionRoleMap[$section_group] ?? null);
 

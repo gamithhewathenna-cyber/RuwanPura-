@@ -7,10 +7,29 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e(setting('site_name', 'Ruwanpura Gems')) ?> — <?= e(c('hero_title')) ?></title>
-    <meta name="description" content="<?= e(c('hero_desc')) ?>">
+    <?php
+        // Pages can set $pageTitle / $pageDescription / $canonicalUrl / $ogType / $ogTitle /
+        // $ogDescription / $ogImage before including this file for page-specific SEO tags.
+        // Any page that doesn't set them keeps the original site-wide default behaviour.
+        $__siteName = setting('site_name', 'Ruwanpura Gems');
+        $__title    = !empty($pageTitle) ? $pageTitle . ' — ' . $__siteName : $__siteName . ' — ' . c('hero_title');
+        $__desc     = !empty($pageDescription) ? $pageDescription : c('hero_desc');
+    ?>
+    <title><?= e($__title) ?></title>
+    <meta name="description" content="<?= e($__desc) ?>">
+    <?php if (!empty($canonicalUrl)): ?>
+        <link rel="canonical" href="<?= e($canonicalUrl) ?>">
+    <?php endif; ?>
     <?php if (setting('noindex_site') === '1'): ?>
         <meta name="robots" content="noindex, nofollow">
+    <?php endif; ?>
+    <?php if (!empty($pageTitle)): ?>
+        <meta property="og:type" content="<?= e($ogType ?? 'website') ?>">
+        <meta property="og:title" content="<?= e($ogTitle ?? $pageTitle) ?>">
+        <meta property="og:description" content="<?= e($ogDescription ?? $__desc) ?>">
+        <?php if (!empty($canonicalUrl)): ?><meta property="og:url" content="<?= e($canonicalUrl) ?>"><?php endif; ?>
+        <?php if (!empty($ogImage)): ?><meta property="og:image" content="<?= e($ogImage) ?>"><?php endif; ?>
+        <meta name="twitter:card" content="<?= !empty($ogImage) ? 'summary_large_image' : 'summary' ?>">
     <?php endif; ?>
 
     <!-- Fonts -->
@@ -45,7 +64,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <!-- Mobile-only: these two mirror the links in .nav-right, which are hidden on
                      small screens so the header doesn't overflow. Desktop is unaffected — this
                      class is display:none outside the mobile breakpoint. -->
-                <a href="<?= BASE_URL ?>index.php#events" class="nav-link nav-link-mobile-only"><?= e(c('nav_news')) ?></a>
+                <a href="<?= BASE_URL ?>blog.php" class="nav-link nav-link-mobile-only<?= in_array($currentPage, ['blog.php', 'blog-post.php'], true) ? ' active' : '' ?>"><?= e(c('nav_news')) ?></a>
                 <a href="<?= BASE_URL ?>contact.php" class="nav-link nav-link-mobile-only<?= $currentPage === 'contact.php' ? ' active' : '' ?>"><?= e(c('nav_contact')) ?></a>
             </div>
 
@@ -55,7 +74,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </a>
 
             <div class="nav-right">
-                <a href="<?= BASE_URL ?>index.php#events" class="nav-link"><?= e(c('nav_news')) ?></a>
+                <a href="<?= BASE_URL ?>blog.php" class="nav-link<?= in_array($currentPage, ['blog.php', 'blog-post.php'], true) ? ' active' : '' ?>"><?= e(c('nav_news')) ?></a>
                 <a href="<?= BASE_URL ?>contact.php" class="nav-link<?= $currentPage === 'contact.php' ? ' active' : '' ?>"><?= e(c('nav_contact')) ?></a>
                 <div class="nav-icons">
                     <a href="tel:<?= e(c('footer_phone1')) ?>" aria-label="Call">

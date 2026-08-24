@@ -55,6 +55,7 @@ function admin_roles()
         'admin'    => 'Administrator (Full Access)',
         'content'  => 'Content Uploader',
         'gemstone' => 'Gemstone Uploader',
+        'blog'     => 'Blog Manager',
     ];
 }
 
@@ -73,6 +74,7 @@ function role_can($section)
     $map = [
         'content'  => ['home', 'about', 'contact'],
         'gemstone' => ['gemstones'],
+        'blog'     => ['blog'],
     ];
     return in_array($section, $map[$role] ?? [], true);
 }

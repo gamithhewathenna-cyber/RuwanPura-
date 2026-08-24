@@ -85,6 +85,16 @@ function logo_white_url()
     return logo_url();
 }
 
+/* Absolute site URL for a given relative path — for canonical/OG tags and the sitemap,
+   where a full https://domain/... URL is required rather than BASE_URL's relative '/'. */
+function site_url($path = '')
+{
+    $https  = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? 80) == 443);
+    $scheme = $https ? 'https' : 'http';
+    $host   = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    return $scheme . '://' . $host . BASE_URL . ltrim($path, '/');
+}
+
 /* ------------------------------------------------------------------ */
 /*  Maintenance mode (public pages)                                    */
 /* ------------------------------------------------------------------ */
@@ -404,6 +414,123 @@ function search_products($query, $limit = 8)
     }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Blog (Gemstone Insights)                                           */
+/* ------------------------------------------------------------------ */
+function get_blog_categories($activeOnly = true)
+{
+    $sql = "SELECT * FROM blog_categories" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
+    return db()->query($sql)->fetchAll();
+}
+
+function blog_status_labels()
+{
+    return ['draft' => 'Draft', 'published' => 'Published'];
+}
+
+/* Filtered + paginated published post listing for the public blog page */
+function get_blog_posts($filters = [], $page = 1, $perPage = 9)
+{
+    $where  = ["p.status = 'published'", 'p.published_at <= NOW()'];
+    $params = [];
+
+    if (!empty($filters['category'])) {
+        $where[] = 'p.category_id = ?';
+        $params[] = (int) $filters['category'];
+    }
+    if (!empty($filters['search'])) {
+        $where[] = '(p.title LIKE ? OR p.excerpt LIKE ?)';
+        $like = '%' . $filters['search'] . '%';
+        $params[] = $like;
+        $params[] = $like;
+    }
+
+    $whereSql = implode(' AND ', $where);
+
+    $countStmt = db()->prepare("SELECT COUNT(*) FROM blog_posts p WHERE $whereSql");
+    $countStmt->execute($params);
+    $total = (int) $countStmt->fetchColumn();
+
+    $perPage = max(1, (int) $perPage);
+    $page    = max(1, (int) $page);
+    $offset  = ($page - 1) * $perPage;
+
+    $sql = "SELECT p.*, c.name AS category_name, c.slug AS category_slug
+            FROM blog_posts p
+            LEFT JOIN blog_categories c ON c.id = p.category_id
+            WHERE $whereSql
+            ORDER BY p.published_at DESC, p.id DESC
+            LIMIT $perPage OFFSET $offset";
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+
+    return [
+        'items' => $stmt->fetchAll(),
+        'total' => $total,
+        'pages' => (int) ceil($total / $perPage),
+        'page'  => $page,
+    ];
+}
+
+function get_post_by_slug($slug)
+{
+    $stmt = db()->prepare("SELECT p.*, c.name AS category_name, c.slug AS category_slug
+                            FROM blog_posts p
+                            LEFT JOIN blog_categories c ON c.id = p.category_id
+                            WHERE p.slug = ? AND p.status = 'published' AND p.published_at <= NOW()");
+    $stmt->execute([$slug]);
+    return $stmt->fetch();
+}
+
+/* Related articles — same category first, topped up with other latest published posts */
+function get_related_posts($post, $limit = 3)
+{
+    $limit = max(1, (int) $limit);
+    try {
+        $items = [];
+
+        if (!empty($post['category_id'])) {
+            $stmt = db()->prepare("SELECT * FROM blog_posts
+                    WHERE status='published' AND published_at <= NOW() AND id <> ? AND category_id = ?
+                    ORDER BY published_at DESC, id DESC
+                    LIMIT $limit");
+            $stmt->execute([(int) $post['id'], (int) $post['category_id']]);
+            $items = $stmt->fetchAll();
+        }
+
+        if (count($items) < $limit) {
+            $need       = $limit - count($items);
+            $excludeIds = array_merge([(int) $post['id']], array_map('intval', array_column($items, 'id')));
+            $in         = implode(',', array_fill(0, count($excludeIds), '?'));
+            $stmt2 = db()->prepare("SELECT * FROM blog_posts
+                    WHERE status='published' AND published_at <= NOW() AND id NOT IN ($in)
+                    ORDER BY published_at DESC, id DESC
+                    LIMIT $need");
+            $stmt2->execute($excludeIds);
+            $items = array_merge($items, $stmt2->fetchAll());
+        }
+
+        return $items;
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
+/* Render blog body text as paragraphs (blank-line separated), escaped for safety */
+function render_blog_content($text)
+{
+    $text = trim((string) $text);
+    if ($text === '') return '';
+    $blocks = preg_split('/\n\s*\n/', $text);
+    $html = '';
+    foreach ($blocks as $block) {
+        $block = trim($block);
+        if ($block === '') continue;
+        $html .= '<p>' . e_nl($block) . '</p>';
+    }
+    return $html;
+}
+
 /* URL-safe slug from a string */
 function slugify($text)
 {
@@ -417,7 +544,7 @@ function slugify($text)
 /* Unique slug for a table's `slug` column, excluding a given id (for edits) */
 function unique_slug($table, $name, $excludeId = 0)
 {
-    $allowed = ['products', 'gem_categories'];
+    $allowed = ['products', 'gem_categories', 'blog_posts', 'blog_categories'];
     if (!in_array($table, $allowed, true)) {
         throw new InvalidArgumentException('Invalid table for unique_slug()');
     }
