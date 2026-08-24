@@ -7,6 +7,16 @@ require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
 
+$__sectionRoleMap = [
+    'header' => 'home', 'hero' => 'home', 'journey' => 'home', 'collection' => 'home',
+    'factory' => 'home', 'branches' => 'home', 'events' => 'home', 'testimonials' => 'home',
+    'cta' => 'home', 'footer' => 'home',
+    'about_hero' => 'about', 'about_evolution' => 'about', 'history' => 'about',
+    'about_video' => 'about', 'awards' => 'about', 'gubelin' => 'about', 'membership' => 'about',
+    'contact_hero' => 'contact', 'contact' => 'contact',
+];
+require_role($__sectionRoleMap[$section_group] ?? null);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (verify_csrf()) {
         save_content_group();

@@ -63,6 +63,21 @@ function gem_tab_active($section) {
 $unreadMessages  = count_unread_messages();
 $unreadEnquiries = count_unread_enquiries();
 
+// ---- Role-based access gate (central choke point for every admin page) ----
+$adminOnlySections = ['settings.php' => 'settings', 'messages.php' => 'messages', 'users.php' => 'users'];
+if ($onHomePage) {
+    require_role('home');
+} elseif ($onAboutPage) {
+    require_role('about');
+} elseif ($onContactPage) {
+    require_role('contact');
+} elseif ($onGemPage) {
+    require_role('gemstones');
+} elseif (isset($adminOnlySections[$current])) {
+    require_role($adminOnlySections[$current]);
+}
+// index.php (dashboard) and account.php are unrestricted for any logged-in admin
+
 // $page_title should be set before including
 $page_title = $page_title ?? 'Dashboard';
 ?>
@@ -89,11 +104,14 @@ $page_title = $page_title ?? 'Dashboard';
                 Dashboard
             </a>
 
+            <?php if (role_can('home')): ?>
             <a href="<?= BASE_URL ?>admin/section-header.php" class="side-link <?= $onHomePage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
                 Home Page
             </a>
+            <?php endif; ?>
 
+            <?php if (role_can('gemstones')): ?>
             <a href="<?= BASE_URL ?>admin/gemstones-list.php" class="side-link <?= $onGemPage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 3 8 9l4 12 4-12-4-6"/></svg>
                 Gemstones
@@ -101,18 +119,26 @@ $page_title = $page_title ?? 'Dashboard';
                     <span class="badge on" style="margin-left:auto;"><?= (int)$unreadEnquiries ?></span>
                 <?php endif; ?>
             </a>
+            <?php endif; ?>
 
+            <?php if (role_can('about')): ?>
             <a href="<?= BASE_URL ?>admin/section-about-hero.php" class="side-link <?= $onAboutPage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="M17 3.5a3.5 3.5 0 0 1 0 7"/></svg>
                 About Us
             </a>
+            <?php endif; ?>
 
+            <?php if (role_can('contact')): ?>
             <a href="<?= BASE_URL ?>admin/section-contact-hero.php" class="side-link <?= $onContactPage ? 'active' : '' ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>
                 Contact Us
             </a>
+            <?php endif; ?>
 
+            <?php if (role_can('messages') || role_can('settings') || role_can('users')): ?>
             <div class="nav-group-label">System</div>
+            <?php endif; ?>
+            <?php if (role_can('messages')): ?>
             <a href="<?= BASE_URL ?>admin/messages.php" class="side-link <?= nav_active('messages.php') ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg>
                 Messages
@@ -120,10 +146,19 @@ $page_title = $page_title ?? 'Dashboard';
                     <span class="badge on" style="margin-left:auto;"><?= (int)$unreadMessages ?></span>
                 <?php endif; ?>
             </a>
+            <?php endif; ?>
+            <?php if (role_can('settings')): ?>
             <a href="<?= BASE_URL ?>admin/settings.php" class="side-link <?= nav_active('settings.php') ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
                 Website Settings
             </a>
+            <?php endif; ?>
+            <?php if (role_can('users')): ?>
+            <a href="<?= BASE_URL ?>admin/users.php" class="side-link <?= nav_active('users.php') ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Admin Users
+            </a>
+            <?php endif; ?>
             <a href="<?= BASE_URL ?>admin/account.php" class="side-link <?= nav_active('account.php') ?>">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
                 My Account

@@ -3,6 +3,7 @@ $page_title = 'Hero Slider';
 require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
+require_role('home');
 
 /* ---- Handle actions ---- */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -3,6 +3,7 @@ $page_title = 'Testimonials';
 require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
+require_role('home');
 
 $section_group = 'testimonials';
 

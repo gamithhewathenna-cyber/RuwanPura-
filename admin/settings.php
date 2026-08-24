@@ -3,6 +3,7 @@ $page_title = 'Website Settings';
 require_once __DIR__ . '/auth.php';
 require_admin();
 require_once __DIR__ . '/form-helpers.php';
+require_role('settings');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (verify_csrf()) {

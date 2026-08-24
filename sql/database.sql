@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
   `name` VARCHAR(120) NOT NULL,
   `email` VARCHAR(190) NOT NULL,
   `password_hash` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(30) NOT NULL DEFAULT 'admin' COMMENT 'admin | content | gemstone',
   `reset_token` VARCHAR(255) DEFAULT NULL,
   `reset_expires` DATETIME DEFAULT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
