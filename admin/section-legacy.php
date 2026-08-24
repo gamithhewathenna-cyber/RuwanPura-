@@ -5,17 +5,11 @@ require_admin();
 require_once __DIR__ . '/form-helpers.php';
 require_role('home');
 
-$section_group = 'legacy';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (verify_csrf()) {
         $action = $_POST['action'] ?? '';
 
-        if ($action === 'save_content') {
-            save_content_group();
-            set_flash('success', 'Section content saved.');
-        }
-        elseif ($action === 'add') {
+        if ($action === 'add') {
             $icon = handle_upload('icon', '');
             $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM legacy_stats")->fetchColumn();
             $stmt = db()->prepare("INSERT INTO legacy_stats (icon, stat_value, stat_label, description, sort_order, is_active) VALUES (?,?,?,?,?,1)");
@@ -46,24 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$blocks = content_group($section_group);
-$items  = db()->query("SELECT * FROM legacy_stats ORDER BY sort_order, id")->fetchAll();
+$items = db()->query("SELECT * FROM legacy_stats ORDER BY sort_order, id")->fetchAll();
 
 require_once __DIR__ . '/layout-top.php';
 ?>
-
-<form method="post" enctype="multipart/form-data">
-    <?= csrf_field() ?>
-    <input type="hidden" name="action" value="save_content">
-    <div class="card">
-        <div class="card-head-row">
-            <div><h2>Section Content</h2>
-            <p class="card-sub" style="margin:4px 0 0;">Heading above the stats.</p></div>
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </div>
-        <?php foreach ($blocks as $block) render_content_field($block); ?>
-    </div>
-</form>
 
 <div class="card">
     <h2>Stats</h2>

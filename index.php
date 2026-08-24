@@ -64,7 +64,6 @@ $testimonials = get_testimonials();
 <!-- ================= LEGACY IN NUMBERS ================= -->
 <section class="legacy-stats">
     <div class="container">
-        <h2 class="section-title legacy-stats-title reveal"><?= e(c('legacy_title', 'Our Legacy in Numbers')) ?></h2>
         <div class="legacy-grid reveal">
             <?php foreach ($legacyStats as $ls): ?>
                 <div class="legacy-item">
