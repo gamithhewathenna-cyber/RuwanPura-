@@ -179,6 +179,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
+    /* ---- Mobile filter drawer (Gemstones catalogue page only) ---- */
+    (function () {
+        var toggleBtn = document.getElementById('filtersToggleBtn');
+        var closeBtn = document.getElementById('filtersCloseBtn');
+        var drawer = document.getElementById('catalogueFilters');
+        var backdrop = document.getElementById('filtersBackdrop');
+        if (!toggleBtn || !drawer || !backdrop) return;
+
+        function openDrawer() {
+            drawer.classList.add('open');
+            backdrop.classList.add('open');
+            document.body.classList.add('drawer-open');
+        }
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            backdrop.classList.remove('open');
+            document.body.classList.remove('drawer-open');
+        }
+
+        toggleBtn.addEventListener('click', openDrawer);
+        if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+        backdrop.addEventListener('click', closeDrawer);
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeDrawer();
+        });
+    })();
+
     /* ---- Sitewide scroll reveal: .reveal / .reveal-fade / .timeline-item ---- */
     (function () {
         var items = document.querySelectorAll('.reveal, .reveal-fade, .timeline-item');

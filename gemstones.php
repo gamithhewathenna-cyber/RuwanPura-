@@ -20,6 +20,7 @@ $treatments   = get_treatments();
 $origins      = get_origins();
 $weightRanges = weight_ranges();
 $statusLabels = product_status_labels();
+$activeFilterCount = array_sum(array_map('count', $filters));
 
 include __DIR__ . '/includes/header.php';
 ?>
@@ -44,9 +45,21 @@ include __DIR__ . '/includes/header.php';
             </div>
         </div>
 
+        <button type="button" id="filtersToggleBtn" class="catalogue-filter-toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            Filters
+            <?php if ($activeFilterCount > 0): ?><span class="filter-count-badge"><?= (int) $activeFilterCount ?></span><?php endif; ?>
+        </button>
+        <div id="filtersBackdrop" class="filters-backdrop"></div>
+
         <div class="catalogue-layout">
-            <aside class="catalogue-filters">
+            <aside class="catalogue-filters" id="catalogueFilters">
+                <div class="filters-drawer-header">
+                    <h3>Filters</h3>
+                    <button type="button" id="filtersCloseBtn" class="filters-drawer-close" aria-label="Close filters">&times;</button>
+                </div>
                 <form method="get" id="filterForm">
+                    <div class="filters-drawer-body">
                     <div class="filter-group">
                         <h4>Category</h4>
                         <?php foreach ($categories as $c): ?>
@@ -109,6 +122,12 @@ include __DIR__ . '/includes/header.php';
 
                     <button type="submit" class="btn-dark catalogue-apply-btn">Apply Filters</button>
                     <a href="<?= BASE_URL ?>gemstones.php" class="catalogue-clear">Clear all filters</a>
+                    </div>
+
+                    <div class="filters-drawer-footer">
+                        <a href="<?= BASE_URL ?>gemstones.php" class="btn-outline filters-clear-mobile">Clear All</a>
+                        <button type="submit" class="btn-dark filters-apply-mobile">Show Products</button>
+                    </div>
                 </form>
             </aside>
 

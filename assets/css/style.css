@@ -927,6 +927,25 @@ a, button, .btn-dark, input, select, textarea {
 }
 .catalogue-clear:hover { color: var(--gold); }
 
+.btn-outline {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; color: var(--ink); border: 1px solid var(--line);
+    border-radius: 8px; padding: 11px 22px; font-size: 15px; font-family: inherit;
+    cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Mobile filter drawer trigger + backdrop — hidden entirely on desktop.
+   The drawer itself (.catalogue-filters) is restyled into a bottom sheet
+   only inside the max-width:980px block below; desktop layout is untouched. */
+.catalogue-filter-toggle,
+.filters-backdrop,
+.filters-drawer-header,
+.filters-drawer-footer { display: none; }
+
+/* Only ever added by JS while the mobile filter drawer is open — never triggered on desktop */
+body.drawer-open { overflow: hidden; }
+
 .catalogue-toolbar { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
 .catalogue-empty { color: var(--muted); padding: 60px 0; text-align: center; font-size: 15px; }
 
@@ -1177,7 +1196,64 @@ a, button, .btn-dark, input, select, textarea {
     .contact-form-wrap { border-left: none; padding-left: 0; border-top: 1px solid var(--line); padding-top: 40px; }
 
     .catalogue-layout { grid-template-columns: 1fr; gap: 30px; }
-    .catalogue-filters { position: static; }
+
+    /* Filters become a slide-up bottom drawer, opened via the Filters button */
+    .catalogue-filter-toggle {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: #fff; border: 1px solid var(--line); border-radius: 30px;
+        padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--ink);
+        cursor: pointer; margin-bottom: 24px;
+    }
+    .catalogue-filter-toggle svg { width: 18px; height: 18px; }
+    .filter-count-badge {
+        min-width: 18px; height: 18px; padding: 0 5px; border-radius: 20px;
+        background: var(--gold); color: #fff; font-size: 11px; font-weight: 600;
+        display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    .filters-backdrop {
+        display: block; position: fixed; inset: 0; background: rgba(0,0,0,.5);
+        opacity: 0; pointer-events: none; transition: opacity .3s ease; z-index: 199;
+    }
+    .filters-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .catalogue-filters {
+        position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+        max-height: 85vh; max-height: 85dvh;
+        background: #fff; border: none; border-radius: 20px 20px 0 0;
+        box-shadow: 0 -10px 40px rgba(0,0,0,.2);
+        padding: 0; margin: 0;
+        display: flex; flex-direction: column;
+        transform: translateY(100%);
+        transition: transform .35s ease;
+        z-index: 200;
+    }
+    .catalogue-filters.open { transform: translateY(0); }
+
+    .filters-drawer-header {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 18px 22px; border-bottom: 1px solid var(--line); flex: 0 0 auto;
+    }
+    .filters-drawer-header h3 { font-family: var(--serif); font-size: 20px; color: var(--ink); font-weight: 600; }
+    .filters-drawer-close {
+        width: 32px; height: 32px; border-radius: 50%; border: none; background: #f3f3f3;
+        color: var(--ink); font-size: 20px; line-height: 1; cursor: pointer;
+    }
+
+    .filters-drawer-body {
+        padding: 20px 22px; overflow-y: auto; -webkit-overflow-scrolling: touch; flex: 1 1 auto;
+    }
+
+    .filters-drawer-footer {
+        display: flex; gap: 12px; padding: 16px 22px;
+        padding-bottom: calc(16px + env(safe-area-inset-bottom));
+        border-top: 1px solid var(--line); flex: 0 0 auto;
+    }
+    .filters-clear-mobile { flex: 1; }
+    .filters-apply-mobile { flex: 2; border: none; cursor: pointer; }
+
+    .catalogue-apply-btn, .catalogue-clear { display: none; } /* replaced by the drawer footer buttons on mobile */
+
     .product-grid, .related-products .product-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
     .product-detail-grid { grid-template-columns: 1fr; gap: 34px; }
     .cart-wrap { grid-template-columns: 1fr; gap: 34px; }
