@@ -1294,7 +1294,11 @@ body.drawer-open { overflow: hidden; }
     .contact-form .form-row-2 { grid-template-columns: 1fr; }
     .contact-heading { font-size: 28px; }
 
-    .product-grid, .related-products .product-grid { grid-template-columns: 1fr; }
+    .product-grid, .related-products .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .product-card-body { padding: 12px 12px 14px; }
+    .product-card-body h3 { font-size: 15px; }
+    .product-card-meta { font-size: 11.5px; }
+    .product-status-badge { font-size: 9px; padding: 4px 8px; top: 8px; left: 8px; }
     .product-title { font-size: 30px; }
     .product-specs { grid-template-columns: 1fr 1fr; }
     .cart-page-title { font-size: 30px; }
