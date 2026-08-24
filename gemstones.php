@@ -46,9 +46,9 @@ include __DIR__ . '/includes/header.php';
                 </div>
             </div>
 
-            <button type="button" id="filtersToggleBtn" class="catalogue-filter-toggle">
+            <button type="button" id="filtersToggleBtn" class="catalogue-filter-toggle" aria-label="Open filters">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
-                Filters
+                <span class="filters-btn-label">Filters</span>
                 <?php if ($activeFilterCount > 0): ?><span class="filter-count-badge"><?= (int) $activeFilterCount ?></span><?php endif; ?>
             </button>
         </div>
