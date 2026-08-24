@@ -849,12 +849,13 @@ a, button, .btn-dark, input, select, textarea {
 /* =====================================================================
    GEMSTONE CATALOGUE
    ===================================================================== */
-.catalogue-hero { background: var(--dark); color: #fff; padding: 60px 0 44px; }
-.catalogue-hero .eyebrow { justify-content: flex-start; }
-.catalogue-hero .eyebrow::before { display: none; }
+.catalogue-hero { background: var(--dark); color: #fff; padding: 60px 0 44px; text-align: center; }
 .catalogue-hero-title {
     font-family: var(--serif); font-weight: 600; color: #fff;
     font-size: 46px; margin-top: 10px;
+}
+.catalogue-hero-desc {
+    color: #ccc; font-size: 16px; max-width: 620px; margin: 16px auto 0; line-height: 1.7;
 }
 
 .catalogue { padding: 60px 0 90px; }
