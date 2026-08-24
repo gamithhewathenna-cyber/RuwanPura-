@@ -169,6 +169,20 @@ CREATE TABLE IF NOT EXISTS `trust_badges` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
+-- Table: legacy_stats  (Home page - "Our Legacy in Numbers", below the hero)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `legacy_stats` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `icon` VARCHAR(255) DEFAULT NULL,
+  `stat_value` VARCHAR(60) DEFAULT NULL,
+  `stat_label` VARCHAR(150) DEFAULT NULL,
+  `description` VARCHAR(400) DEFAULT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
 -- Table: contact_messages  (Contact Us page - submitted enquiries)
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `contact_messages` (
@@ -354,6 +368,8 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('nav_about','About us','header','Nav: About Label','text',3),
 ('nav_news','Insights','header','Nav: News Label','text',4),
 ('nav_contact','Contact Us','header','Nav: Contact Label','text',5),
+-- Legacy stats (home page, below the hero slider)
+('legacy_title','Our Legacy in Numbers','legacy','Section Title','text',1),
 -- Hero
 ('hero_eyebrow','SRI LANKA · EST. 1985','hero','Hero Eyebrow','text',1),
 ('hero_title','World\'s Most Extraordinary Gemstones','hero','Hero Title','textarea',2),
@@ -479,6 +495,13 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
 ('blog_hero_title','Insights','blog_hero','Hero Title','text',2),
 ('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3);
+
+-- Legacy stats (home page, below the hero slider)
+INSERT INTO `legacy_stats` (`icon`,`stat_value`,`stat_label`,`description`,`sort_order`) VALUES
+('legacy-experience.svg','40+ Years','Gemstone Expertise','Four decades of knowledge, craftsmanship, and trust.',1),
+('legacy-continents.svg','3 Continents','Global Presence','Connecting Sri Lanka\'s gemstones with the world.',2),
+('legacy-natural.svg','100% Natural','Exceptional Gemstones','Carefully selected for quality, beauty, and character.',3),
+('legacy-network.svg','Global Network','Worldwide Reach','Serving collectors, jewellers, and gemstone professionals worldwide.',4);
 
 -- Trust badges (home page, below the hero slider)
 INSERT INTO `trust_badges` (`icon`,`title`,`description`,`sort_order`) VALUES

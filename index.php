@@ -5,6 +5,7 @@ maybe_show_maintenance_page();
 include __DIR__ . '/includes/header.php';
 
 $heroSlides   = get_hero_slides();
+$legacyStats  = get_legacy_stats();
 $trustBadges  = get_trust_badges();
 $gemstones    = get_latest_products(10);
 $branches     = get_branches();
@@ -58,6 +59,27 @@ $testimonials = get_testimonials();
         </div>
     </div>
 </section>
+
+<?php if ($legacyStats): ?>
+<!-- ================= LEGACY IN NUMBERS ================= -->
+<section class="legacy-stats">
+    <div class="container">
+        <h2 class="section-title legacy-stats-title reveal"><?= e(c('legacy_title', 'Our Legacy in Numbers')) ?></h2>
+        <div class="legacy-grid reveal">
+            <?php foreach ($legacyStats as $ls): ?>
+                <div class="legacy-item">
+                    <?php if ($ls['icon']): ?>
+                        <img class="legacy-icon" src="<?= UPLOAD_URL . e($ls['icon']) ?>" alt="">
+                    <?php endif; ?>
+                    <div class="legacy-value"><?= e($ls['stat_value']) ?></div>
+                    <div class="legacy-label"><?= e($ls['stat_label']) ?></div>
+                    <p class="legacy-desc"><?= e($ls['description']) ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <!-- ================= JOURNEY ================= -->
 <section class="journey" id="journey">
