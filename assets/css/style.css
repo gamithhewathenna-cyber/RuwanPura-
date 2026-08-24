@@ -764,7 +764,7 @@ ul { list-style: none; }
 }
 .membership-item { text-align: center; }
 .membership-item img { max-height: 50px; width: auto; object-fit: contain; margin: 0 auto 14px; filter: grayscale(1); opacity: .85; }
-.membership-item .logo-fallback { display: block; margin-bottom: 14px; }
+.membership-item .logo-fallback { display: block; margin-bottom: 14px; font-size: 13.5px; letter-spacing: .3px; }
 .membership-item p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 .membership-footer { color: var(--muted); font-size: 14.5px; max-width: 900px; margin: 0 auto; text-align: center; }
 
