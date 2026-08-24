@@ -1267,6 +1267,11 @@ body.drawer-open { overflow: hidden; }
     .product-grid, .related-products .product-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
     .product-detail-grid { grid-template-columns: 1fr; gap: 34px; }
     .cart-wrap { grid-template-columns: 1fr; gap: 34px; }
+
+    /* Show product cards immediately on mobile instead of waiting on the
+       scroll-reveal fade-in — on small screens the grid can be taller than
+       the viewport, which can leave it stuck at opacity:0 until scrolled. */
+    .catalogue .product-grid.reveal { opacity: 1; transform: none; transition: none; }
 }
 
 @media (max-width: 560px) {
