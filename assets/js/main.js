@@ -80,4 +80,30 @@ document.addEventListener('DOMContentLoaded', function () {
         restartAuto();
     })();
 
+    /* ---- Our Global Journey timeline: reveal items as they scroll into view ---- */
+    (function () {
+        var items = document.querySelectorAll('.timeline-item');
+        if (items.length === 0) return;
+
+        if (typeof IntersectionObserver === 'undefined') {
+            // Unsupported browser — just show everything, no animation.
+            items.forEach(function (item) { item.classList.add('in-view'); });
+            return;
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+
+        items.forEach(function (item, i) {
+            item.style.transitionDelay = Math.min(i * 90, 450) + 'ms';
+            observer.observe(item);
+        });
+    })();
+
 });

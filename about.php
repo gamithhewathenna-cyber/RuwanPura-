@@ -49,6 +49,7 @@ $memberships  = get_memberships();
             <div class="eyebrow"><?= e(c('history_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('history_title')) ?></h2>
         </div>
+        <noscript><style>.timeline-item{opacity:1!important;transform:none!important;}</style></noscript>
         <div class="timeline">
             <?php foreach ($milestones as $m): ?>
                 <div class="timeline-item">

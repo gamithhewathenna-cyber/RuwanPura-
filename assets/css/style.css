@@ -302,6 +302,7 @@ ul { list-style: none; }
 
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
+    .timeline-item { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 
 /* =====================================================================
@@ -617,7 +618,7 @@ ul { list-style: none; }
 /* --- Our Global Journey (timeline) --- */
 .history { padding: 80px 0; }
 .history-head { text-align: center; margin-bottom: 60px; }
-.timeline { position: relative; max-width: 900px; margin: 0 auto; }
+.timeline { position: relative; width: 100%; }
 .timeline::before {
     content: '';
     position: absolute; left: 130px; top: 6px; bottom: 6px; width: 1px;
@@ -629,7 +630,11 @@ ul { list-style: none; }
     align-items: center;
     margin-bottom: 22px;
     position: relative;
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .6s ease, transform .6s ease;
 }
+.timeline-item.in-view { opacity: 1; transform: translateY(0); }
 .timeline-year {
     background: #f3f3f3;
     border: 1px solid var(--line);
@@ -639,6 +644,7 @@ ul { list-style: none; }
     font-size: 13px;
     font-weight: 600;
     color: var(--ink);
+    transition: border-color .3s ease, color .3s ease, background .3s ease;
 }
 .timeline-dot {
     width: 12px; height: 12px; border-radius: 50%;
@@ -646,6 +652,7 @@ ul { list-style: none; }
     margin: 0 auto;
     position: relative; z-index: 2;
     box-shadow: 0 0 0 4px #fff;
+    transition: transform .3s ease, box-shadow .3s ease;
 }
 .timeline-desc {
     background: #4a4a4a;
@@ -654,7 +661,12 @@ ul { list-style: none; }
     padding: 18px 22px;
     font-size: 14.5px;
     line-height: 1.6;
+    transition: background .3s ease, box-shadow .3s ease, transform .3s ease;
 }
+
+.timeline-item:hover .timeline-dot { transform: scale(1.5); box-shadow: 0 0 0 4px #fff, 0 0 0 9px rgba(201,154,91,.35); }
+.timeline-item:hover .timeline-year { border-color: var(--gold); color: var(--gold); background: #fff; }
+.timeline-item:hover .timeline-desc { background: var(--ink); box-shadow: 0 14px 30px rgba(0,0,0,.18); transform: translateX(6px); }
 
 /* --- Direct From The Source (video + responsibility) --- */
 .about-video { background: var(--dark); color: #fff; padding: 80px 0; text-align: center; }
@@ -1042,7 +1054,6 @@ ul { list-style: none; }
     .evolution-img { order: -1; }
     .evolution-badge { width: 150px; left: -14px; bottom: -14px; }
 
-    .timeline { max-width: 100%; }
     .timeline::before { left: 5px; }
     .timeline-item { grid-template-columns: 12px 1fr; gap: 14px; align-items: start; }
     .timeline-year { order: 2; grid-column: 2; background: none; border: none; padding: 0 0 6px; text-align: left; font-size: 13px; color: var(--gold); }
