@@ -403,10 +403,19 @@ a, button, .btn-dark, input, select, textarea {
     display: flex;
     gap: 14px;
     align-items: flex-start;
+    transition: background .3s ease, transform .3s ease, box-shadow .3s ease;
 }
-.branch-item .dot { color: var(--ink); font-size: 20px; line-height: 1.4; }
-.branch-item h4 { font-size: 16px; color: var(--ink); font-weight: 600; margin-bottom: 3px; }
-.branch-item p { font-size: 14px; color: var(--muted); margin: 0; }
+.branch-item:hover {
+    background: var(--dark);
+    transform: translateX(8px);
+    box-shadow: 0 16px 34px rgba(0,0,0,.14);
+}
+.branch-item .dot { color: var(--ink); font-size: 20px; line-height: 1.4; transition: color .3s ease, transform .3s ease; }
+.branch-item:hover .dot { color: var(--gold); transform: scale(1.3); }
+.branch-item h4 { font-size: 16px; color: var(--ink); font-weight: 600; margin-bottom: 3px; transition: color .3s ease; }
+.branch-item:hover h4 { color: #fff; }
+.branch-item p { font-size: 14px; color: var(--muted); margin: 0; transition: color .3s ease; }
+.branch-item:hover p { color: #d8d2c4; }
 .branches-map img { border-radius: 8px; width: 100%; }
 .branches-map .map-placeholder {
     aspect-ratio: 16/12;
