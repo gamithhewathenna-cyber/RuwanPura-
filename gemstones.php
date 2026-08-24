@@ -38,7 +38,7 @@ include __DIR__ . '/includes/header.php';
     <div class="container">
         <div class="catalogue-search-wrap reveal">
             <div class="catalogue-search">
-                <svg class="catalogue-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <svg class="catalogue-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
                 <input type="text" id="gemSearchInput" placeholder="Search gemstones by name…" autocomplete="off" aria-label="Search gemstones">
                 <div id="gemSearchResults" class="catalogue-search-results"></div>
             </div>

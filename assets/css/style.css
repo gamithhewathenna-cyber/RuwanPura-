@@ -866,7 +866,7 @@ a, button, .btn-dark, input, select, textarea {
 .catalogue { padding: 60px 0 90px; }
 
 .catalogue-search-wrap { position: relative; z-index: 50; display: flex; justify-content: flex-start; margin-bottom: 44px; }
-.catalogue-search { position: relative; width: 100%; max-width: 100%; }
+.catalogue-search { position: relative; width: 100%; max-width: 100%; min-width: 0; }
 .catalogue-search-icon {
     position: absolute; left: 17px; top: 50%; transform: translateY(-50%);
     width: 18px; height: 18px; color: var(--muted); pointer-events: none;
