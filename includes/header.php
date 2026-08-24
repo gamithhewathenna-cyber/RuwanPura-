@@ -50,7 +50,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
 
             <a class="nav-logo" href="<?= BASE_URL ?>index.php">
-                <img src="<?= logo_white_url() ?>" alt="<?= e(setting('site_name')) ?>"
+                <img src="<?= logo_url() ?>" alt="<?= e(setting('site_name')) ?>"
                      onerror="this.style.display='none'">
             </a>
 

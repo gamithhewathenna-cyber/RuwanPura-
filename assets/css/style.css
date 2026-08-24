@@ -118,9 +118,9 @@ a, button, .btn-dark, input, select, textarea {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(13,13,13,.85);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid #f0f0f0;
 }
 .nav {
     display: flex;
@@ -141,7 +141,7 @@ a, button, .btn-dark, input, select, textarea {
 
 .nav a.nav-link, .nav .nav-link {
     font-size: 15px;
-    color: #fff;
+    color: var(--ink);
     font-weight: 400;
     position: relative;
     display: inline-flex;
@@ -151,11 +151,11 @@ a, button, .btn-dark, input, select, textarea {
 }
 .nav a.nav-link:hover { color: var(--gold); }
 .nav a.nav-link.active { color: var(--gold); }
-.nav .caret { font-size: 10px; color: rgba(255,255,255,.6); }
+.nav .caret { font-size: 10px; color: #444; }
 .nav a.nav-link.nav-link-mobile-only { display: none; } /* shown only inside the mobile dropdown — see max-width:980px */
 
 .nav-icons { display: flex; align-items: center; gap: 18px; }
-.nav-icons a { color: #fff; display: inline-flex; }
+.nav-icons a { color: var(--ink); display: inline-flex; }
 .nav-icons svg { width: 20px; height: 20px; }
 .cart-icon-link { position: relative; }
 .cart-badge {
@@ -166,7 +166,7 @@ a, button, .btn-dark, input, select, textarea {
     align-items: center; justify-content: center;
 }
 
-.menu-toggle { display: none; background: none; border: none; cursor: pointer; color: #fff; }
+.menu-toggle { display: none; background: none; border: none; cursor: pointer; }
 .menu-toggle svg { width: 28px; height: 28px; }
 
 /* =====================================================================
@@ -1136,10 +1136,6 @@ body.drawer-open { overflow: hidden; }
         -webkit-overflow-scrolling: touch;
     }
     .nav-menu.open { transform: translateY(0); }
-    /* The dropdown panel has a white background (unlike the black nav bar
-       itself), so its links need dark text to stay readable. */
-    .nav-menu a.nav-link, .nav-menu .nav-link { color: var(--ink); }
-    .nav-menu a.nav-link:hover, .nav-menu a.nav-link.active { color: var(--gold); }
     .nav a.nav-link.nav-link-mobile-only { display: inline-flex; } /* mirror links live only in the dropdown on mobile */
     .menu-toggle { display: inline-flex; padding: 8px; margin: -8px; } /* bigger tap target, same visual icon size */
     .nav { justify-content: space-between; }
