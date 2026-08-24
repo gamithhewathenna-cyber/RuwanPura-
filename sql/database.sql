@@ -367,8 +367,8 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('history_title','Our Global Journey','history','Title','text',2),
 -- About: Direct From The Source (video + responsibility)
 ('video_eyebrow','DIRECT FROM THE SOURCE','about_video','Eyebrow','text',1),
-('video_thumbnail','','about_video','Video Thumbnail Image','image',2),
-('video_url','','about_video','Video URL (YouTube / Vimeo / mp4)','link',3),
+('video_thumbnail','','about_video','Fallback Image (shown only if no Video URL is set below)','image',2),
+('video_url','','about_video','Video URL (paste a YouTube watch/share link, or any embed URL)','link',3),
 ('video_heading','Social & environmental responsibility','about_video','Heading','text',4),
 ('video_p1','At Ruwanpura Gems, we distinguish ourselves from average retailers by maintaining a rigorous and complete chain of custody for every gemstone in our collection. Since our strategic decision in 2012 to invest directly in mining operations across Madagascar and Mozambique, we have secured the ability to oversee the journey of a gemstone from the moment it leaves the earth until it reaches your hands. This "mine-to-market" approach allows us to guarantee that every stone is sourced with the highest level of integrity and transparency.','about_video','Paragraph 1','textarea',5),
 ('video_p2','Our dedication to excellence extends beyond the quality of the gems to the wellbeing of the people and environmental standards. Our carefully selected mining teams operate under strict labor and environmental requirements, ensuring a safe and fair workplace for all involved. By upholding these socially and environmentally responsible practices, we ensure that every stone supplied to our wholesale buyers, jewelry manufacturers, and collectors is ethically produced and of the highest artisanal standard.','about_video','Paragraph 2','textarea',6),

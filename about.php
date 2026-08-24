@@ -67,14 +67,17 @@ $memberships  = get_memberships();
     <div class="container">
         <div class="eyebrow"><?= e(c('video_eyebrow')) ?></div>
 
+        <?php $videoEmbedUrl = video_embed_url(c('video_url')); ?>
         <div class="video-frame">
-            <?php if (c('video_thumbnail')): ?>
+            <?php if ($videoEmbedUrl): ?>
+                <iframe src="<?= e($videoEmbedUrl) ?>" title="<?= e(c('video_heading')) ?>" loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+            <?php elseif (c('video_thumbnail')): ?>
                 <img src="<?= c_img('video_thumbnail') ?>" alt="">
-            <?php endif; ?>
-            <?php if (c('video_url')): ?>
-                <a href="<?= e(c('video_url')) ?>" target="_blank" rel="noopener" class="play-btn" aria-label="Play video">&#9658;</a>
-            <?php else: ?>
                 <span class="play-btn" aria-hidden="true">&#9658;</span>
+            <?php else: ?>
+                <div class="contact-map-placeholder">Video</div>
             <?php endif; ?>
         </div>
 

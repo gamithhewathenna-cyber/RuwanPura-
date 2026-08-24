@@ -411,6 +411,31 @@ function unique_slug($table, $name, $excludeId = 0)
     return $slug;
 }
 
+/* Normalize a pasted YouTube link (watch/share/shorts URL, or a full <iframe> embed
+   snippet) into a plain embeddable URL. Non-YouTube URLs are returned as-is, so a
+   direct Vimeo/other embed src still works. */
+function video_embed_url($url)
+{
+    $url = trim((string) $url);
+    if ($url === '') return '';
+
+    if (stripos($url, '<iframe') !== false && preg_match('/src=["\']([^"\']+)["\']/i', $url, $m)) {
+        $url = html_entity_decode($m[1]);
+    }
+
+    if (preg_match('~youtu\.be/([A-Za-z0-9_-]{6,})~i', $url, $m)) {
+        return 'https://www.youtube.com/embed/' . $m[1];
+    }
+    if (preg_match('~[?&]v=([A-Za-z0-9_-]{6,})~', $url, $m)) {
+        return 'https://www.youtube.com/embed/' . $m[1];
+    }
+    if (preg_match('~youtube\.com/(?:embed|shorts)/([A-Za-z0-9_-]{6,})~i', $url, $m)) {
+        return 'https://www.youtube.com/embed/' . $m[1];
+    }
+
+    return $url;
+}
+
 /* Image URL for a repeatable row image column */
 function row_img($file, $placeholder = '')
 {

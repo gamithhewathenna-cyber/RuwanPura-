@@ -22,10 +22,10 @@ document.querySelectorAll('input[type=file][data-preview]').forEach(function(inp
     });
 });
 
-// If a full <iframe> embed snippet gets pasted into the map embed field,
+// If a full <iframe> embed snippet gets pasted into the map or video embed fields,
 // extract just the src URL before the form is submitted — some hosts block
 // requests whose body contains raw <iframe>/<script> tags.
-document.querySelectorAll('input[name="content[contact_map_embed]"]').forEach(function(inp){
+document.querySelectorAll('input[name="content[contact_map_embed]"], input[name="content[video_url]"]').forEach(function(inp){
     var form = inp.closest('form');
     if (!form) return;
     form.addEventListener('submit', function(){
