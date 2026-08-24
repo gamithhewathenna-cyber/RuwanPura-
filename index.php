@@ -193,8 +193,8 @@ $testimonials = get_testimonials();
         </div>
 
         <div class="testi-track">
-            <?php foreach ($testimonials as $i => $t): ?>
-                <div class="testi-card<?= $i === 0 ? ' dark' : '' ?>">
+            <?php foreach ($testimonials as $t): ?>
+                <div class="testi-card">
                     <p class="quote">“<?= e($t['quote']) ?>”</p>
                     <div class="testi-author">
                         <?php if ($t['avatar']): ?>

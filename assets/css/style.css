@@ -479,19 +479,20 @@ a, button, .btn-dark, input, select, textarea {
     border-radius: 10px;
     padding: 28px 26px;
     box-shadow: 0 6px 20px rgba(0,0,0,.05);
+    transition: background .3s ease, box-shadow .3s ease;
 }
-.testi-card.dark { background: var(--dark); color: #fff; }
-.testi-card .quote { font-size: 14.5px; margin-bottom: 22px; }
-.testi-card.dark .quote { color: #eee; }
+.testi-card:hover { background: var(--dark); box-shadow: 0 16px 34px rgba(0,0,0,.18); }
+.testi-card .quote { font-size: 14.5px; margin-bottom: 22px; transition: color .3s ease; }
+.testi-card:hover .quote { color: #eee; }
 .testi-author { display: flex; align-items: center; gap: 12px; }
 .testi-author .avatar {
     width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
     background: #ddd; flex: 0 0 42px;
 }
-.testi-author .name { font-size: 13px; font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: .5px; }
-.testi-card.dark .name { color: #fff; }
-.testi-author .role { font-size: 12px; color: var(--muted); }
-.testi-card.dark .role { color: #bbb; }
+.testi-author .name { font-size: 13px; font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: .5px; transition: color .3s ease; }
+.testi-card:hover .name { color: #fff; }
+.testi-author .role { font-size: 12px; color: var(--muted); transition: color .3s ease; }
+.testi-card:hover .role { color: #bbb; }
 .testi-progress {
     height: 4px;
     background: #eee;
