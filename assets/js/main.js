@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 requestAnimationFrame(function () {
                     place(oldEl, direction === 'next');
+                    place(newEl, false);
                     newEl.classList.add('active');
                 });
             });
