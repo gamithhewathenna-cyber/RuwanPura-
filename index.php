@@ -5,6 +5,7 @@ maybe_show_maintenance_page();
 include __DIR__ . '/includes/header.php';
 
 $heroSlides   = get_hero_slides();
+$trustBadges  = get_trust_badges();
 $gemstones    = get_latest_products(10);
 $branches     = get_branches();
 $partners     = get_partners();
@@ -57,6 +58,25 @@ $testimonials = get_testimonials();
         </div>
     </div>
 </section>
+
+<?php if ($trustBadges): ?>
+<!-- ================= TRUST BADGES ================= -->
+<section class="trust-badges">
+    <div class="container">
+        <div class="trust-badges-grid reveal">
+            <?php foreach ($trustBadges as $tb): ?>
+                <div class="trust-badge">
+                    <?php if ($tb['icon']): ?>
+                        <img class="trust-badge-icon" src="<?= UPLOAD_URL . e($tb['icon']) ?>" alt="">
+                    <?php endif; ?>
+                    <h4><?= e($tb['title']) ?></h4>
+                    <p><?= e($tb['description']) ?></p>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <!-- ================= JOURNEY ================= -->
 <section class="journey" id="journey">

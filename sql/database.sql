@@ -156,6 +156,19 @@ CREATE TABLE IF NOT EXISTS `memberships` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
+-- Table: trust_badges  (Home page - icon strip shown below the hero)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `trust_badges` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `icon` VARCHAR(255) DEFAULT NULL,
+  `title` VARCHAR(150) DEFAULT NULL,
+  `description` VARCHAR(400) DEFAULT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
 -- Table: contact_messages  (Contact Us page - submitted enquiries)
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `contact_messages` (
@@ -466,6 +479,14 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
 ('blog_hero_title','Insights','blog_hero','Hero Title','text',2),
 ('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3);
+
+-- Trust badges (home page, below the hero slider)
+INSERT INTO `trust_badges` (`icon`,`title`,`description`,`sort_order`) VALUES
+('badge-shipping.svg','Worldwide Shipping','Secure delivery to customers worldwide.',1),
+('badge-gemstones.svg','Authentic Gemstones','Carefully selected natural gemstones.',2),
+('badge-guidance.svg','Expert Guidance','Personal assistance from our gem experts.',3),
+('badge-heritage.svg','Sri Lankan Heritage','Rooted in Sri Lanka\'s gem heritage.',4),
+('badge-trust.svg','Trusted & Transparent','Clear details for confident purchases.',5);
 
 -- Hero slides
 INSERT INTO `hero_slides` (`image`,`eyebrow`,`title`,`description`,`btn_text`,`btn_link`,`sort_order`) VALUES

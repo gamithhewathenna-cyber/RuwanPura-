@@ -13,6 +13,7 @@ $homePageSections = [
     'section-announcement.php' => 'Announcement Bar',
     'section-header.php'      => 'Header & Navigation',
     'section-hero.php'        => 'Hero Slider',
+    'section-trust-badges.php'=> 'Trust Badges',
     'section-journey.php'     => 'Journey Section',
     'section-collection.php'  => 'Gemstones Collection',
     'section-factory.php'     => 'Factory & Laboratories',
