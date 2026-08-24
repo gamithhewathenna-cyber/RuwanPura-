@@ -114,17 +114,33 @@ a, button, .btn-dark, input, select, textarea {
 /* =====================================================================
    ANNOUNCEMENT BAR
    ===================================================================== */
-.announcement-bar { background: var(--dark); }
-.announcement-bar-inner {
+.announcement-bar {
     position: relative;
-    display: flex; align-items: center; justify-content: center;
-    padding: 11px 44px;
-    min-height: 20px;
+    background: var(--dark);
+    overflow: hidden;
+    padding: 11px 46px 11px 0;
+    height: 42px;
 }
-.announcement-text { font-size: 13.5px; letter-spacing: .3px; color: #fff; text-align: center; line-height: 1.5; }
+.announcement-track {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: max-content;
+    animation: announcement-scroll 18s linear infinite;
+}
+.announcement-bar:hover .announcement-track { animation-play-state: paused; }
+.announcement-text {
+    display: inline-flex; align-items: center; gap: 40px; white-space: nowrap;
+    font-size: 13.5px; letter-spacing: .3px; color: #fff; line-height: 1.5;
+}
+.announcement-text::after { content: '\2022'; color: var(--gold); }
 a.announcement-text:hover { color: var(--gold); }
+@keyframes announcement-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
 .announcement-close {
-    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%); z-index: 2;
     width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
     background: none; border: none; color: #fff; font-size: 20px; line-height: 1; cursor: pointer;
     opacity: .65; transition: opacity .2s;
@@ -352,6 +368,7 @@ a.announcement-text:hover { color: var(--gold); }
 
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
+    .announcement-track { animation: none; }
     .timeline-item,
     .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
     .parallax { transform: none !important; }
@@ -1267,8 +1284,8 @@ body.drawer-open { overflow: hidden; }
     .hero-arrow-outer { display: none; }
     .hero-arrow-inner { display: flex; }
 
-    .announcement-bar-inner { padding: 10px 34px; }
-    .announcement-text { font-size: 12.5px; }
+    .announcement-track { gap: 26px; }
+    .announcement-text { font-size: 12.5px; gap: 26px; }
 
     /* Shrink logo + header bar a little so the row has room to breathe on phones/tablets */
     .nav { height: 88px; }
