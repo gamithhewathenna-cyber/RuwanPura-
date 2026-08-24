@@ -1146,8 +1146,8 @@ body.drawer-open { overflow: hidden; }
     /* Bigger, easier-to-tap touch targets */
     .cart-item-remove { width: 36px; height: 36px; font-size: 20px; }
     .filter-check input { width: 18px; height: 18px; }
-    .catalogue-search-icon { width: 24px; height: 24px; left: 18px; }
-    .catalogue-search input { padding: 16px 18px 16px 54px; }
+    .catalogue-search-icon { width: 20px; height: 20px; left: 16px; }
+    .catalogue-search input { height: 50px; padding: 0 16px 0 46px; }
 
     .testi-track { -webkit-overflow-scrolling: touch; }
 
@@ -1204,13 +1204,23 @@ body.drawer-open { overflow: hidden; }
        search bar and the Filters toggle sit side by side in one row on mobile */
     .catalogue-toolbar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
     .catalogue-toolbar-row .catalogue-search-wrap { flex: 1 1 auto; min-width: 0; margin-bottom: 0; }
+    /* Icon-only pill on mobile — keeps the row compact so the search field has
+       room to breathe instead of getting squeezed and clipping its text. */
+    .filters-btn-label { display: none; }
     .catalogue-filter-toggle {
-        display: inline-flex; align-items: center; gap: 8px;
-        background: #fff; border: 1px solid var(--line); border-radius: 30px;
-        padding: 12px 20px; font-size: 14px; font-weight: 500; color: var(--ink);
-        cursor: pointer; margin-bottom: 0; flex: 0 0 auto; white-space: nowrap;
+        position: relative;
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        height: 50px; width: 50px; padding: 0;
+        background: #fff; border: 1px solid var(--line); border-radius: 50%;
+        font-size: 14px; font-weight: 500; color: var(--ink);
+        cursor: pointer; margin-bottom: 0; flex: 0 0 auto;
+        transition: border-color .2s, box-shadow .2s;
     }
-    .catalogue-filter-toggle svg { width: 18px; height: 18px; }
+    .catalogue-filter-toggle:active { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,154,91,.15); }
+    .catalogue-filter-toggle svg { width: 19px; height: 19px; }
+    .catalogue-filter-toggle .filter-count-badge {
+        position: absolute; top: -4px; right: -4px;
+    }
     .filter-count-badge {
         min-width: 18px; height: 18px; padding: 0 5px; border-radius: 20px;
         background: var(--gold); color: #fff; font-size: 11px; font-weight: 600;
