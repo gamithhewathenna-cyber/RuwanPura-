@@ -179,6 +179,7 @@ $memberships  = get_memberships();
                 <div class="membership-item">
                     <?php if ($m['logo']): ?>
                         <img src="<?= row_img($m['logo']) ?>" alt="<?= e($m['name']) ?>">
+                        <h4 class="membership-name"><?= e($m['name']) ?></h4>
                     <?php else: ?>
                         <span class="logo-fallback"><?= e($m['name']) ?></span>
                     <?php endif; ?>

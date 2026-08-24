@@ -788,8 +788,9 @@ a, button, .btn-dark, input, select, textarea {
     margin-bottom: 40px;
 }
 .membership-item { text-align: center; }
-.membership-item img { max-height: 50px; width: auto; object-fit: contain; margin: 0 auto 14px; filter: grayscale(1); opacity: .85; }
+.membership-item img { max-height: 50px; width: auto; object-fit: contain; margin: 0 auto 10px; filter: grayscale(1); opacity: .85; }
 .membership-item .logo-fallback { display: block; margin-bottom: 14px; font-size: 13.5px; letter-spacing: .3px; }
+.membership-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.4; }
 .membership-item p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
 .membership-footer { color: var(--muted); font-size: 14.5px; max-width: 900px; margin: 0 auto; text-align: center; }
 
