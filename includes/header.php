@@ -59,13 +59,16 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <!-- ================= ANNOUNCEMENT BAR ================= -->
 <div class="announcement-bar">
     <div class="announcement-row">
-        <?php foreach ($announcementCards as $ac): ?>
-            <?php if ($ac['link']): ?>
-                <a href="<?= e($ac['link']) ?>" class="announcement-card"><?= e($ac['text']) ?></a>
-            <?php else: ?>
-                <span class="announcement-card"><?= e($ac['text']) ?></span>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        <?php // Rendered twice back-to-back so the sliding loop animation is seamless ?>
+        <?php for ($i = 0; $i < 2; $i++): ?>
+            <?php foreach ($announcementCards as $ac): ?>
+                <?php if ($ac['link']): ?>
+                    <a href="<?= e($ac['link']) ?>" class="announcement-card"><?= e($ac['text']) ?></a>
+                <?php else: ?>
+                    <span class="announcement-card"><?= e($ac['text']) ?></span>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endfor; ?>
     </div>
 </div>
 <?php endif; ?>

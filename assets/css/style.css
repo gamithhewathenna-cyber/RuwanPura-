@@ -114,17 +114,18 @@ a, button, .btn-dark, input, select, textarea {
 /* =====================================================================
    ANNOUNCEMENT BAR
    ===================================================================== */
-.announcement-bar { background: var(--dark); }
+.announcement-bar { background: var(--dark); overflow: hidden; }
 .announcement-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    padding: 10px 20px;
-    row-gap: 6px;
+    width: max-content;
+    padding: 10px 0;
+    animation: announcement-loop 22s linear infinite;
 }
+.announcement-bar:hover .announcement-row { animation-play-state: paused; }
 .announcement-card {
     display: inline-block;
+    white-space: nowrap;
     font-size: 13px; letter-spacing: .3px; color: #fff; line-height: 1.4;
     text-align: center;
     padding: 0 22px;
@@ -132,6 +133,10 @@ a, button, .btn-dark, input, select, textarea {
 }
 .announcement-card:first-child { border-left: none; }
 a.announcement-card:hover { color: var(--gold); }
+@keyframes announcement-loop {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
 
 /* =====================================================================
    HEADER
@@ -401,6 +406,7 @@ a.announcement-card:hover { color: var(--gold); }
 
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
+    .announcement-row { animation: none; }
     .timeline-item,
     .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
     .parallax { transform: none !important; }
