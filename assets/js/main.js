@@ -1,6 +1,13 @@
 /* =====================================================================
    Ruwanpura Gems - Front-end interactions
    ===================================================================== */
+
+/* Fallback page fade-in (only relevant where @view-transition isn't supported —
+   see style.css). Runs immediately rather than waiting on DOMContentLoaded,
+   since this script sits at the end of <body> and the element already exists
+   by the time it executes — keeps the invisible flash as short as possible. */
+document.body.classList.add('page-loaded');
+
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ---- Mobile menu toggle ---- */

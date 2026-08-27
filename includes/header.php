@@ -50,7 +50,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             --dark: <?= e($darkc) ?>;
         }
     </style>
-    <noscript><style>.reveal,.reveal-fade,.timeline-item{opacity:1!important;transform:none!important;}</style></noscript>
+    <noscript><style>.reveal,.reveal-fade,.timeline-item{opacity:1!important;transform:none!important;}body{opacity:1!important;}</style></noscript>
 </head>
 <body>
 

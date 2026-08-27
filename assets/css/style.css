@@ -22,6 +22,21 @@
 
 html { scroll-behavior: smooth; }
 
+/* =====================================================================
+   PAGE-TO-PAGE TRANSITIONS
+   In browsers that support it (Chrome/Edge, and others as they ship it),
+   this makes every same-site navigation cross-fade automatically — no JS
+   needed, and it degrades to a normal instant navigation everywhere else.
+   ===================================================================== */
+@view-transition {
+    navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: .45s;
+    animation-timing-function: cubic-bezier(.16,.84,.44,1);
+}
+
 body {
     font-family: var(--sans);
     color: var(--text);
@@ -30,6 +45,16 @@ body {
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+}
+
+/* Fallback fade-in for browsers that don't support @view-transition above —
+   scoped so it never runs alongside the native transition (which would
+   otherwise cross-fade into an invisible body, then fade in a second time).
+   main.js adds .page-loaded on load; the noscript rule in header.php guards
+   against the page staying invisible if JS never runs at all. */
+@supports not (view-transition-name: none) {
+    body { opacity: 0; transition: opacity .4s ease; }
+    body.page-loaded { opacity: 1; }
 }
 
 img { max-width: 100%; display: block; }
