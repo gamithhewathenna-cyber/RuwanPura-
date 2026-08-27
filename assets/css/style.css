@@ -343,15 +343,29 @@ a.announcement-card:hover { color: var(--gold); }
     gap: 60px;
     align-items: center;
 }
-.journey-img { text-align: center; }
-.journey-img img {
-    margin: 0 auto; max-height: 420px; width: auto;
-    filter: drop-shadow(0 30px 40px rgba(0,40,120,.25));
-    animation: journey-spin 30s linear infinite;
+/* Shadow lives on the outer wrapper (unclipped) and the shine sweep is clipped
+   by the inner frame — keeping them on separate elements means overflow:hidden
+   (needed to contain the sweep) never clips the drop-shadow. */
+.journey-img { text-align: center; filter: drop-shadow(0 30px 40px rgba(0,40,120,.25)); }
+.journey-img-frame { position: relative; display: inline-block; overflow: hidden; }
+.journey-img img { display: block; margin: 0 auto; max-height: 420px; width: auto; }
+/* A diagonal light streak sweeps across the gem every few seconds, like light
+   catching a facet — the wrapper (not the <img> itself) carries it, since
+   ::after doesn't render on replaced elements like <img>. */
+.journey-img-frame::after {
+    content: '';
+    position: absolute;
+    top: -60%; left: -60%;
+    width: 35%; height: 220%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.65), transparent);
+    transform: rotate(20deg);
+    animation: journey-shine 4.5s ease-in-out infinite;
+    pointer-events: none;
 }
-@keyframes journey-spin {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+@keyframes journey-shine {
+    0%   { left: -60%; }
+    35%  { left: 130%; }
+    100% { left: 130%; }
 }
 .journey-content { text-align: center; }
 .journey-content .eyebrow { justify-content: center; }
@@ -415,7 +429,7 @@ a.announcement-card:hover { color: var(--gold); }
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
     .announcement-row { animation: none; }
-    .journey-img img { animation: none; }
+    .journey-img-frame::after { animation: none; display: none; }
     .timeline-item,
     .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
     .parallax { transform: none !important; }

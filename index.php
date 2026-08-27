@@ -84,11 +84,13 @@ $testimonials = get_testimonials();
     <div class="container">
         <div class="journey-grid">
             <div class="journey-img reveal-fade">
-                <?php if (c('journey_image')): ?>
-                    <img src="<?= c_img('journey_image') ?>" alt="Sapphire">
-                <?php else: ?>
-                    <img src="<?= BASE_URL ?>assets/images/journey-placeholder.png" alt="Sapphire">
-                <?php endif; ?>
+                <div class="journey-img-frame">
+                    <?php if (c('journey_image')): ?>
+                        <img src="<?= c_img('journey_image') ?>" alt="Sapphire">
+                    <?php else: ?>
+                        <img src="<?= BASE_URL ?>assets/images/journey-placeholder.png" alt="Sapphire">
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="journey-content reveal">
                 <div class="eyebrow"><?= e(c('journey_eyebrow')) ?></div>
