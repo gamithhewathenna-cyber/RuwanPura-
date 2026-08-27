@@ -258,11 +258,7 @@ $testimonials = get_testimonials();
                 <div class="testi-card">
                     <p class="quote">“<?= e($t['quote']) ?>”</p>
                     <div class="testi-author">
-                        <?php if ($t['avatar']): ?>
-                            <img class="avatar" src="<?= row_img($t['avatar']) ?>" alt="<?= e($t['author_name']) ?>">
-                        <?php else: ?>
-                            <span class="avatar"></span>
-                        <?php endif; ?>
+                        <span class="avatar"><i class="fa-solid fa-user"></i></span>
                         <div>
                             <div class="name"><?= e($t['author_name']) ?></div>
                             <div class="role"><?= e($t['author_role']) ?></div>
