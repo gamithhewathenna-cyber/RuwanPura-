@@ -8,7 +8,6 @@ require_admin();
 require_once __DIR__ . '/form-helpers.php';
 
 $__sectionRoleMap = [
-    'announcement' => 'home',
     'header' => 'home', 'hero' => 'home', 'journey' => 'home', 'collection' => 'home',
     'factory' => 'home', 'branches' => 'home', 'why_choose' => 'home', 'events' => 'home', 'testimonials' => 'home',
     'cta' => 'home', 'footer' => 'home',

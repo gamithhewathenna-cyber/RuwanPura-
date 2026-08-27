@@ -114,31 +114,24 @@ a, button, .btn-dark, input, select, textarea {
 /* =====================================================================
    ANNOUNCEMENT BAR
    ===================================================================== */
-.announcement-bar {
-    position: relative;
-    background: var(--dark);
-    overflow: hidden;
-    height: 42px;
+.announcement-bar { background: var(--dark); }
+.announcement-row {
     display: flex;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px 20px;
+    row-gap: 6px;
 }
-.announcement-track {
-    white-space: nowrap;
-    animation: announcement-scroll 12s linear infinite;
+.announcement-card {
+    display: inline-block;
+    font-size: 13px; letter-spacing: .3px; color: #fff; line-height: 1.4;
+    text-align: center;
+    padding: 0 22px;
+    border-left: 1px solid rgba(255,255,255,.2);
 }
-.announcement-bar:hover .announcement-track { animation-play-state: paused; }
-.announcement-text {
-    display: inline-block; white-space: nowrap;
-    font-size: 13.5px; letter-spacing: .3px; color: #fff; line-height: 1.5;
-}
-a.announcement-text:hover { color: var(--gold); }
-/* Starts fully off the right edge of the screen and slides all the way past
-   the left edge of its own width, so it genuinely enters from the right and
-   exits on the left — rather than just being already on-screen at load. */
-@keyframes announcement-scroll {
-    from { transform: translateX(100vw); }
-    to   { transform: translateX(-100%); }
-}
+.announcement-card:first-child { border-left: none; }
+a.announcement-card:hover { color: var(--gold); }
 
 /* =====================================================================
    HEADER
@@ -408,7 +401,6 @@ a.announcement-text:hover { color: var(--gold); }
 
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
-    .announcement-track { animation: none; }
     .timeline-item,
     .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
     .parallax { transform: none !important; }
@@ -1337,7 +1329,7 @@ body.drawer-open { overflow: hidden; }
     .hero-arrow-outer { display: none; }
     .hero-arrow-inner { display: flex; }
 
-    .announcement-text { font-size: 12.5px; }
+    .announcement-card { font-size: 12px; padding: 0 14px; }
 
     /* Shrink logo + header bar a little so the row has room to breathe on phones/tablets */
     .nav { height: 88px; }

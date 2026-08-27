@@ -168,6 +168,11 @@ function get_branches()
 {
     return db()->query("SELECT * FROM branches WHERE is_active=1 ORDER BY sort_order, id")->fetchAll();
 }
+function get_announcement_cards($activeOnly = true)
+{
+    $sql = "SELECT * FROM announcement_cards" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
+    return db()->query($sql)->fetchAll();
+}
 function get_legacy_stats($activeOnly = true)
 {
     $sql = "SELECT * FROM legacy_stats" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";

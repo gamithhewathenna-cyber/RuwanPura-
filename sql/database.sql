@@ -169,6 +169,18 @@ CREATE TABLE IF NOT EXISTS `trust_badges` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
+-- Table: announcement_cards  (black bar above the menu, shown on every page)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `announcement_cards` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(255) DEFAULT NULL,
+  `link` VARCHAR(255) DEFAULT NULL,
+  `sort_order` INT(11) NOT NULL DEFAULT 0,
+  `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
 -- Table: legacy_stats  (Home page - "Our Legacy in Numbers", below the hero)
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `legacy_stats` (
@@ -359,9 +371,6 @@ INSERT INTO `settings` (`setting_key`,`setting_value`) VALUES
 
 -- Content blocks -------------------------------------------------------
 INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_label`,`block_type`,`sort_order`) VALUES
--- Announcement bar
-('announcement_text','','announcement','Announcement Text (leave blank to hide the bar)','textarea',1),
-('announcement_link','','announcement','Announcement Link (optional)','link',2),
 -- Header / nav
 ('nav_home','Home','header','Nav: Home Label','text',1),
 ('nav_gemstones','Our Gemstones','header','Nav: Gemstones Label','text',2),
@@ -495,6 +504,12 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
 ('blog_hero_title','Insights','blog_hero','Hero Title','text',2),
 ('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3);
+
+-- Announcement bar cards (shown above the menu on every page)
+INSERT INTO `announcement_cards` (`text`,`link`,`sort_order`) VALUES
+('Free worldwide shipping on certified gemstones', NULL, 1),
+('100% natural, ethically sourced stones', NULL, 2),
+('Need help choosing? Contact our experts', '/contact.php', 3);
 
 -- Legacy stats (home page, below the hero slider)
 INSERT INTO `legacy_stats` (`icon`,`stat_value`,`stat_label`,`description`,`sort_order`) VALUES

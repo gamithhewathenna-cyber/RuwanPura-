@@ -54,15 +54,18 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </head>
 <body>
 
-<?php if (c('announcement_text')): ?>
+<?php $announcementCards = get_announcement_cards(); ?>
+<?php if ($announcementCards): ?>
 <!-- ================= ANNOUNCEMENT BAR ================= -->
 <div class="announcement-bar">
-    <div class="announcement-track">
-        <?php if (c('announcement_link')): ?>
-            <a href="<?= e(c('announcement_link')) ?>" class="announcement-text"><?= e(c('announcement_text')) ?></a>
-        <?php else: ?>
-            <span class="announcement-text"><?= e(c('announcement_text')) ?></span>
-        <?php endif; ?>
+    <div class="announcement-row">
+        <?php foreach ($announcementCards as $ac): ?>
+            <?php if ($ac['link']): ?>
+                <a href="<?= e($ac['link']) ?>" class="announcement-card"><?= e($ac['text']) ?></a>
+            <?php else: ?>
+                <span class="announcement-card"><?= e($ac['text']) ?></span>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
 </div>
 <?php endif; ?>
