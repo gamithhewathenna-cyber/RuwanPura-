@@ -344,7 +344,15 @@ a.announcement-card:hover { color: var(--gold); }
     align-items: center;
 }
 .journey-img { text-align: center; }
-.journey-img img { margin: 0 auto; max-height: 420px; width: auto; filter: drop-shadow(0 30px 40px rgba(0,40,120,.25)); }
+.journey-img img {
+    margin: 0 auto; max-height: 420px; width: auto;
+    filter: drop-shadow(0 30px 40px rgba(0,40,120,.25));
+    animation: journey-spin 30s linear infinite;
+}
+@keyframes journey-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
 .journey-content { text-align: center; }
 .journey-content .eyebrow { justify-content: center; }
 .journey-title {
@@ -407,6 +415,7 @@ a.announcement-card:hover { color: var(--gold); }
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
     .announcement-row { animation: none; }
+    .journey-img img { animation: none; }
     .timeline-item,
     .reveal, .reveal-fade { opacity: 1 !important; transform: none !important; transition: none !important; }
     .parallax { transform: none !important; }
