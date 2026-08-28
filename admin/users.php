@@ -48,6 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 set_flash('success', 'Role updated.');
             }
         }
+        elseif ($action === 'reset_password') {
+            $id  = (int) ($_POST['id'] ?? 0);
+            $new = $_POST['new_password'] ?? '';
+            if (strlen($new) < 6) {
+                set_flash('error', 'New password must be at least 6 characters.');
+            } else {
+                $hash = password_hash($new, PASSWORD_DEFAULT);
+                db()->prepare("UPDATE admins SET password_hash = ? WHERE id = ?")->execute([$hash, $id]);
+                set_flash('success', 'Password reset.');
+            }
+        }
         elseif ($action === 'delete') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id === $myId) {
@@ -101,8 +112,18 @@ require_once __DIR__ . '/layout-top.php';
                     <?php endif; ?>
                 </td>
                 <td class="row-actions">
+                    <details style="display:inline-block;">
+                        <summary class="btn btn-sm" style="cursor:pointer;display:inline-flex;">Reset Password</summary>
+                        <form method="post" style="margin-top:10px;min-width:220px;">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="action" value="reset_password">
+                            <input type="hidden" name="id" value="<?= (int) $a['id'] ?>">
+                            <input type="password" name="new_password" class="form-control" placeholder="New password" minlength="6" required autocomplete="new-password" style="margin-bottom:8px;">
+                            <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Reset the password for <?= e(addslashes($a['name'])) ?>? They will need to use the new password to log in.')">Set Password</button>
+                        </form>
+                    </details>
                     <?php if ((int) $a['id'] !== $myId): ?>
-                        <form method="post" onsubmit="return confirm('Remove this admin user? They will no longer be able to log in.')">
+                        <form method="post" style="display:inline;" onsubmit="return confirm('Remove this admin user? They will no longer be able to log in.')">
                             <?= csrf_field() ?>
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?= (int) $a['id'] ?>">
