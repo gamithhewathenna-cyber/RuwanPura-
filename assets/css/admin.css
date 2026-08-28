@@ -118,6 +118,20 @@ img { max-width: 100%; display: block; }
 }
 .form-control:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,154,91,.15); }
 textarea.form-control { resize: vertical; min-height: 90px; line-height: 1.5; }
+
+.password-field { position: relative; }
+.password-field .form-control { padding-right: 42px; }
+.password-toggle {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    background: none; border: none; cursor: pointer; color: #9ca3af; border-radius: 6px;
+}
+.password-toggle:hover { color: #4b5563; background: #f3f4f6; }
+.password-toggle svg { width: 18px; height: 18px; }
+.password-toggle.is-visible { color: var(--gold); }
+.password-toggle .eye-off { display: none; }
+.password-toggle.is-visible .eye { display: none; }
+.password-toggle.is-visible .eye-off { display: block; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 
 .btn {

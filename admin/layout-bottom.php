@@ -11,6 +11,19 @@
     if(o){o.addEventListener('click',function(){s.classList.remove('open');o.classList.remove('show');});}
 })();
 
+// Show/hide password fields (works for any current or future .password-field)
+document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.password-toggle');
+    if (!btn) return;
+    var wrap = btn.closest('.password-field');
+    var input = wrap ? wrap.querySelector('input') : null;
+    if (!input) return;
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.classList.toggle('is-visible', show);
+    btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+});
+
 // image preview on file select
 document.querySelectorAll('input[type=file][data-preview]').forEach(function(inp){
     inp.addEventListener('change',function(){
