@@ -58,13 +58,10 @@ $testimonials = get_testimonials();
 <section class="journey" id="journey">
     <div class="container">
         <div class="journey-grid">
+            <?php $journeyImgUrl = c('journey_image') ? c_img('journey_image') : BASE_URL . 'assets/images/journey-placeholder.png'; ?>
             <div class="journey-img reveal-fade">
-                <div class="journey-img-frame">
-                    <?php if (c('journey_image')): ?>
-                        <img src="<?= c_img('journey_image') ?>" alt="Sapphire">
-                    <?php else: ?>
-                        <img src="<?= BASE_URL ?>assets/images/journey-placeholder.png" alt="Sapphire">
-                    <?php endif; ?>
+                <div class="journey-img-frame" style="--journey-mask: url('<?= e($journeyImgUrl) ?>');">
+                    <img src="<?= e($journeyImgUrl) ?>" alt="Sapphire">
                 </div>
             </div>
             <div class="journey-content reveal-right">
