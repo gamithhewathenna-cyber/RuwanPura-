@@ -33,7 +33,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- ================= PRODUCT HEADER ================= -->
 <section class="about-hero">
-    <div class="container reveal">
+    <div class="container reveal-left">
         <h1 class="about-hero-title"><?= e($categoryName ?: 'Gemstone') ?></h1>
         <p class="product-header-subtitle"><?= e($product['name']) ?></p>
     </div>
@@ -94,7 +94,7 @@ include __DIR__ . '/includes/header.php';
             </script>
             <?php endif; ?>
 
-            <div class="product-info reveal">
+            <div class="product-info reveal-right">
                 <span class="product-status-badge status-<?= e($product['status']) ?>"><?= e($statusLabels[$product['status']]) ?></span>
                 <h1 class="product-title"><?= e($product['name']) ?></h1>
                 <?php if ($product['sku']): ?><p class="product-sku">SKU: <?= e($product['sku']) ?></p><?php endif; ?>

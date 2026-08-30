@@ -22,7 +22,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- ================= BLOG HERO ================= -->
 <section class="catalogue-hero">
-    <div class="container reveal">
+    <div class="container reveal-left">
         <div class="eyebrow"><?= e(c('blog_hero_eyebrow')) ?></div>
         <h1 class="about-hero-title catalogue-hero-title"><?= e(c('blog_hero_title', 'Insights')) ?></h1>
         <p class="catalogue-hero-desc"><?= e(c('blog_hero_desc')) ?></p>

@@ -11,7 +11,7 @@ $memberships  = get_memberships();
 
 <!-- ================= ABOUT HERO ================= -->
 <section class="about-hero">
-    <div class="container reveal">
+    <div class="container reveal-left">
         <div class="eyebrow"><?= e(c('about_hero_eyebrow')) ?></div>
         <h1 class="about-hero-title"><?= e(c('about_hero_title')) ?></h1>
         <p class="about-hero-quote">&ldquo;<?= e(c('about_hero_quote')) ?>&rdquo;</p>
@@ -22,7 +22,7 @@ $memberships  = get_memberships();
 <section class="evolution">
     <div class="container">
         <div class="evolution-grid">
-            <div class="evolution-content reveal">
+            <div class="evolution-content reveal-left">
                 <h2 class="evolution-title"><?= e(c('evolution_title')) ?></h2>
                 <p><?= e(c('evolution_p1')) ?></p>
                 <p><?= e(c('evolution_p2')) ?></p>
@@ -45,7 +45,7 @@ $memberships  = get_memberships();
 <!-- ================= OUR GLOBAL JOURNEY ================= -->
 <section class="history">
     <div class="container">
-        <div class="history-head reveal">
+        <div class="history-head reveal-right">
             <div class="eyebrow"><?= e(c('history_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('history_title')) ?></h2>
         </div>
@@ -85,7 +85,7 @@ $memberships  = get_memberships();
                 <?php endif; ?>
             </div>
 
-            <div class="video-text reveal">
+            <div class="video-text reveal-right">
                 <h2 class="video-heading"><?= e(c('video_heading')) ?></h2>
                 <p><?= e(c('video_p1')) ?></p>
                 <p><?= e(c('video_p2')) ?></p>
@@ -108,7 +108,7 @@ $memberships  = get_memberships();
 <!-- ================= NATIONAL INDUSTRY EXCELLENCE ================= -->
 <section class="awards">
     <div class="container">
-        <div class="awards-head reveal">
+        <div class="awards-head reveal-left">
             <div class="eyebrow"><?= e(c('awards_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('awards_title')) ?></h2>
         </div>
@@ -120,7 +120,7 @@ $memberships  = get_memberships();
                     <div class="img-placeholder">Award</div>
                 <?php endif; ?>
             </div>
-            <div class="awards-list reveal">
+            <div class="awards-list reveal-right">
                 <?php foreach ($achievements as $a): ?>
                     <div class="branch-item">
                         <span class="dot">●</span>
@@ -139,7 +139,7 @@ $memberships  = get_memberships();
 <section class="gubelin">
     <div class="container">
         <div class="gubelin-grid">
-            <div class="gubelin-content reveal">
+            <div class="gubelin-content reveal-left">
                 <div class="eyebrow left"><?= e(c('gubelin_eyebrow')) ?></div>
                 <h2 class="gubelin-title"><?= e(c('gubelin_title')) ?></h2>
                 <p class="gubelin-subtitle"><?= e(c('gubelin_subtitle')) ?></p>
@@ -169,7 +169,7 @@ $memberships  = get_memberships();
 <!-- ================= PROFESSIONAL STANDING / MEMBERSHIPS ================= -->
 <section class="membership">
     <div class="container">
-        <div class="membership-head reveal">
+        <div class="membership-head reveal-right">
             <div class="eyebrow"><?= e(c('membership_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('membership_title')) ?></h2>
             <p><?= e(c('membership_p1')) ?></p>

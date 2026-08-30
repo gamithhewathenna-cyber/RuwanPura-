@@ -66,7 +66,7 @@ include __DIR__ . '/includes/header.php';
 
 <!-- ================= ARTICLE HEADER ================= -->
 <section class="about-hero">
-    <div class="container reveal">
+    <div class="container reveal-left">
         <?php if ($post['category_name']): ?><div class="eyebrow"><?= e(strtoupper($post['category_name'])) ?></div><?php endif; ?>
         <h1 class="about-hero-title" style="font-size:44px;text-transform:none;"><?= e($post['title']) ?></h1>
         <div class="blog-post-meta">

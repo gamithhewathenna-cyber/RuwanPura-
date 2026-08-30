@@ -7,7 +7,7 @@
             <?php else: ?>
                 <img class="cta-bg parallax" data-speed="0.12" src="<?= BASE_URL ?>assets/images/cta-placeholder.jpg" alt="">
             <?php endif; ?>
-            <div class="cta-inner reveal">
+            <div class="cta-inner reveal-left">
                 <div class="cta-top">
                     <h2 class="cta-title"><?= e(c('cta_title')) ?></h2>
                     <p class="cta-desc"><?= e(c('cta_desc')) ?></p>
