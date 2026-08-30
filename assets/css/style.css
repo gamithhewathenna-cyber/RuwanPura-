@@ -119,6 +119,15 @@ a, button, .btn-dark, input, select, textarea {
 }
 .reveal-right.in-view { opacity: 1; transform: translateX(0); }
 
+/* Custom hover cursor — a small blue faceted diamond — shown only over the
+   nav menu links and buttons, not the whole site. */
+.nav a.nav-link,
+.nav .nav-link,
+.btn-dark,
+.btn-outline {
+    cursor: url('../images/cursor-diamond.svg') 13 4, pointer;
+}
+
 /* Section eyebrow (small gold spaced text with side lines) */
 .eyebrow {
     font-family: var(--sans);
