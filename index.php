@@ -4,7 +4,6 @@ maybe_show_maintenance_page();
 
 include __DIR__ . '/includes/header.php';
 
-$heroSlides   = get_hero_slides();
 $legacyStats  = get_legacy_stats();
 $gemstones    = get_latest_products(10);
 $branches     = get_branches();
@@ -14,47 +13,23 @@ $testimonials = get_testimonials();
 
 <!-- ================= HERO ================= -->
 <section class="hero">
-    <button class="hero-arrow hero-arrow-outer prev" aria-label="Previous">‹</button>
-    <button class="hero-arrow hero-arrow-outer next" aria-label="Next">›</button>
-    <div class="container">
-        <div class="hero-grid">
-            <div class="hero-text">
-                <?php if ($heroSlides): foreach ($heroSlides as $i => $s): ?>
-                    <div class="hero-text-slide<?= $i === 0 ? ' active' : '' ?>">
-                        <div class="hero-eyebrow"><?= e(slide_text($s, 'eyebrow', c('hero_eyebrow'))) ?></div>
-                        <h1 class="hero-title"><?= e(slide_text($s, 'title', c('hero_title'))) ?></h1>
-                        <p class="hero-desc"><?= e(slide_text($s, 'description', c('hero_desc'))) ?></p>
-                        <a href="<?= e(slide_text($s, 'btn_link', c('hero_btn_link', '#'))) ?>" class="btn-dark"><?= e(slide_text($s, 'btn_text', c('hero_btn_text'))) ?></a>
-                    </div>
-                <?php endforeach; else: ?>
-                    <div class="hero-text-slide active">
-                        <div class="hero-eyebrow"><?= e(c('hero_eyebrow')) ?></div>
-                        <h1 class="hero-title"><?= e(c('hero_title')) ?></h1>
-                        <p class="hero-desc"><?= e(c('hero_desc')) ?></p>
-                        <a href="<?= e(c('hero_btn_link', '#')) ?>" class="btn-dark"><?= e(c('hero_btn_text')) ?></a>
-                    </div>
-                <?php endif; ?>
-            </div>
+    <div class="hero-media">
+        <?php if (c('hero_video')): ?>
+            <video autoplay muted loop playsinline preload="auto"
+                   <?= c('hero_video_poster') ? 'poster="' . c_img('hero_video_poster') . '"' : '' ?>>
+                <source src="<?= c_img('hero_video') ?>" type="video/mp4">
+            </video>
+        <?php else: ?>
+            <img src="<?= c('hero_video_poster') ? c_img('hero_video_poster') : BASE_URL . 'assets/images/hero-placeholder.jpg' ?>" alt="">
+        <?php endif; ?>
+    </div>
 
-            <div class="hero-slider">
-                <button class="hero-arrow hero-arrow-inner prev" aria-label="Previous">‹</button>
-                <div class="hero-slides">
-                    <?php if ($heroSlides): foreach ($heroSlides as $i => $s): ?>
-                        <div class="hero-slide<?= $i === 0 ? ' active' : '' ?>">
-                            <?php if ($s['image']): ?>
-                                <img src="<?= row_img($s['image']) ?>" alt="Gemstone slide <?= $i + 1 ?>">
-                            <?php else: ?>
-                                <img src="<?= BASE_URL ?>assets/images/hero-placeholder.jpg" alt="Gemstone">
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; else: ?>
-                        <div class="hero-slide active">
-                            <img src="<?= BASE_URL ?>assets/images/hero-placeholder.jpg" alt="Gemstone">
-                        </div>
-                    <?php endif; ?>
-                </div>
-                <button class="hero-arrow hero-arrow-inner next" aria-label="Next">›</button>
-            </div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-eyebrow"><?= e(c('hero_eyebrow')) ?></div>
+            <h1 class="hero-title"><?= e(c('hero_title')) ?></h1>
+            <p class="hero-desc"><?= e(c('hero_desc')) ?></p>
+            <a href="<?= e(c('hero_btn_link', '#')) ?>" class="hero-cta"><?= e(c('hero_btn_text')) ?></a>
         </div>
     </div>
 </section>

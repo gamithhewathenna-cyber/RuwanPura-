@@ -74,7 +74,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <?php endif; ?>
 
 <!-- ================= HEADER ================= -->
-<header class="site-header">
+<header class="site-header<?= $currentPage === 'index.php' ? ' site-header--transparent' : '' ?>">
     <div class="container">
         <nav class="nav">
             <div class="nav-left nav-menu">
@@ -89,8 +89,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
 
             <a class="nav-logo" href="<?= BASE_URL ?>index.php">
-                <img src="<?= logo_url() ?>" alt="<?= e(setting('site_name')) ?>"
+                <img class="logo-default" src="<?= logo_url() ?>" alt="<?= e(setting('site_name')) ?>"
                      onerror="this.style.display='none'">
+                <?php if ($currentPage === 'index.php'): ?>
+                    <img class="logo-white" src="<?= logo_white_url() ?>" alt="<?= e(setting('site_name')) ?>"
+                         onerror="this.style.display='none'">
+                <?php endif; ?>
             </a>
 
             <div class="nav-right">

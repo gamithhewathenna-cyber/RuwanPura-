@@ -26,6 +26,7 @@ function image_size_hint($key)
         'awards_image'         => '700 × 900px',
         'gubelin_image'        => '900 × 1100px',
         'why_image'            => '900 × 1125px, portrait (4:5)',
+        'hero_video_poster'    => '1920 × 1080px, landscape',
     ];
     return $hints[$key] ?? '';
 }
@@ -72,9 +73,14 @@ function render_content_field($block)
             break;
 
         case 'video':
-            $vPreviewId = 'prev_' . $key;
+            $vPreviewId  = 'prev_' . $key;
+            $isLandscape = ($key === 'hero_video');
+            $boxStyle    = $isLandscape ? 'width:180px;height:100px;' : 'width:110px;height:160px;';
+            $vHint       = $isLandscape
+                ? 'MP4, up to 40MB. Recommended: landscape, e.g. 1920 × 1080px. Keep it short (10–20s) and compressed for fast loading.'
+                : 'MP4/WebM/MOV, up to 80MB. Recommended: portrait, e.g. 1080 × 1920px.';
             echo '<div class="img-field">';
-            echo '  <div class="img-preview" id="' . $vPreviewId . '" style="width:110px;height:160px;">';
+            echo '  <div class="img-preview" id="' . $vPreviewId . '" style="' . $boxStyle . '">';
             if ($val) {
                 echo '<video src="' . UPLOAD_URL . e($val) . '" style="width:100%;height:100%;object-fit:cover;" muted></video>';
             } else {
@@ -86,7 +92,7 @@ function render_content_field($block)
             echo '    <input type="file" name="video_' . e($key) . '" accept="video/mp4,video/webm,video/quicktime">';
             echo '  </div>';
             echo '</div>';
-            echo '<div class="hint" style="margin-top:8px;">MP4/WebM/MOV, up to 80MB. Recommended: portrait, e.g. 1080 × 1920px.</div>';
+            echo '<div class="hint" style="margin-top:8px;">' . e($vHint) . '</div>';
             echo '<input type="hidden" name="video_keys[]" value="' . e($key) . '">';
             break;
 
@@ -123,9 +129,10 @@ function save_content_group()
     // Save videos (only those with an uploaded file)
     if (!empty($_POST['video_keys']) && is_array($_POST['video_keys'])) {
         foreach ($_POST['video_keys'] as $key) {
-            $field = 'video_' . $key;
-            $old   = c($key);
-            $new   = handle_video_upload($field, $old);
+            $field    = 'video_' . $key;
+            $old      = c($key);
+            $maxBytes = ($key === 'hero_video') ? 40 * 1024 * 1024 : null;
+            $new      = handle_video_upload($field, $old, $maxBytes);
             if ($new !== $old) {
                 update_content($key, $new);
             }

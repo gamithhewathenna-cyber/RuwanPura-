@@ -385,6 +385,8 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 ('hero_desc','Discover the finest sapphires on Earth — gems celebrated for their breathtaking colors, impressive sizes, and timeless allure.','hero','Hero Description','textarea',3),
 ('hero_btn_text','Discover More','hero','Hero Button Text','text',4),
 ('hero_btn_link','#collection','hero','Hero Button Link','link',5),
+('hero_video','','hero','Hero Video (MP4, plays muted/looped in the background)','video',6),
+('hero_video_poster','','hero','Hero Poster Image (shown before the video loads, and as a fallback)','image',7),
 -- Journey
 ('journey_eyebrow','REFINED GROWTH','journey','Journey Eyebrow','text',1),
 ('journey_title','A Journey Defined by Vision & Trust','journey','Journey Title','textarea',2),
