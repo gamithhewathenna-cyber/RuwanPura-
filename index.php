@@ -92,7 +92,7 @@ $testimonials = get_testimonials();
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="journey-content reveal">
+            <div class="journey-content reveal-right">
                 <div class="eyebrow"><?= e(c('journey_eyebrow')) ?></div>
                 <h2 class="journey-title"><?= e(c('journey_title')) ?></h2>
                 <p><?= e(c('journey_p1')) ?></p>
@@ -105,7 +105,7 @@ $testimonials = get_testimonials();
 <!-- ================= COLLECTION ================= -->
 <section class="collection" id="collection">
     <div class="container">
-        <div class="collection-head reveal">
+        <div class="collection-head reveal-left">
             <div class="eyebrow"><?= e(c('collection_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('collection_title')) ?></h2>
         </div>
@@ -144,7 +144,7 @@ $testimonials = get_testimonials();
             <div class="factory-images reveal-fade">
                 <img class="fac-single" src="<?= c('factory_image1') ? c_img('factory_image1') : BASE_URL.'assets/images/factory1.jpg' ?>" alt="Factory & Laboratories">
             </div>
-            <div class="factory-content reveal">
+            <div class="factory-content reveal-right">
                 <div class="eyebrow left"><?= e(c('factory_eyebrow')) ?></div>
                 <h2 class="factory-title"><?= e(c('factory_title')) ?></h2>
                 <p><?= e(c('factory_p1')) ?></p>
@@ -158,7 +158,7 @@ $testimonials = get_testimonials();
 <section class="branches">
     <div class="container">
         <div class="branches-grid">
-            <div class="branches-left reveal">
+            <div class="branches-left reveal-left">
                 <div class="eyebrow left"><?= e(c('branches_eyebrow')) ?></div>
                 <h2 class="branches-title"><?= e(c('branches_title')) ?></h2>
                 <p class="branches-desc"><?= e(c('branches_desc')) ?></p>
@@ -187,7 +187,7 @@ $testimonials = get_testimonials();
 <section class="why-choose">
     <div class="container">
         <div class="why-grid">
-            <div class="why-content reveal">
+            <div class="why-content reveal-left">
                 <div class="eyebrow left"><?= e(c('why_eyebrow')) ?></div>
                 <h2 class="why-title"><?= e(c('why_title')) ?></h2>
                 <p class="why-desc"><?= e(c('why_desc')) ?></p>
@@ -224,7 +224,7 @@ $testimonials = get_testimonials();
 <!-- ================= EVENTS ================= -->
 <section class="events" id="events">
     <div class="container">
-        <div class="events-head reveal">
+        <div class="events-head reveal-right">
             <div class="eyebrow"><?= e(c('events_eyebrow')) ?></div>
             <h2 class="section-title"><?= e(c('events_title')) ?></h2>
             <p class="events-desc"><?= e(c('events_desc')) ?></p>
@@ -246,7 +246,7 @@ $testimonials = get_testimonials();
 <!-- ================= TESTIMONIALS ================= -->
 <section class="testimonials">
     <div class="container">
-        <div class="testi-head reveal">
+        <div class="testi-head reveal-left">
             <div class="testi-quote-mark">“</div>
             <div class="eyebrow"><?= e(c('testi_eyebrow')) ?></div>
             <h2 class="testi-title"><?= e(c('testi_title')) ?></h2>

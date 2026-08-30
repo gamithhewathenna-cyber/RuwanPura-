@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /* ---- Sitewide scroll reveal: .reveal / .reveal-fade / .timeline-item ---- */
     (function () {
-        var items = document.querySelectorAll('.reveal, .reveal-fade, .timeline-item');
+        var items = document.querySelectorAll('.reveal, .reveal-fade, .reveal-left, .reveal-right, .timeline-item');
         if (items.length === 0) return;
 
         if (typeof IntersectionObserver === 'undefined') {
