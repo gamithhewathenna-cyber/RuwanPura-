@@ -398,7 +398,7 @@ a.announcement-card:hover { color: var(--gold); }
 .legacy-item:hover .legacy-icon { transform: scale(1.2) rotate(-8deg); }
 .legacy-value { font-family: var(--serif); font-size: 30px; font-weight: 600; color: var(--ink); line-height: 1.1; margin-bottom: 8px; transition: transform .3s ease; }
 .legacy-item:hover .legacy-value { transform: scale(1.08); }
-.legacy-label { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.legacy-label { font-size: 15px; font-weight: 600; color: var(--gold); margin-bottom: 8px; }
 .legacy-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
 
 /* =====================================================================
