@@ -387,10 +387,8 @@ a.announcement-card:hover { color: var(--gold); }
     text-align: center;
     padding: 34px 20px;
     cursor: default;
-    border-left: 1px solid rgba(255,255,255,.2);
     transition: transform .35s cubic-bezier(.34,1.56,.64,1);
 }
-.legacy-item:first-child { border-left: none; }
 .legacy-item:hover {
     transform: translateY(-10px);
 }
@@ -1548,7 +1546,6 @@ body.drawer-open { overflow: hidden; }
     /* Static 2-column grid — two stats per row, two rows, no animation */
     .legacy-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 14px; }
     .legacy-item { padding: 14px 8px; }
-    .legacy-item:nth-child(2n+1) { border-left: none; }
     .legacy-item:hover { transform: none; }
     .legacy-icon { font-size: 22px; margin-bottom: 10px; }
     .legacy-item:hover .legacy-icon { transform: none; }
