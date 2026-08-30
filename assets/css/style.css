@@ -509,6 +509,7 @@ a.announcement-card:hover { color: var(--gold); }
 .collection-slider:hover .collection-track { animation-play-state: paused; }
 .gem-card { display: block; text-align: center; flex: 0 0 auto; width: 200px; }
 .gem-thumb {
+    position: relative;
     aspect-ratio: 4/5;
     border-radius: 10px;
     overflow: hidden;
@@ -517,6 +518,26 @@ a.announcement-card:hover { color: var(--gold); }
 }
 .gem-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
 .gem-card:hover .gem-thumb img { transform: scale(1.03); }
+/* A diagonal light streak sweeps across each gem thumbnail, like light
+   catching a facet — staggered per card so they twinkle at different times
+   rather than all flashing in unison. */
+.gem-thumb::after {
+    content: '';
+    position: absolute;
+    top: -60%; left: -60%;
+    width: 35%; height: 220%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,.65), transparent);
+    transform: rotate(20deg);
+    animation: gem-shine 5s ease-in-out infinite;
+    pointer-events: none;
+}
+.gem-card:nth-child(3n) .gem-thumb::after { animation-delay: 1.6s; }
+.gem-card:nth-child(3n+1) .gem-thumb::after { animation-delay: 3.2s; }
+@keyframes gem-shine {
+    0%   { left: -60%; }
+    35%  { left: 130%; }
+    100% { left: 130%; }
+}
 .gem-name {
     font-family: var(--serif);
     font-size: 16px;
@@ -534,6 +555,7 @@ a.announcement-card:hover { color: var(--gold); }
     .announcement-row { animation: none; }
     .journey-img-frame { animation: none; }
     .journey-img-frame::after { animation: none; display: none; }
+    .gem-thumb::after { animation: none; display: none; }
     .hero-eyebrow, .hero-title, .hero-desc, .hero-cta { animation: none; opacity: 1; transform: none; }
     .timeline-item,
     .reveal, .reveal-fade, .reveal-left, .reveal-right { opacity: 1 !important; transform: none !important; transition: none !important; }
