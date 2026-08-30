@@ -25,16 +25,31 @@ html { scroll-behavior: smooth; }
 /* =====================================================================
    PAGE-TO-PAGE TRANSITIONS
    In browsers that support it (Chrome/Edge, and others as they ship it),
-   this makes every same-site navigation cross-fade automatically — no JS
-   needed, and it degrades to a normal instant navigation everywhere else.
+   this makes every same-site navigation slide-and-fade automatically — no
+   JS needed, and it degrades to a normal instant navigation everywhere else.
    ===================================================================== */
 @view-transition {
     navigation: auto;
 }
 ::view-transition-old(root),
 ::view-transition-new(root) {
-    animation-duration: .45s;
-    animation-timing-function: cubic-bezier(.16,.84,.44,1);
+    /* Overriding the default cross-dissolve blend so the slide reads cleanly
+       instead of the two pages ghosting through each other. */
+    mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+    animation: .5s cubic-bezier(.16,.84,.44,1) both view-transition-slide-out;
+}
+::view-transition-new(root) {
+    animation: .5s cubic-bezier(.16,.84,.44,1) both view-transition-slide-in;
+}
+@keyframes view-transition-slide-out {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-60px); }
+}
+@keyframes view-transition-slide-in {
+    from { opacity: 0; transform: translateX(60px); }
+    to   { opacity: 1; transform: translateX(0); }
 }
 
 body {
