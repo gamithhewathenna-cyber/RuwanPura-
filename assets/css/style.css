@@ -299,6 +299,7 @@ a.announcement-card:hover { color: var(--gold); }
 .hero {
     position: relative;
     aspect-ratio: 1920 / 700;
+    min-height: 620px; /* floor so the ratio never squeezes the content shorter than it needs (e.g. 1440x900) */
     display: flex;
     align-items: center;
     overflow: hidden;
