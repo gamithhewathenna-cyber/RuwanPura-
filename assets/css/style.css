@@ -377,7 +377,7 @@ a.announcement-card:hover { color: var(--gold); }
 /* =====================================================================
    LEGACY IN NUMBERS
    ===================================================================== */
-.legacy-stats { padding: 30px 0; background: #000; border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12); }
+.legacy-stats { padding: 30px 0; background: #fff; border-top: 1px solid rgba(0,0,0,.12); border-bottom: 1px solid rgba(0,0,0,.12); }
 .legacy-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -387,8 +387,10 @@ a.announcement-card:hover { color: var(--gold); }
     text-align: center;
     padding: 34px 20px;
     cursor: default;
+    border-left: 1px solid rgba(0,0,0,.15);
     transition: transform .35s cubic-bezier(.34,1.56,.64,1);
 }
+.legacy-item:first-child { border-left: none; }
 .legacy-item:hover {
     transform: translateY(-10px);
 }
@@ -396,8 +398,8 @@ a.announcement-card:hover { color: var(--gold); }
 .legacy-item:hover .legacy-icon { transform: scale(1.2) rotate(-8deg); }
 .legacy-value { font-family: var(--serif); font-size: 30px; font-weight: 600; color: var(--gold); line-height: 1.1; margin-bottom: 8px; transition: transform .3s ease; }
 .legacy-item:hover .legacy-value { transform: scale(1.08); }
-.legacy-label { font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 8px; }
-.legacy-desc { font-size: 13.5px; color: rgba(255,255,255,.65); line-height: 1.6; }
+.legacy-label { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.legacy-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
 
 /* =====================================================================
    TRUST BADGES
@@ -1546,6 +1548,7 @@ body.drawer-open { overflow: hidden; }
     /* Static 2-column grid — two stats per row, two rows, no animation */
     .legacy-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 14px; }
     .legacy-item { padding: 14px 8px; }
+    .legacy-item:nth-child(2n+1) { border-left: none; }
     .legacy-item:hover { transform: none; }
     .legacy-icon { font-size: 22px; margin-bottom: 10px; }
     .legacy-item:hover .legacy-icon { transform: none; }
