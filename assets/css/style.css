@@ -377,7 +377,7 @@ a.announcement-card:hover { color: var(--gold); }
 /* =====================================================================
    LEGACY IN NUMBERS
    ===================================================================== */
-.legacy-stats { padding: 30px 0; background: var(--dark); border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12); }
+.legacy-stats { padding: 30px 0; background: #000; border-top: 1px solid rgba(255,255,255,.12); border-bottom: 1px solid rgba(255,255,255,.12); }
 .legacy-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
