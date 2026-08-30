@@ -271,7 +271,10 @@ a.announcement-card:hover { color: var(--gold); }
 .site-header--transparent:not(.is-scrolled) .caret {
     color: #fff;
 }
-.site-header--transparent:not(.is-scrolled) .nav a.nav-link.active { color: var(--gold); }
+.site-header--transparent:not(.is-scrolled) .nav a.nav-link:hover,
+.site-header--transparent:not(.is-scrolled) .nav a.nav-link.active {
+    color: var(--gold);
+}
 .site-header--transparent:not(.is-scrolled) .logo-default { display: none; }
 .site-header--transparent:not(.is-scrolled) .logo-white { display: block; }
 /* The mobile dropdown panel always has its own white background regardless
