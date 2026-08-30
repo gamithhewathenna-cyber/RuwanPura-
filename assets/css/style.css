@@ -435,8 +435,15 @@ a.announcement-card:hover { color: var(--gold); }
    by the inner frame — keeping them on separate elements means overflow:hidden
    (needed to contain the sweep) never clips the drop-shadow. */
 .journey-img { text-align: center; filter: drop-shadow(0 30px 40px rgba(0,40,120,.25)); }
-.journey-img-frame { position: relative; display: inline-block; overflow: hidden; }
+.journey-img-frame {
+    position: relative; display: inline-block; overflow: hidden;
+    animation: journey-spin 12s linear infinite;
+}
 .journey-img img { display: block; margin: 0 auto; max-height: 420px; width: auto; }
+@keyframes journey-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
 /* A diagonal light streak sweeps across the gem every few seconds, like light
    catching a facet — the wrapper (not the <img> itself) carries it, since
    ::after doesn't render on replaced elements like <img>. */
@@ -517,6 +524,7 @@ a.announcement-card:hover { color: var(--gold); }
 @media (prefers-reduced-motion: reduce) {
     .collection-track { animation: none; }
     .announcement-row { animation: none; }
+    .journey-img-frame { animation: none; }
     .journey-img-frame::after { animation: none; display: none; }
     .hero-eyebrow, .hero-title, .hero-desc, .hero-cta { animation: none; opacity: 1; transform: none; }
     .timeline-item,
