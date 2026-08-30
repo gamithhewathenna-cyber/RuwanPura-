@@ -37,7 +37,6 @@ $testimonials = get_testimonials();
 <?php if ($legacyStats): ?>
 <!-- ================= LEGACY IN NUMBERS ================= -->
 <section class="legacy-stats">
-    <div class="container">
         <div class="legacy-grid">
             <?php foreach ($legacyStats as $ls): ?>
                 <div class="legacy-item reveal">
@@ -50,7 +49,6 @@ $testimonials = get_testimonials();
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>
 </section>
 <?php endif; ?>
 
