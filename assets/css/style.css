@@ -125,7 +125,7 @@ a, button, .btn-dark, input, select, textarea {
 .nav .nav-link,
 .btn-dark,
 .btn-outline {
-    cursor: url('../images/cursor-diamond.svg') 13 4, pointer;
+    cursor: url('../images/cursor-diamond.svg') 14 14, pointer;
 }
 
 /* Section eyebrow (small gold spaced text with side lines) */
