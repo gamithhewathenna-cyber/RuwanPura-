@@ -230,9 +230,9 @@ a.announcement-card:hover { color: var(--gold); }
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: color .2s;
+    transition: color .2s, transform .3s cubic-bezier(.34,1.56,.64,1);
 }
-.nav a.nav-link:hover { color: var(--gold); }
+.nav a.nav-link:hover { color: var(--gold); transform: scale(1.1); }
 .nav a.nav-link.active { color: var(--gold); }
 .nav .caret { font-size: 10px; color: #444; }
 .nav a.nav-link.nav-link-mobile-only { display: none; } /* shown only inside the mobile dropdown — see max-width:980px */
