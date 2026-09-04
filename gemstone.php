@@ -118,6 +118,18 @@ include __DIR__ . '/includes/header.php';
                     </div>
                 <?php endif; ?>
 
+                <?php $pricing = product_pricing($product); if ($pricing['original'] !== null): ?>
+                    <p style="margin-bottom:6px;">
+                        <?php if ($pricing['has_discount']): ?>
+                            <span class="price-was" style="font-size:16px;"><?= format_money($pricing['original']) ?></span>
+                            <span class="price-now" style="font-size:24px;"><?= format_money($pricing['final']) ?></span>
+                        <?php else: ?>
+                            <span class="price-now" style="font-size:24px;"><?= format_money($pricing['final']) ?></span>
+                        <?php endif; ?>
+                    </p>
+                    <div class="shipping-note">The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.</div>
+                <?php endif; ?>
+
                 <button type="button" class="btn-dark add-to-cart-btn"
                     data-id="<?= (int) $product['id'] ?>"
                     data-name="<?= e($product['name']) ?>"
@@ -125,7 +137,7 @@ include __DIR__ . '/includes/header.php';
                     data-shape="<?= e($shapeName) ?>"
                     data-image="<?= $images ? UPLOAD_URL . e($images[0]['image']) : '' ?>"
                     <?= $product['status'] !== 'available' ? 'disabled' : '' ?>>
-                    <?= $product['status'] === 'available' ? 'Add to Enquiry Cart' : e($statusLabels[$product['status']]) ?>
+                    <?= $product['status'] === 'available' ? 'Add to Cart' : e($statusLabels[$product['status']]) ?>
                 </button>
             </div>
         </div>

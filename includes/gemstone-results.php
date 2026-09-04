@@ -32,6 +32,16 @@
                             echo e(implode(' · ', $meta));
                         ?>
                     </p>
+                    <?php $cardPricing = product_pricing($p); if ($cardPricing['original'] !== null): ?>
+                        <p class="cart-item-price" style="margin-top:8px;">
+                            <?php if ($cardPricing['has_discount']): ?>
+                                <span class="price-was"><?= format_money($cardPricing['original']) ?></span>
+                                <span class="price-now"><?= format_money($cardPricing['final']) ?></span>
+                            <?php else: ?>
+                                <span class="price-now"><?= format_money($cardPricing['final']) ?></span>
+                            <?php endif; ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </a>
         <?php endforeach; ?>

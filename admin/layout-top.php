@@ -54,6 +54,19 @@ $gemPageSections = [
 ];
 $onGemPage = in_array($current, ['gemstones-list.php', 'gemstones-edit.php', 'gem-taxonomy.php', 'enquiries.php'], true);
 
+$salesPageSections = [
+    ['file' => 'orders.php',    'label' => 'Orders'],
+    ['file' => 'customers.php', 'label' => 'Customers'],
+];
+$onSalesPage = in_array($current, ['orders.php', 'orders-edit.php', 'customers.php', 'customers-edit.php'], true);
+
+function sales_tab_active($section) {
+    $cur = basename($_SERVER['PHP_SELF']);
+    if ($section['file'] === 'orders.php' && $cur === 'orders-edit.php') return true;
+    if ($section['file'] === 'customers.php' && $cur === 'customers-edit.php') return true;
+    return $cur === $section['file'];
+}
+
 $blogPageSections = [
     ['file' => 'section-blog-hero.php', 'label' => 'Hero Band'],
     ['file' => 'blog-list.php',         'label' => 'Posts'],
@@ -79,6 +92,7 @@ function gem_tab_active($section) {
 
 $unreadMessages  = count_unread_messages();
 $unreadEnquiries = count_unread_enquiries();
+$ordersNeedingAttention = count_orders_needing_attention();
 
 // ---- Role-based access gate (central choke point for every admin page) ----
 $adminOnlySections = ['settings.php' => 'settings', 'messages.php' => 'messages', 'users.php' => 'users'];
@@ -92,6 +106,8 @@ if ($onHomePage) {
     require_role('gemstones');
 } elseif ($onBlogPage) {
     require_role('blog');
+} elseif ($onSalesPage) {
+    require_role('orders');
 } elseif (isset($adminOnlySections[$current])) {
     require_role($adminOnlySections[$current]);
 }
@@ -137,6 +153,16 @@ $page_title = $page_title ?? 'Dashboard';
                 Gemstones
                 <?php if ($unreadEnquiries > 0): ?>
                     <span class="badge on" style="margin-left:auto;"><?= (int)$unreadEnquiries ?></span>
+                <?php endif; ?>
+            </a>
+            <?php endif; ?>
+
+            <?php if (role_can('orders')): ?>
+            <a href="<?= BASE_URL ?>admin/orders.php" class="side-link <?= $onSalesPage ? 'active' : '' ?>">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+                Orders
+                <?php if ($ordersNeedingAttention > 0): ?>
+                    <span class="badge on" style="margin-left:auto;"><?= (int)$ordersNeedingAttention ?></span>
                 <?php endif; ?>
             </a>
             <?php endif; ?>
@@ -267,6 +293,19 @@ $page_title = $page_title ?? 'Dashboard';
                 <div class="home-tabs">
                     <?php foreach ($blogPageSections as $section): ?>
                         <a href="<?= BASE_URL ?>admin/<?= $section['file'] ?>" class="home-tab <?= blog_tab_active($section) ? 'active' : '' ?>"><?= e($section['label']) ?></a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($onSalesPage): ?>
+                <div class="home-tabs">
+                    <?php foreach ($salesPageSections as $section): ?>
+                        <a href="<?= BASE_URL ?>admin/<?= $section['file'] ?>" class="home-tab <?= sales_tab_active($section) ? 'active' : '' ?>">
+                            <?= e($section['label']) ?>
+                            <?php if ($section['file'] === 'orders.php' && $ordersNeedingAttention > 0): ?>
+                                <span class="badge on" style="margin-left:6px;"><?= (int)$ordersNeedingAttention ?></span>
+                            <?php endif; ?>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>

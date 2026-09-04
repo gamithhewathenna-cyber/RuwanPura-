@@ -35,6 +35,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!array_key_exists($status, product_status_labels())) $status = 'available';
             $isActive    = isset($_POST['is_active']) ? 1 : 0;
 
+            $price          = $_POST['price'] !== '' ? max(0, (float)$_POST['price']) : null;
+            $discountType   = $_POST['discount_type'] ?? 'none';
+            if (!in_array($discountType, ['none', 'amount', 'percentage'], true)) $discountType = 'none';
+            $discountValue  = $_POST['discount_value'] !== '' ? (float)$_POST['discount_value'] : null;
+            if ($discountValue !== null) {
+                $discountValue = $discountType === 'percentage' ? max(0, min(100, $discountValue)) : max(0, $discountValue);
+            }
+            $discountActive = (isset($_POST['discount_active']) && $discountType !== 'none' && $discountValue !== null && $discountValue > 0) ? 1 : 0;
+
             if ($name === '') {
                 set_flash('error', 'Please enter a gemstone name.');
                 header('Location: ' . BASE_URL . 'admin/gemstones-edit.php' . ($id ? '?id=' . $id : ''));
@@ -43,13 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($id) {
                 $slug = unique_slug('products', $name, $id);
-                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
-                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
+                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, price=?, discount_type=?, discount_value=?, discount_active=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
+                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
             } else {
                 $slug = unique_slug('products', $name);
                 $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
-                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $stmt->execute([$name, $slug, $sku, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
+                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, price, discount_type, discount_value, discount_active, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
                 $id = (int) db()->lastInsertId();
             }
 
@@ -211,6 +220,53 @@ require_once __DIR__ . '/layout-top.php';
             </div>
         </div>
 
+    </div>
+
+    <div class="card">
+        <h2>Pricing &amp; Discount</h2>
+        <p class="card-sub">The gemstone-only selling price. Shipping is calculated separately and added by an admin after the order is placed.</p>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Price (USD)</label>
+                <input type="number" step="0.01" min="0" name="price" class="form-control" value="<?= e($product['price'] ?? '') ?>" placeholder="e.g. 1250.00">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Discount Type</label>
+                <select name="discount_type" class="form-control">
+                    <option value="none" <?= (($product['discount_type'] ?? 'none') === 'none') ? 'selected' : '' ?>>No Discount</option>
+                    <option value="amount" <?= (($product['discount_type'] ?? '') === 'amount') ? 'selected' : '' ?>>Fixed Amount Off</option>
+                    <option value="percentage" <?= (($product['discount_type'] ?? '') === 'percentage') ? 'selected' : '' ?>>Percentage Off</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Discount Value</label>
+                <input type="number" step="0.01" min="0" name="discount_value" class="form-control" value="<?= e($product['discount_value'] ?? '') ?>" placeholder="e.g. 10">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="switch-label">
+                <input type="checkbox" name="discount_active" value="1" <?= !empty($product['discount_active']) ? 'checked' : '' ?>>
+                Discount is active (shown to customers)
+            </label>
+        </div>
+
+        <?php $editPricing = $product ? product_pricing($product) : null; if ($editPricing && $editPricing['original'] !== null): ?>
+            <p class="hint">Customer sees:
+                <?php if ($editPricing['has_discount']): ?>
+                    <span class="price-was"><?= format_money($editPricing['original']) ?></span> <span class="price-now"><?= format_money($editPricing['final']) ?></span>
+                <?php else: ?>
+                    <span class="price-now"><?= format_money($editPricing['final']) ?></span>
+                <?php endif; ?>
+            </p>
+        <?php endif; ?>
+    </div>
+
+    <div class="card">
         <div class="form-group">
             <label>Description</label>
             <textarea name="description" class="form-control" rows="4"><?= e($product['description'] ?? '') ?></textarea>

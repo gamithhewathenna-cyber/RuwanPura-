@@ -56,6 +56,7 @@ function admin_roles()
         'content'  => 'Content Uploader',
         'gemstone' => 'Gemstone Uploader',
         'blog'     => 'Blog Manager',
+        'orders'   => 'Orders & Customers Manager',
     ];
 }
 
@@ -75,6 +76,7 @@ function role_can($section)
         'content'  => ['home', 'about', 'contact'],
         'gemstone' => ['gemstones'],
         'blog'     => ['blog'],
+        'orders'   => ['orders'],
     ];
     return in_array($section, $map[$role] ?? [], true);
 }

@@ -254,6 +254,10 @@ CREATE TABLE IF NOT EXISTS `products` (
   `name` VARCHAR(190) NOT NULL,
   `slug` VARCHAR(220) NOT NULL,
   `sku` VARCHAR(60) DEFAULT NULL,
+  `price` DECIMAL(12,2) NULL DEFAULT NULL COMMENT 'Fixed selling price, gemstone only (excludes shipping)',
+  `discount_type` ENUM('none','amount','percentage') NOT NULL DEFAULT 'none',
+  `discount_value` DECIMAL(12,2) NULL DEFAULT NULL,
+  `discount_active` TINYINT(1) NOT NULL DEFAULT 0,
   `category_id` INT(11) DEFAULT NULL,
   `shape_id` INT(11) DEFAULT NULL,
   `treatment_id` INT(11) DEFAULT NULL,
@@ -308,6 +312,114 @@ CREATE TABLE IF NOT EXISTS `enquiry_items` (
   `shape` VARCHAR(120) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `enquiry_id` (`enquiry_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
+-- Customer accounts
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `customers` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `full_name` VARCHAR(150) NOT NULL,
+  `email` VARCHAR(190) NOT NULL,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `phone` VARCHAR(60) DEFAULT NULL,
+  `country` VARCHAR(100) DEFAULT NULL,
+  `billing_address_line1` VARCHAR(255) DEFAULT NULL,
+  `billing_address_line2` VARCHAR(255) DEFAULT NULL,
+  `billing_city` VARCHAR(120) DEFAULT NULL,
+  `billing_state` VARCHAR(120) DEFAULT NULL,
+  `billing_postal_code` VARCHAR(40) DEFAULT NULL,
+  `billing_country` VARCHAR(100) DEFAULT NULL,
+  `shipping_same_as_billing` TINYINT(1) NOT NULL DEFAULT 1,
+  `shipping_address_line1` VARCHAR(255) DEFAULT NULL,
+  `shipping_address_line2` VARCHAR(255) DEFAULT NULL,
+  `shipping_city` VARCHAR(120) DEFAULT NULL,
+  `shipping_state` VARCHAR(120) DEFAULT NULL,
+  `shipping_postal_code` VARCHAR(40) DEFAULT NULL,
+  `shipping_country` VARCHAR(100) DEFAULT NULL,
+  `reset_token` VARCHAR(255) DEFAULT NULL,
+  `reset_expires` DATETIME DEFAULT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ---------------------------------------------------------------------
+-- Orders (Bank Transfer only — see includes/order-functions.php)
+-- ---------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `order_number` VARCHAR(40) NOT NULL,
+  `customer_id` INT(11) NOT NULL,
+
+  `customer_name` VARCHAR(150) NOT NULL,
+  `customer_email` VARCHAR(190) NOT NULL,
+  `customer_phone` VARCHAR(60) DEFAULT NULL,
+  `customer_country` VARCHAR(100) DEFAULT NULL,
+
+  `billing_address_line1` VARCHAR(255) DEFAULT NULL,
+  `billing_address_line2` VARCHAR(255) DEFAULT NULL,
+  `billing_city` VARCHAR(120) DEFAULT NULL,
+  `billing_state` VARCHAR(120) DEFAULT NULL,
+  `billing_postal_code` VARCHAR(40) DEFAULT NULL,
+  `billing_country` VARCHAR(100) DEFAULT NULL,
+
+  `shipping_address_line1` VARCHAR(255) DEFAULT NULL,
+  `shipping_address_line2` VARCHAR(255) DEFAULT NULL,
+  `shipping_city` VARCHAR(120) DEFAULT NULL,
+  `shipping_state` VARCHAR(120) DEFAULT NULL,
+  `shipping_postal_code` VARCHAR(40) DEFAULT NULL,
+  `shipping_country` VARCHAR(100) DEFAULT NULL,
+
+  `payment_method` VARCHAR(30) NOT NULL DEFAULT 'bank_transfer',
+
+  `items_original_total` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `items_discount_total` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `gemstone_total` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `shipping_charge` DECIMAL(12,2) DEFAULT NULL,
+  `final_total` DECIMAL(12,2) DEFAULT NULL,
+
+  `order_status` ENUM(
+      'order_in_process',
+      'shipping_quoted',
+      'payment_pending',
+      'payment_verified',
+      'order_confirmed',
+      'shipped',
+      'completed',
+      'cancelled'
+    ) NOT NULL DEFAULT 'order_in_process',
+
+  `payment_reference` VARCHAR(190) DEFAULT NULL,
+  `admin_notes` TEXT DEFAULT NULL,
+  `shipping_confirmed_at` DATETIME DEFAULT NULL,
+  `payment_confirmed_at` DATETIME DEFAULT NULL,
+
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_number` (`order_number`),
+  KEY `customer_id` (`customer_id`),
+  KEY `order_status` (`order_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `order_items` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `order_id` INT(11) NOT NULL,
+  `product_id` INT(11) DEFAULT NULL,
+  `product_name` VARCHAR(190) NOT NULL,
+  `weight` DECIMAL(8,2) DEFAULT NULL,
+  `shape` VARCHAR(120) DEFAULT NULL,
+  `sku` VARCHAR(60) DEFAULT NULL,
+  `image` VARCHAR(255) DEFAULT NULL,
+  `quantity` INT(11) NOT NULL DEFAULT 1,
+  `unit_price` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `discount_amount` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  `line_total` DECIMAL(12,2) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
@@ -505,7 +617,14 @@ INSERT INTO `content_blocks` (`block_key`,`block_value`,`block_group`,`block_lab
 -- Blog: Hero band
 ('blog_hero_eyebrow','INSIGHTS & STORIES','blog_hero','Hero Eyebrow','text',1),
 ('blog_hero_title','Insights','blog_hero','Hero Title','text',2),
-('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3);
+('blog_hero_desc','Guides, stories, and news from the world of fine coloured gemstones — written by the Ruwanpura Gems team.','blog_hero','Hero Description','textarea',3),
+-- Bank transfer instructions (used in the shipping-confirmation order email)
+('bank_name','','bank_details','Bank Name','text',1),
+('bank_account_name','','bank_details','Account Holder Name','text',2),
+('bank_account_number','','bank_details','Account Number','text',3),
+('bank_branch','','bank_details','Branch','text',4),
+('bank_swift','','bank_details','SWIFT / BIC Code','text',5),
+('bank_instructions_extra','','bank_details','Additional Instructions (optional)','textarea',6);
 
 -- Announcement bar cards (shown above the menu on every page)
 INSERT INTO `announcement_cards` (`text`,`link`,`sort_order`) VALUES

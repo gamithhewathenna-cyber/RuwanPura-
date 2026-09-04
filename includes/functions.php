@@ -287,6 +287,92 @@ function product_status_labels()
     ];
 }
 
+/* ------------------------------------------------------------------ */
+/*  E-commerce: pricing, orders, money formatting                      */
+/* ------------------------------------------------------------------ */
+
+/* Compute a product's original/final price from its price + discount columns.
+   Returns null values when no price has been set yet (pre-migration or unpriced product). */
+function product_pricing($product)
+{
+    $original = isset($product['price']) && $product['price'] !== null ? (float) $product['price'] : null;
+    $type     = $product['discount_type'] ?? 'none';
+    $value    = isset($product['discount_value']) && $product['discount_value'] !== null ? (float) $product['discount_value'] : 0;
+    $active   = !empty($product['discount_active']) && $type !== 'none' && $value > 0;
+
+    $final = $original;
+    if ($active && $original !== null) {
+        if ($type === 'percentage') {
+            $pct   = max(0, min(100, $value));
+            $final = round($original * (1 - $pct / 100), 2);
+        } else { // amount
+            $final = round(max(0, $original - $value), 2);
+        }
+    }
+
+    return [
+        'original'     => $original,
+        'final'        => $final,
+        'has_discount' => $active && $original !== null && $final < $original,
+    ];
+}
+
+/* Format a numeric amount as a display price (e.g. "$1,250.00") */
+function format_money($amount)
+{
+    if ($amount === null) return '—';
+    return '$' . number_format((float) $amount, 2);
+}
+
+function order_status_labels()
+{
+    return [
+        'order_in_process' => 'Order in Process',
+        'shipping_quoted'  => 'Shipping Quoted / Awaiting Payment',
+        'payment_pending'  => 'Payment Pending',
+        'payment_verified' => 'Payment Verified',
+        'order_confirmed'  => 'Order Confirmed',
+        'shipped'          => 'Shipped',
+        'completed'        => 'Completed',
+        'cancelled'        => 'Cancelled',
+    ];
+}
+
+/* Derived, display-only "Payment Status" for the admin orders list — never stored,
+   so it can never drift out of sync with order_status. */
+function order_payment_status_label($orderStatus)
+{
+    $map = [
+        'order_in_process' => 'Awaiting Shipping Quote',
+        'shipping_quoted'  => 'Awaiting Payment',
+        'payment_pending'  => 'Pending Verification',
+        'payment_verified' => 'Paid',
+        'order_confirmed'  => 'Paid',
+        'shipped'          => 'Paid',
+        'completed'        => 'Paid',
+        'cancelled'        => 'Cancelled',
+    ];
+    return $map[$orderStatus] ?? ucfirst(str_replace('_', ' ', (string) $orderStatus));
+}
+
+/* Human-readable order number, generated before insert (not id-based) so
+   concurrent order placements never collide on the UNIQUE order_number key. */
+function generate_order_number()
+{
+    return 'RG-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+}
+
+/* Count of orders an admin should look at (no shipping charge quoted yet, or payment
+   pending verification) — shown as a sidebar badge, mirrors count_unread_enquiries() */
+function count_orders_needing_attention()
+{
+    try {
+        return (int) db()->query("SELECT COUNT(*) FROM orders WHERE order_status IN ('order_in_process','payment_pending')")->fetchColumn();
+    } catch (PDOException $e) {
+        return 0; // table not migrated yet
+    }
+}
+
 /* Build the $filters array for get_products() from $_GET — shared by gemstones.php
    (full page load) and filter-products.php (AJAX partial reload) so both read the
    same query-string shape identically. */

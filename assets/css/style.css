@@ -1214,6 +1214,7 @@ a.announcement-card:hover { color: var(--gold); }
     cursor: pointer;
 }
 .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+.btn-outline.btn-sm, .btn-dark.btn-sm { padding: 6px 14px; font-size: 13px; border-radius: 6px; text-decoration: none; }
 
 /* Mobile filter drawer trigger + backdrop — hidden entirely on desktop.
    The drawer itself (.catalogue-filters) is restyled into a bottom sheet
@@ -1432,8 +1433,54 @@ body.drawer-open { overflow: hidden; }
     flex: 0 0 30px;
 }
 .cart-item-remove:hover { border-color: #dc2626; color: #dc2626; }
+.cart-checkout { border: 1px solid var(--line); border-radius: 12px; padding: 26px 28px; }
 .cart-checkout h2 { font-family: var(--serif); font-size: 26px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
 .cart-checkout-intro { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+
+/* --- E-commerce: pricing, shipping disclaimer, account pages --- */
+.hint { color: var(--muted); font-size: 12px; font-weight: 400; }
+.price-was { text-decoration: line-through; color: var(--muted); font-size: 13px; margin-right: 6px; }
+.price-now { color: var(--gold); font-weight: 600; font-size: 15px; }
+.cart-item-price { margin-top: 4px; }
+.shipping-note {
+    background: #f8f4ea; border: 1px solid #eadfc7; border-radius: 8px;
+    padding: 12px 16px; font-size: 13px; color: var(--muted); line-height: 1.5; margin: 14px 0;
+}
+.cart-subtotal-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 16px; font-weight: 600; color: var(--ink); padding-top: 14px; border-top: 1px solid var(--line);
+}
+
+.account-card { border: 1px solid var(--line); border-radius: 12px; padding: 28px 30px; margin-bottom: 26px; background: #fff; }
+.account-card h2 { font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.account-card-sub { color: var(--muted); font-size: 13.5px; margin-bottom: 20px; }
+.account-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+.account-tab { padding: 10px 18px; font-size: 14px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; background: none; border-top: none; border-left: none; border-right: none; }
+.account-tab.active { color: var(--ink); border-bottom-color: var(--gold); font-weight: 600; }
+.account-tab-panel { display: none; }
+.account-tab-panel.active { display: block; }
+
+.order-status-pill {
+    display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .4px; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 20px; background: #f3f4f6; color: #555;
+}
+.order-status-pill.st-order_in_process, .order-status-pill.st-shipping_quoted { background: #fef3c7; color: #92400e; }
+.order-status-pill.st-payment_pending { background: #fde68a; color: #92400e; }
+.order-status-pill.st-payment_verified, .order-status-pill.st-order_confirmed { background: #dbeafe; color: #1e40af; }
+.order-status-pill.st-shipped { background: #e0e7ff; color: #3730a3; }
+.order-status-pill.st-completed { background: #dcfce7; color: #166534; }
+.order-status-pill.st-cancelled { background: #fee2e2; color: #991b1b; }
+
+.order-items-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+.order-items-table th { text-align: left; font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); padding: 8px 10px; border-bottom: 2px solid var(--line); }
+.order-items-table td { padding: 10px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.order-totals-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; }
+.order-totals-row.grand { font-weight: 700; font-size: 17px; color: var(--ink); border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px; }
+
+@media (max-width: 640px) {
+    .cart-checkout { padding: 20px; }
+    .account-card { padding: 20px; }
+}
 
 /* =====================================================================
    FOOTER

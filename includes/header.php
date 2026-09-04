@@ -110,9 +110,12 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <a href="<?= BASE_URL ?>contact.php" aria-label="Location">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                     </a>
-                    <a href="<?= BASE_URL ?>cart.php" aria-label="Enquiry Cart" class="cart-icon-link">
+                    <a href="<?= BASE_URL ?>cart.php" aria-label="Cart" class="cart-icon-link">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
                         <span id="cartCount" class="cart-badge" style="display:none;">0</span>
+                    </a>
+                    <a href="<?= BASE_URL ?><?= !empty($_SESSION['customer_id']) ? 'account/index.php' : 'account/login.php' ?>" aria-label="<?= !empty($_SESSION['customer_id']) ? 'My Account' : 'Login' ?>">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>
                     </a>
                 </div>
                 <button class="menu-toggle" aria-label="Menu">
