@@ -804,6 +804,54 @@ function handle_video_upload($fileField, $oldFile = '', $maxBytes = null)
     return handle_upload($fileField, $oldFile, ['mp4', 'webm', 'mov'], $maxBytes ?? (80 * 1024 * 1024));
 }
 
+/* Server-side backstop for product images: the admin's crop tool already outputs
+   an exact 1000x1000 JPEG, so this is a no-op in the normal case. It only kicks
+   in if a file arrives at some other size (JS disabled/bypassed) — center-crops
+   to a square, then resizes to $size x $size, so the stored file is always exact. */
+function resize_crop_image_to_square($filename, $size = 1000)
+{
+    if (!$filename || !extension_loaded('gd')) return false;
+    $path = UPLOAD_DIR . '/' . $filename;
+    if (!file_exists($path)) return false;
+
+    $info = @getimagesize($path);
+    if (!$info) return false;
+    [$width, $height, $type] = $info;
+    if ($width === $size && $height === $size) return true; // already correct
+
+    switch ($type) {
+        case IMAGETYPE_JPEG: $src = @imagecreatefromjpeg($path); break;
+        case IMAGETYPE_PNG:  $src = @imagecreatefrompng($path); break;
+        case IMAGETYPE_GIF:  $src = @imagecreatefromgif($path); break;
+        case IMAGETYPE_WEBP: $src = function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($path) : false; break;
+        default: return false; // svg or unsupported raster type — leave untouched
+    }
+    if (!$src) return false;
+
+    $srcSize = min($width, $height);
+    $srcX = (int) (($width - $srcSize) / 2);
+    $srcY = (int) (($height - $srcSize) / 2);
+
+    $dst = imagecreatetruecolor($size, $size);
+    if ($type === IMAGETYPE_PNG) {
+        imagealphablending($dst, false);
+        imagesavealpha($dst, true);
+    }
+    imagecopyresampled($dst, $src, 0, 0, $srcX, $srcY, $size, $size, $srcSize, $srcSize);
+
+    $ok = false;
+    switch ($type) {
+        case IMAGETYPE_JPEG: $ok = imagejpeg($dst, $path, 90); break;
+        case IMAGETYPE_PNG:  $ok = imagepng($dst, $path, 6); break;
+        case IMAGETYPE_GIF:  $ok = imagegif($dst, $path); break;
+        case IMAGETYPE_WEBP: $ok = function_exists('imagewebp') ? imagewebp($dst, $path, 90) : false; break;
+    }
+
+    imagedestroy($src);
+    imagedestroy($dst);
+    return $ok;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Flash messages                                                     */
 /* ------------------------------------------------------------------ */

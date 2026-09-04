@@ -222,6 +222,25 @@ textarea.form-control { resize: vertical; min-height: 90px; line-height: 1.5; }
 .gem-image-actions form { flex: 1; }
 .gem-image-actions .btn { width: 100%; }
 
+.cropped-preview-item { position: relative; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.cropped-preview-item img { width: 100%; height: 130px; object-fit: cover; display: block; }
+.cropped-preview-remove {
+    position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%;
+    border: none; background: rgba(0,0,0,.6); color: #fff; font-size: 14px; line-height: 1; cursor: pointer;
+}
+.cropped-preview-remove:hover { background: #dc2626; }
+
+.crop-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 1000;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.crop-modal-box { background: #fff; border-radius: 12px; width: 100%; max-width: 560px; overflow: hidden; }
+.crop-modal-head { padding: 18px 22px 12px; }
+.crop-modal-head h3 { font-size: 16px; color: var(--dark); margin: 0; }
+.crop-modal-body { background: #111; max-height: 60vh; }
+.crop-modal-body img { display: block; max-width: 100%; }
+.crop-modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 22px; }
+
 .slide-editor {
     border: 1px solid var(--line); border-radius: 10px; margin-bottom: 12px; overflow: hidden;
 }

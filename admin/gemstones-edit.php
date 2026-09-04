@@ -90,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ];
                     $saved = handle_upload('__single', '');
                     if ($saved) {
+                        resize_crop_image_to_square($saved);
                         $maxOrd++;
                         $primary = !$hasPrimary ? 1 : 0;
                         if ($primary) $hasPrimary = true;
@@ -294,7 +295,7 @@ require_once __DIR__ . '/layout-top.php';
 
 <div class="card">
     <h2>Product Images</h2>
-    <p class="card-sub">The Primary image is used as the catalogue thumbnail. Recommended size: 1000 × 1000px, square.</p>
+    <p class="card-sub">The Primary image is used as the catalogue thumbnail. Images are cropped to exactly 1000 × 1000px before upload — use the crop tool that opens when you choose a file.</p>
 
     <?php if ($images): ?>
         <div class="gem-image-grid">
@@ -325,15 +326,34 @@ require_once __DIR__ . '/layout-top.php';
     <?php endif; ?>
 
     <?php if ($product): ?>
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="imagesUploadForm">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="upload_images">
             <div class="form-group">
                 <label>Add More Images</label>
-                <input type="file" name="images[]" accept="image/*" multiple>
+                <input type="file" id="imagesFileInput" name="images[]" accept="image/*" multiple>
+                <div class="hint" style="margin-top:6px;">Select one or more photos — you'll be asked to crop each one to a 1000 × 1000px square before they're added below.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Upload Images</button>
+            <div id="croppedPreviewList" class="gem-image-grid" style="display:none;margin-bottom:16px;"></div>
+            <button type="submit" class="btn btn-primary" id="uploadImagesBtn" disabled>Upload Images</button>
         </form>
+
+        <!-- Crop modal -->
+        <div id="cropModal" class="crop-modal" style="display:none;">
+            <div class="crop-modal-box">
+                <div class="crop-modal-head">
+                    <h3>Crop Image <span id="cropModalCount"></span></h3>
+                    <p class="card-sub" style="margin:2px 0 0;">Drag to reposition, resize the corners to zoom. The output will be exactly 1000 × 1000px.</p>
+                </div>
+                <div class="crop-modal-body">
+                    <img id="cropModalImage" src="" alt="">
+                </div>
+                <div class="crop-modal-actions">
+                    <button type="button" class="btn btn-sm" id="cropSkipBtn">Skip This Image</button>
+                    <button type="button" class="btn btn-sm btn-primary" id="cropConfirmBtn">Crop &amp; Continue</button>
+                </div>
+            </div>
+        </div>
     <?php else: ?>
         <p class="card-sub">Save the gemstone first, then come back here to upload images.</p>
     <?php endif; ?>
@@ -362,5 +382,122 @@ require_once __DIR__ . '/layout-top.php';
         <p class="card-sub">Save the gemstone first, then come back here to upload a video.</p>
     <?php endif; ?>
 </div>
+
+<?php if ($product): ?>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+<script>
+(function () {
+    var fileInput   = document.getElementById('imagesFileInput');
+    var previewList = document.getElementById('croppedPreviewList');
+    var uploadBtn    = document.getElementById('uploadImagesBtn');
+    var uploadForm   = document.getElementById('imagesUploadForm');
+    var modal        = document.getElementById('cropModal');
+    var modalImg      = document.getElementById('cropModalImage');
+    var modalCount    = document.getElementById('cropModalCount');
+    var skipBtn       = document.getElementById('cropSkipBtn');
+    var confirmBtn    = document.getElementById('cropConfirmBtn');
+    if (!fileInput) return;
+
+    var CROP_SIZE = 1000;
+    var queue = [];       // remaining raw Files still to crop
+    var queueTotal = 0;
+    var croppedFiles = []; // resulting cropped File objects
+    var cropper = null;
+    var currentObjectUrl = null;
+
+    function updateInputFiles() {
+        var dt = new DataTransfer();
+        croppedFiles.forEach(function (f) { dt.items.add(f); });
+        fileInput.files = dt.files;
+        uploadBtn.disabled = croppedFiles.length === 0;
+    }
+
+    function renderPreviews() {
+        previewList.innerHTML = '';
+        previewList.style.display = croppedFiles.length ? 'grid' : 'none';
+        croppedFiles.forEach(function (file, idx) {
+            var url = URL.createObjectURL(file);
+            var item = document.createElement('div');
+            item.className = 'cropped-preview-item';
+            item.innerHTML = '<img src="' + url + '"><button type="button" class="cropped-preview-remove" aria-label="Remove">&times;</button>';
+            item.querySelector('button').addEventListener('click', function () {
+                croppedFiles.splice(idx, 1);
+                updateInputFiles();
+                renderPreviews();
+            });
+            previewList.appendChild(item);
+        });
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        if (cropper) { cropper.destroy(); cropper = null; }
+        if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); currentObjectUrl = null; }
+    }
+
+    function processNext() {
+        if (!queue.length) {
+            closeModal();
+            updateInputFiles();
+            renderPreviews();
+            return;
+        }
+        var file = queue.shift();
+        var doneCount = queueTotal - queue.length;
+        modalCount.textContent = '(' + doneCount + ' of ' + queueTotal + ')';
+
+        currentObjectUrl = URL.createObjectURL(file);
+        modal.style.display = 'flex';
+        modalImg.src = currentObjectUrl;
+
+        modalImg.onload = function () {
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(modalImg, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 1,
+                dragMode: 'move',
+                background: false,
+                responsive: true
+            });
+        };
+    }
+
+    fileInput.addEventListener('change', function () {
+        if (!fileInput.files || !fileInput.files.length) return;
+        queue = Array.prototype.slice.call(fileInput.files);
+        queueTotal = queue.length;
+        processNext();
+    });
+
+    confirmBtn.addEventListener('click', function () {
+        if (!cropper) return;
+        var canvas = cropper.getCroppedCanvas({ width: CROP_SIZE, height: CROP_SIZE, imageSmoothingQuality: 'high' });
+        canvas.toBlob(function (blob) {
+            if (blob) {
+                var name = 'cropped-' + Date.now() + '-' + croppedFiles.length + '.jpg';
+                croppedFiles.push(new File([blob], name, { type: 'image/jpeg' }));
+            }
+            if (cropper) { cropper.destroy(); cropper = null; }
+            if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); currentObjectUrl = null; }
+            processNext();
+        }, 'image/jpeg', 0.92);
+    });
+
+    skipBtn.addEventListener('click', function () {
+        if (cropper) { cropper.destroy(); cropper = null; }
+        if (currentObjectUrl) { URL.revokeObjectURL(currentObjectUrl); currentObjectUrl = null; }
+        processNext();
+    });
+
+    uploadForm.addEventListener('submit', function (e) {
+        if (!croppedFiles.length) {
+            e.preventDefault();
+        }
+    });
+})();
+</script>
+<?php endif; ?>
 
 <?php require_once __DIR__ . '/layout-bottom.php'; ?>
