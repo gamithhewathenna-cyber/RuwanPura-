@@ -127,7 +127,13 @@ include __DIR__ . '/includes/header.php';
                             <span class="price-now" style="font-size:24px;"><?= format_money($pricing['final']) ?></span>
                         <?php endif; ?>
                     </p>
-                    <div class="shipping-note">The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.</div>
+                    <div class="shipping-note">
+                        <ul>
+                            <li>The displayed price is for the <strong>gemstone only</strong>. Shipping charges will be calculated separately.</li>
+                            <li>After you place your order, <strong>our team will contact you within a few hours</strong> to confirm the shipping charges and final total.</li>
+                            <li>The <strong>final amount, including shipping</strong>, will be confirmed with you before payment.</li>
+                        </ul>
+                    </div>
                 <?php endif; ?>
 
                 <?php

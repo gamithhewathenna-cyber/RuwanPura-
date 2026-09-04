@@ -100,7 +100,13 @@ include __DIR__ . '/includes/header.php';
             <!-- Order Summary -->
             <div class="account-card">
                 <h2>Order Summary</h2>
-                <div class="shipping-note">The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.</div>
+                <div class="shipping-note">
+                    <ul>
+                        <li>The displayed price is for the <strong>gemstone only</strong>. Shipping charges will be calculated separately.</li>
+                        <li>After you place your order, <strong>our team will contact you within a few hours</strong> to confirm the shipping charges and final total.</li>
+                        <li>The <strong>final amount, including shipping</strong>, will be confirmed with you before payment.</li>
+                    </ul>
+                </div>
                 <div class="cart-items" id="cartItems"></div>
                 <div class="cart-subtotal-row" style="margin-top:16px;">
                     <span>Gemstone Total</span>

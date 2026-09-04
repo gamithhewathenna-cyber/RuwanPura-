@@ -75,7 +75,13 @@ include __DIR__ . '/../includes/header.php';
                 <div class="order-totals-row"><span>Shipping Charge</span><span><?= format_money($order['shipping_charge']) ?></span></div>
                 <div class="order-totals-row grand"><span>Final Total</span><span><?= format_money($order['final_total']) ?></span></div>
             <?php else: ?>
-                <div class="shipping-note" style="margin-top:14px;">The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.</div>
+                <div class="shipping-note" style="margin-top:14px;">
+                    <ul>
+                        <li>The displayed price is for the <strong>gemstone only</strong>. Shipping charges will be calculated separately.</li>
+                        <li>After you place your order, <strong>our team will contact you within a few hours</strong> to confirm the shipping charges and final total.</li>
+                        <li>The <strong>final amount, including shipping</strong>, will be confirmed with you before payment.</li>
+                    </ul>
+                </div>
             <?php endif; ?>
 
             <?php if ($order['order_status'] === 'shipping_quoted' && $order['shipping_charge'] !== null):

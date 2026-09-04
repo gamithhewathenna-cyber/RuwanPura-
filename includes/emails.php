@@ -43,8 +43,9 @@ function send_order_placed_email($order, $items)
           . "Order Number: {$order['order_number']}\n\n"
           . "Items:\n" . order_items_summary_text($items) . "\n\n"
           . "Gemstone Total: " . format_money($order['gemstone_total']) . "\n\n"
-          . "The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.\n\n"
-          . "We will be in touch shortly with your shipping charge and final payable total.\n\n"
+          . "- The displayed price is for the gemstone only. Shipping charges will be calculated separately.\n"
+          . "- After you place your order, our team will contact you within a few hours to confirm the shipping charges and final total.\n"
+          . "- The final amount, including shipping, will be confirmed with you before payment.\n\n"
           . "Best regards,\n$siteName";
 
     @mail($order['customer_email'], "Order Received — {$order['order_number']} — $siteName", $body, 'From: ' . $from);

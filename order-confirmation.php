@@ -53,7 +53,13 @@ include __DIR__ . '/includes/header.php';
                 <span><?= format_money($order['gemstone_total']) ?></span>
             </div>
 
-            <div class="shipping-note" style="margin-top:18px;">The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.</div>
+            <div class="shipping-note" style="margin-top:18px;">
+                <ul>
+                    <li>The displayed price is for the <strong>gemstone only</strong>. Shipping charges will be calculated separately.</li>
+                    <li>After you place your order, <strong>our team will contact you within a few hours</strong> to confirm the shipping charges and final total.</li>
+                    <li>The <strong>final amount, including shipping</strong>, will be confirmed with you before payment.</li>
+                </ul>
+            </div>
 
             <a href="<?= BASE_URL ?>account/order.php?id=<?= (int) $orderId ?>" class="btn-dark" style="display:inline-block;margin-top:18px;">View Order Details</a>
             <a href="<?= BASE_URL ?>gemstones.php" class="btn-outline" style="display:inline-block;margin-top:18px;margin-left:10px;">Continue Browsing</a>
