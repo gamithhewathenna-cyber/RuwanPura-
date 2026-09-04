@@ -107,12 +107,13 @@ require_once __DIR__ . '/layout-top.php';
 <div class="card">
     <h2>Order Items</h2>
     <table class="items-table">
-        <thead><tr><th>Gemstone</th><th>Details</th><th>Price</th><th>Discount</th><th>Line Total</th></tr></thead>
+        <thead><tr><th>Gemstone</th><th>Details</th><th>Qty</th><th>Unit Price</th><th>Discount</th><th>Line Total</th></tr></thead>
         <tbody>
         <?php foreach ($items as $it): ?>
             <tr>
                 <td><?php if ($it['product_id']): ?><a href="<?= BASE_URL ?>admin/gemstones-edit.php?id=<?= (int)$it['product_id'] ?>"><?= e($it['product_name']) ?></a><?php else: ?><?= e($it['product_name']) ?><?php endif; ?></td>
                 <td><?= e(($it['weight'] !== null ? $it['weight'] . ' ct' : '') . ($it['shape'] ? ' · ' . $it['shape'] : '')) ?></td>
+                <td><?= (int) $it['quantity'] ?></td>
                 <td><?= format_money($it['unit_price']) ?></td>
                 <td><?= $it['discount_amount'] > 0 ? format_money($it['discount_amount']) : '—' ?></td>
                 <td><?= format_money($it['line_total']) ?></td>

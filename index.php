@@ -95,6 +95,16 @@ $testimonials = get_testimonials();
                                 <?php endif; ?>
                             </div>
                             <div class="gem-name"><?= e($g['name']) ?></div>
+                            <?php $gemPricing = product_pricing($g); if ($gemPricing['original'] !== null): ?>
+                                <div class="gem-price">
+                                    <?php if ($gemPricing['has_discount']): ?>
+                                        <span class="price-was"><?= format_money($gemPricing['original']) ?></span>
+                                        <span class="price-now"><?= format_money($gemPricing['final']) ?></span>
+                                    <?php else: ?>
+                                        <span class="price-now"><?= format_money($gemPricing['final']) ?></span>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
                         </a>
                     <?php endforeach; ?>
                 </div>

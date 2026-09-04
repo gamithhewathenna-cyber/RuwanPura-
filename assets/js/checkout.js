@@ -22,11 +22,11 @@
                 onChange: function (items) {
                     var subtotalEl = document.getElementById('cartSubtotal');
                     if (subtotalEl) {
-                        var total = items.reduce(function (sum, it) { return sum + (it.final_price || 0); }, 0);
+                        var total = items.reduce(function (sum, it) { return sum + (it.line_total || 0); }, 0);
                         subtotalEl.textContent = '$' + total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                     }
                     var input = document.getElementById('cartDataInput');
-                    if (input) input.value = JSON.stringify(items.map(function (it) { return it.id; }));
+                    if (input) input.value = JSON.stringify(items.map(function (it) { return { id: it.id, qty: it.qty }; }));
 
                     if (!items.length) {
                         empty.style.display = 'block';
@@ -55,11 +55,11 @@
         if (placeOrderForm) {
             placeOrderForm.addEventListener('submit', function (e) {
                 var input = document.getElementById('cartDataInput');
-                var ids = RuwanpuraCart.get().map(function (i) { return i.id; });
+                var cartItems = RuwanpuraCart.get();
                 if (input && (!input.value || input.value === '[]')) {
-                    input.value = JSON.stringify(ids);
+                    input.value = JSON.stringify(cartItems.map(function (i) { return { id: i.id, qty: i.qty }; }));
                 }
-                if (!ids.length) {
+                if (!cartItems.length) {
                     e.preventDefault();
                     alert('Your cart is empty.');
                 }

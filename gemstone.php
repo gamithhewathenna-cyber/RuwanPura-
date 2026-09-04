@@ -130,14 +130,28 @@ include __DIR__ . '/includes/header.php';
                     <div class="shipping-note">The displayed price is for the gemstone only. Shipping charges will be calculated separately and confirmed before payment.</div>
                 <?php endif; ?>
 
+                <?php
+                    $stock   = (int) ($product['quantity'] ?? 1);
+                    $inStock = $product['status'] === 'available' && $stock > 0;
+                ?>
+                <?php if ($inStock && $stock > 1): ?>
+                    <p class="hint" style="margin-bottom:8px;"><?= (int) $stock ?> in stock</p>
+                    <div class="qty-field">
+                        <label for="addQty">Quantity</label>
+                        <input type="number" id="addQty" min="1" max="<?= (int) $stock ?>" value="1">
+                    </div>
+                <?php endif; ?>
+
                 <button type="button" class="btn-dark add-to-cart-btn"
                     data-id="<?= (int) $product['id'] ?>"
                     data-name="<?= e($product['name']) ?>"
                     data-weight="<?= e($product['weight']) ?>"
                     data-shape="<?= e($shapeName) ?>"
                     data-image="<?= $images ? UPLOAD_URL . e($images[0]['image']) : '' ?>"
-                    <?= $product['status'] !== 'available' ? 'disabled' : '' ?>>
-                    <?= $product['status'] === 'available' ? 'Add to Cart' : e($statusLabels[$product['status']]) ?>
+                    data-max-qty="<?= (int) $stock ?>"
+                    data-qty-input="addQty"
+                    <?= !$inStock ? 'disabled' : '' ?>>
+                    <?= $inStock ? 'Add to Cart' : ($stock <= 0 ? 'Out of Stock' : e($statusLabels[$product['status']])) ?>
                 </button>
             </div>
         </div>

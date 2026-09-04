@@ -57,10 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $customerId = current_customer_id();
         save_customer_profile($customerId, $_POST);
 
-        $productIds = json_decode($_POST['cart_data'] ?? '[]', true);
-        if (!is_array($productIds)) $productIds = [];
+        $cartItems = json_decode($_POST['cart_data'] ?? '[]', true);
+        if (!is_array($cartItems)) $cartItems = [];
 
-        $result = place_order($customerId, $productIds, $_POST, 'bank_transfer');
+        $result = place_order($customerId, $cartItems, $_POST, 'bank_transfer');
         if (!empty($result['errors'])) {
             set_flash('error', implode(' ', $result['errors']));
             header('Location: ' . BASE_URL . 'checkout.php');

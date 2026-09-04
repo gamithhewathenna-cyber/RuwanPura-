@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $discountValue = $discountType === 'percentage' ? max(0, min(100, $discountValue)) : max(0, $discountValue);
             }
             $discountActive = (isset($_POST['discount_active']) && $discountType !== 'none' && $discountValue !== null && $discountValue > 0) ? 1 : 0;
+            $quantity       = max(0, (int)($_POST['quantity'] ?? 1));
 
             if ($name === '') {
                 set_flash('error', 'Please enter a gemstone name.');
@@ -52,13 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($id) {
                 $slug = unique_slug('products', $name, $id);
-                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, price=?, discount_type=?, discount_value=?, discount_active=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
-                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
+                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, price=?, discount_type=?, discount_value=?, discount_active=?, quantity=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
+                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $quantity, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
             } else {
                 $slug = unique_slug('products', $name);
                 $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
-                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, price, discount_type, discount_value, discount_active, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
+                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, price, discount_type, discount_value, discount_active, quantity, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $quantity, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
                 $id = (int) db()->lastInsertId();
             }
 
@@ -230,6 +231,11 @@ require_once __DIR__ . '/layout-top.php';
             <div class="form-group">
                 <label>Price (USD)</label>
                 <input type="number" step="0.01" min="0" name="price" class="form-control" value="<?= e($product['price'] ?? '') ?>" placeholder="e.g. 1250.00">
+            </div>
+            <div class="form-group">
+                <label>Quantity in Stock</label>
+                <input type="number" step="1" min="0" name="quantity" class="form-control" value="<?= e($product['quantity'] ?? 1) ?>">
+                <div class="hint" style="margin-top:6px;">Most gemstones are one-of-a-kind (1). For products you hold in bulk, set the actual number of units available (e.g. 15–20).</div>
             </div>
         </div>
 

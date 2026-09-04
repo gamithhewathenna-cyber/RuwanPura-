@@ -5,15 +5,23 @@
 require_once __DIR__ . '/functions.php';
 
 /**
- * Place a new order for the given customer and product ids.
+ * Place a new order for the given customer.
  *
+ * @param array $cartItems list of ['id' => int, 'qty' => int] pairs (as sent by checkout.js)
  * @return array ['id' => int, 'order_number' => string] on success,
- *               ['errors' => string[]] on failure (e.g. an item became unavailable).
+ *               ['errors' => string[]] on failure (e.g. an item became unavailable or is out of stock).
  */
-function place_order($customerId, array $productIds, array $addressSnapshot, $paymentMethod = 'bank_transfer')
+function place_order($customerId, array $cartItems, array $addressSnapshot, $paymentMethod = 'bank_transfer')
 {
-    $productIds = array_values(array_unique(array_filter(array_map('intval', $productIds))));
-    if (!$productIds) {
+    // Normalize + dedupe by product id, summing quantities for any accidental duplicates
+    $requested = [];
+    foreach ($cartItems as $row) {
+        $pid = isset($row['id']) ? (int) $row['id'] : 0;
+        $qty = isset($row['qty']) ? (int) $row['qty'] : 1;
+        if ($pid <= 0 || $qty <= 0) continue;
+        $requested[$pid] = ($requested[$pid] ?? 0) + $qty;
+    }
+    if (!$requested) {
         return ['errors' => ['Your cart is empty.']];
     }
 
@@ -29,24 +37,27 @@ function place_order($customerId, array $productIds, array $addressSnapshot, $pa
 
     try {
         $items          = [];
+        $stockUpdates   = []; // product_id => new quantity, status
         $unavailable    = [];
         $originalTotal  = 0.0;
         $discountTotal  = 0.0;
 
-        foreach ($productIds as $pid) {
+        foreach ($requested as $pid => $qty) {
             $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ? FOR UPDATE");
             $stmt->execute([$pid]);
             $product = $stmt->fetch();
 
-            if (!$product || !$product['is_active'] || $product['status'] !== 'available') {
-                $unavailable[] = $product ? $product['name'] : ('#' . $pid);
+            $stock = $product ? (int) ($product['quantity'] ?? 1) : 0;
+
+            if (!$product || !$product['is_active'] || $product['status'] !== 'available' || $stock < $qty) {
+                $unavailable[] = $product ? $product['name'] . ($stock > 0 && $stock < $qty ? " (only $stock in stock)" : '') : ('#' . $pid);
                 continue;
             }
 
             $pricing = product_pricing($product);
             $unit    = $pricing['original'] ?? 0.0;
             $final   = $pricing['final'] ?? 0.0;
-            $discount = round($unit - $final, 2);
+            $discountPerUnit = round($unit - $final, 2);
 
             $imgStmt = $pdo->prepare("SELECT image FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, sort_order, id LIMIT 1");
             $imgStmt->execute([$pid]);
@@ -61,18 +72,25 @@ function place_order($customerId, array $productIds, array $addressSnapshot, $pa
                 'shape'           => $shapeName,
                 'sku'             => $product['sku'],
                 'image'           => $image ?: null,
+                'quantity'        => $qty,
                 'unit_price'      => $unit,
-                'discount_amount' => $discount,
-                'line_total'      => $final,
+                'discount_amount' => round($discountPerUnit * $qty, 2),
+                'line_total'      => round($final * $qty, 2),
             ];
 
-            $originalTotal += $unit;
-            $discountTotal += $discount;
+            $newStock = $stock - $qty;
+            $stockUpdates[$pid] = [
+                'quantity' => $newStock,
+                'status'   => $newStock <= 0 ? 'reserved' : $product['status'],
+            ];
+
+            $originalTotal += round($unit * $qty, 2);
+            $discountTotal += round($discountPerUnit * $qty, 2);
         }
 
         if ($unavailable) {
             $pdo->rollBack();
-            return ['errors' => ['The following item(s) are no longer available and were removed from your cart: ' . implode(', ', $unavailable) . '.'], 'unavailable' => $unavailable];
+            return ['errors' => ['The following item(s) are no longer available in the requested quantity: ' . implode(', ', $unavailable) . '.'], 'unavailable' => $unavailable];
         }
         if (!$items) {
             $pdo->rollBack();
@@ -116,16 +134,18 @@ function place_order($customerId, array $productIds, array $addressSnapshot, $pa
         $orderId = (int) $pdo->lastInsertId();
 
         $itemStmt = $pdo->prepare("INSERT INTO order_items (order_id, product_id, product_name, weight, shape, sku, image, quantity, unit_price, discount_amount, line_total)
-            VALUES (?,?,?,?,?,?,?,1,?,?,?)");
+            VALUES (?,?,?,?,?,?,?,?,?,?,?)");
         foreach ($items as $it) {
             $itemStmt->execute([
                 $orderId, $it['product_id'], $it['product_name'], $it['weight'], $it['shape'], $it['sku'], $it['image'],
-                $it['unit_price'], $it['discount_amount'], $it['line_total'],
+                $it['quantity'], $it['unit_price'], $it['discount_amount'], $it['line_total'],
             ]);
         }
 
-        $inClause = implode(',', array_fill(0, count($productIds), '?'));
-        $pdo->prepare("UPDATE products SET status = 'reserved' WHERE id IN ($inClause)")->execute($productIds);
+        $stockStmt = $pdo->prepare("UPDATE products SET quantity = ?, status = ? WHERE id = ?");
+        foreach ($stockUpdates as $pid => $upd) {
+            $stockStmt->execute([$upd['quantity'], $upd['status'], $pid]);
+        }
 
         $pdo->commit();
 
@@ -159,23 +179,37 @@ function apply_order_status_transition($orderId, $newStatus)
             return false;
         }
 
-        $productIds = $pdo->prepare("SELECT product_id FROM order_items WHERE order_id = ? AND product_id IS NOT NULL");
-        $productIds->execute([$orderId]);
-        $ids = array_map('intval', $productIds->fetchAll(PDO::FETCH_COLUMN));
+        $lineStmt = $pdo->prepare("SELECT product_id, quantity FROM order_items WHERE order_id = ? AND product_id IS NOT NULL");
+        $lineStmt->execute([$orderId]);
+        $lines = $lineStmt->fetchAll();
 
         $now = date('Y-m-d H:i:s');
         $paymentConfirmedAt = $order['payment_confirmed_at'];
 
         if (in_array($newStatus, ['payment_verified', 'order_confirmed', 'shipped', 'completed'], true)) {
-            if ($ids) {
-                $in = implode(',', array_fill(0, count($ids), '?'));
-                $pdo->prepare("UPDATE products SET status = 'sold' WHERE id IN ($in) AND status <> 'sold'")->execute($ids);
+            // Only flip a product to 'sold' once its live stock is actually exhausted —
+            // if other units of the same product remain, it stays purchasable.
+            foreach ($lines as $line) {
+                $pStmt = $pdo->prepare("SELECT quantity, status FROM products WHERE id = ? FOR UPDATE");
+                $pStmt->execute([$line['product_id']]);
+                $p = $pStmt->fetch();
+                if ($p && (int) $p['quantity'] <= 0 && $p['status'] !== 'sold') {
+                    $pdo->prepare("UPDATE products SET status = 'sold' WHERE id = ?")->execute([$line['product_id']]);
+                }
             }
             if (!$paymentConfirmedAt) $paymentConfirmedAt = $now;
-        } elseif ($newStatus === 'cancelled') {
-            if ($ids) {
-                $in = implode(',', array_fill(0, count($ids), '?'));
-                $pdo->prepare("UPDATE products SET status = 'available' WHERE id IN ($in)")->execute($ids);
+        } elseif ($newStatus === 'cancelled' && $order['order_status'] !== 'cancelled') {
+            // Restore the exact quantity this order had reserved for each product,
+            // and revert to Available if the product was auto-marked reserved/sold.
+            foreach ($lines as $line) {
+                $pStmt = $pdo->prepare("SELECT quantity, status FROM products WHERE id = ? FOR UPDATE");
+                $pStmt->execute([$line['product_id']]);
+                $p = $pStmt->fetch();
+                if (!$p) continue;
+                $restoredQty = (int) $p['quantity'] + (int) $line['quantity'];
+                $newStatusForProduct = ($restoredQty > 0 && in_array($p['status'], ['reserved', 'sold'], true)) ? 'available' : $p['status'];
+                $pdo->prepare("UPDATE products SET quantity = ?, status = ? WHERE id = ?")
+                    ->execute([$restoredQty, $newStatusForProduct, $line['product_id']]);
             }
         }
 

@@ -57,12 +57,13 @@ include __DIR__ . '/../includes/header.php';
             <p style="margin-top:6px;color:var(--muted);font-size:13.5px;">Placed on <?= e(date('M j, Y g:i A', strtotime($order['created_at']))) ?></p>
 
             <table class="order-items-table">
-                <thead><tr><th>Gemstone</th><th>Details</th><th style="text-align:right;">Price</th></tr></thead>
+                <thead><tr><th>Gemstone</th><th>Details</th><th>Qty</th><th style="text-align:right;">Price</th></tr></thead>
                 <tbody>
                 <?php foreach ($items as $it): ?>
                     <tr>
                         <td><?= e($it['product_name']) ?></td>
                         <td><?= e(($it['weight'] !== null ? $it['weight'] . ' ct' : '') . ($it['shape'] ? ' · ' . $it['shape'] : '')) ?></td>
+                        <td><?= (int) $it['quantity'] ?></td>
                         <td style="text-align:right;"><?= format_money($it['line_total']) ?></td>
                     </tr>
                 <?php endforeach; ?>

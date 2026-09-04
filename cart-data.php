@@ -33,6 +33,8 @@ if ($ids) {
         $images  = get_product_images($id);
         $shapeName = lookup_name('gem_shapes', $p['shape_id']);
 
+        $stock = (int) ($p['quantity'] ?? 1);
+
         $items[] = [
             'id'            => $id,
             'found'         => true,
@@ -43,7 +45,8 @@ if ($ids) {
             'image'         => $images ? UPLOAD_URL . $images[0]['image'] : '',
             'status'        => $p['status'],
             'status_label'  => $statusLabels[$p['status']] ?? $p['status'],
-            'available'     => $p['is_active'] == 1 && $p['status'] === 'available',
+            'stock'         => $stock,
+            'available'     => $p['is_active'] == 1 && $p['status'] === 'available' && $stock > 0,
             'price'         => $pricing['original'],
             'final_price'   => $pricing['final'],
             'has_discount'  => $pricing['has_discount'],

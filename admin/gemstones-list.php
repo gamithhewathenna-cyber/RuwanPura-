@@ -59,7 +59,7 @@ require_once __DIR__ . '/layout-top.php';
     <p class="card-sub">Every gemstone in the online catalogue. Click a name to edit it.</p>
 
     <table class="items-table">
-        <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Weight</th><th>Price</th><th>Status</th><th>Shown</th><th style="text-align:right">Actions</th></tr></thead>
+        <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Weight</th><th>Price</th><th>Stock</th><th>Status</th><th>Shown</th><th style="text-align:right">Actions</th></tr></thead>
         <tbody>
         <?php foreach ($products as $p): ?>
             <tr>
@@ -86,6 +86,7 @@ require_once __DIR__ . '/layout-top.php';
                         —
                     <?php endif; ?>
                 </td>
+                <td><?= (int) ($p['quantity'] ?? 1) ?></td>
                 <td>
                     <form method="post" style="display:inline;">
                         <?= csrf_field() ?>
@@ -118,7 +119,7 @@ require_once __DIR__ . '/layout-top.php';
             </tr>
         <?php endforeach; ?>
         <?php if (!$products): ?>
-            <tr><td colspan="8" style="color:var(--muted);text-align:center;padding:24px;">No gemstones yet. Click "Add Gemstone" to create one.</td></tr>
+            <tr><td colspan="9" style="color:var(--muted);text-align:center;padding:24px;">No gemstones yet. Click "Add Gemstone" to create one.</td></tr>
         <?php endif; ?>
         </tbody>
     </table>

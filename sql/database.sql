@@ -258,6 +258,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `discount_type` ENUM('none','amount','percentage') NOT NULL DEFAULT 'none',
   `discount_value` DECIMAL(12,2) NULL DEFAULT NULL,
   `discount_active` TINYINT(1) NOT NULL DEFAULT 0,
+  `quantity` INT(11) NOT NULL DEFAULT 1 COMMENT 'Units in stock',
   `category_id` INT(11) DEFAULT NULL,
   `shape_id` INT(11) DEFAULT NULL,
   `treatment_id` INT(11) DEFAULT NULL,
