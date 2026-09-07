@@ -442,7 +442,7 @@ function count_orders_needing_attention()
 function product_filters_from_get()
 {
     return [
-        'category'  => array_map('intval', $_GET['category'] ?? []),
+        'category'  => !empty($_GET['category']) ? [(int) $_GET['category']] : [],
         'shape'     => array_map('intval', $_GET['shape'] ?? []),
         'treatment' => array_map('intval', $_GET['treatment'] ?? []),
         'origin'    => array_map('intval', $_GET['origin'] ?? []),

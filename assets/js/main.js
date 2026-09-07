@@ -317,8 +317,33 @@ document.addEventListener('DOMContentLoaded', function () {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 form.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+                var catInput = document.getElementById('categoryFilterInput');
+                if (catInput) catInput.value = '';
+                form.querySelectorAll('.cat-accordion-select.is-active, .subcat-select.is-active').forEach(function (btn) {
+                    btn.classList.remove('is-active');
+                });
                 applyFilters('');
             });
+        });
+
+        /* Category / sub-category selection — click to filter instantly (no checkboxes).
+           Clicking the already-active one again clears it and shows everything. */
+        form.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cat-accordion-select, .subcat-select');
+            if (!btn) return;
+            var catInput = document.getElementById('categoryFilterInput');
+            if (!catInput) return;
+
+            var id = btn.getAttribute('data-id');
+            var nowActive = catInput.value !== id;
+            catInput.value = nowActive ? id : '';
+
+            form.querySelectorAll('.cat-accordion-select.is-active, .subcat-select.is-active').forEach(function (el) {
+                el.classList.remove('is-active');
+            });
+            if (nowActive) btn.classList.add('is-active');
+
+            applyFilters(formQueryString());
         });
 
         resultsEl.addEventListener('click', function (e) {
@@ -360,65 +385,38 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
-    /* ---- Category accordion: full-width row click reveals sub-categories ----
-       Rows with children expand/collapse their panel (measuring scrollHeight for
-       a smooth height animation rather than an instant show/hide). Rows without
-       children toggle their own filter checkbox instead, so every row stays a
-       full-width clickable control either way. Clicking the checkbox itself
-       always just toggles the filter, never the accordion. */
+    /* ---- Category accordion chevron: expand/collapse only ----
+       Selecting a category/sub-category to filter by is handled separately
+       (see the click delegation on #filterForm above) — this button only
+       ever reveals or hides the sub-category list, it never applies a filter. */
     (function () {
-        document.querySelectorAll('.cat-accordion-item').forEach(function (item) {
-            var row = item.querySelector('.cat-accordion-row');
-            var panel = item.querySelector('.cat-accordion-panel');
-            if (!row) return;
-            var checkbox = row.querySelector('.cat-accordion-check input');
+        document.querySelectorAll('.cat-accordion-toggle').forEach(function (toggleBtn) {
+            var item = toggleBtn.closest('.cat-accordion-item');
+            var panel = item ? item.querySelector('.cat-accordion-panel') : null;
+            if (!panel) return;
 
-            if (panel) {
-                if (panel.classList.contains('open')) panel.style.maxHeight = 'none';
+            if (panel.classList.contains('open')) panel.style.maxHeight = 'none';
 
-                var toggle = function () {
-                    var isOpen = panel.classList.contains('open');
-                    if (isOpen) {
-                        panel.style.maxHeight = panel.scrollHeight + 'px';
-                        requestAnimationFrame(function () { panel.style.maxHeight = '0px'; });
-                        panel.classList.remove('open');
-                        item.classList.remove('is-open');
-                        row.setAttribute('aria-expanded', 'false');
-                    } else {
-                        panel.classList.add('open');
-                        item.classList.add('is-open');
-                        panel.style.maxHeight = panel.scrollHeight + 'px';
-                        row.setAttribute('aria-expanded', 'true');
-                        panel.addEventListener('transitionend', function handler(e) {
-                            if (e.propertyName !== 'max-height') return;
-                            panel.style.maxHeight = 'none';
-                            panel.removeEventListener('transitionend', handler);
-                        });
-                    }
-                };
-
-                row.addEventListener('click', function (e) {
-                    if (e.target.closest('.cat-accordion-check')) return;
-                    toggle();
-                });
-                row.addEventListener('keydown', function (e) {
-                    if (e.key !== 'Enter' && e.key !== ' ') return;
-                    e.preventDefault();
-                    toggle();
-                });
-            } else if (checkbox) {
-                row.addEventListener('click', function (e) {
-                    if (e.target === checkbox) return;
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-                });
-                row.addEventListener('keydown', function (e) {
-                    if (e.key !== 'Enter' && e.key !== ' ') return;
-                    e.preventDefault();
-                    checkbox.checked = !checkbox.checked;
-                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-                });
-            }
+            toggleBtn.addEventListener('click', function () {
+                var isOpen = panel.classList.contains('open');
+                if (isOpen) {
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                    requestAnimationFrame(function () { panel.style.maxHeight = '0px'; });
+                    panel.classList.remove('open');
+                    item.classList.remove('is-open');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    panel.classList.add('open');
+                    item.classList.add('is-open');
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                    toggleBtn.setAttribute('aria-expanded', 'true');
+                    panel.addEventListener('transitionend', function handler(e) {
+                        if (e.propertyName !== 'max-height') return;
+                        panel.style.maxHeight = 'none';
+                        panel.removeEventListener('transitionend', handler);
+                    });
+                }
+            });
         });
     })();
 

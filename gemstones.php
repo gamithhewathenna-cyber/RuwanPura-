@@ -32,9 +32,12 @@ include __DIR__ . '/includes/header.php';
                 <form method="get" id="filterForm">
                     <div class="filters-drawer-body">
 
-                    <!-- Category accordion -->
+                    <!-- Category accordion — click a category/sub-category name to filter instantly;
+                         the chevron only expands/collapses, it never selects anything. -->
+                    <input type="hidden" name="category" id="categoryFilterInput" value="<?= !empty($filters['category']) ? (int) $filters['category'][0] : '' ?>">
                     <div class="cat-accordion">
                         <?php
+                            $selectedCategory = !empty($filters['category']) ? (int) $filters['category'][0] : 0;
                             $catI = 0;
                             $catN = count($categories);
                             while ($catI < $catN):
@@ -48,28 +51,26 @@ include __DIR__ . '/includes/header.php';
                                 $hasChildren  = !empty($children);
                                 $childChecked = false;
                                 foreach ($children as $ch) {
-                                    if (in_array($ch['id'], $filters['category'])) { $childChecked = true; break; }
+                                    if ((int) $ch['id'] === $selectedCategory) { $childChecked = true; break; }
                                 }
                         ?>
                             <div class="cat-accordion-item<?= $childChecked ? ' is-open' : '' ?>">
-                                <div class="cat-accordion-row" role="button" tabindex="0"<?= $hasChildren ? ' aria-expanded="' . ($childChecked ? 'true' : 'false') . '"' : '' ?>>
-                                    <label class="cat-accordion-check">
-                                        <input type="checkbox" name="category[]" value="<?= (int) $topCat['id'] ?>" <?= in_array($topCat['id'], $filters['category']) ? 'checked' : '' ?>>
-                                    </label>
-                                    <span class="cat-accordion-name"><?= e($topCat['name']) ?></span>
+                                <div class="cat-accordion-row">
+                                    <button type="button" class="cat-accordion-select<?= (int) $topCat['id'] === $selectedCategory ? ' is-active' : '' ?>" data-id="<?= (int) $topCat['id'] ?>">
+                                        <?= e($topCat['name']) ?>
+                                    </button>
                                     <?php if ($hasChildren): ?>
-                                        <span class="cat-accordion-toggle" aria-hidden="true">
+                                        <button type="button" class="cat-accordion-toggle" aria-label="Show sub-categories" aria-expanded="<?= $childChecked ? 'true' : 'false' ?>">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                                        </span>
+                                        </button>
                                     <?php endif; ?>
                                 </div>
                                 <?php if ($hasChildren): ?>
                                     <div class="cat-accordion-panel<?= $childChecked ? ' open' : '' ?>">
                                         <?php foreach ($children as $ch): ?>
-                                            <label class="filter-check is-subcategory">
-                                                <input type="checkbox" name="category[]" value="<?= (int) $ch['id'] ?>" <?= in_array($ch['id'], $filters['category']) ? 'checked' : '' ?>>
+                                            <button type="button" class="subcat-select<?= (int) $ch['id'] === $selectedCategory ? ' is-active' : '' ?>" data-id="<?= (int) $ch['id'] ?>">
                                                 <?= e($ch['name']) ?>
-                                            </label>
+                                            </button>
                                         <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
