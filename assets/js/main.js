@@ -296,6 +296,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
+    /* ---- Category accordion: chevron reveals a category's sub-categories ---- */
+    (function () {
+        document.querySelectorAll('.cat-accordion-toggle').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var item = btn.closest('.cat-accordion-item');
+                var panel = item ? item.querySelector('.cat-accordion-panel') : null;
+                if (!panel) return;
+                var open = panel.classList.toggle('open');
+                item.classList.toggle('is-open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+        });
+    })();
+
     /* ---- Sitewide scroll reveal: .reveal / .reveal-fade / .timeline-item ---- */
     (function () {
         var items = document.querySelectorAll('.reveal, .reveal-fade, .reveal-left, .reveal-right, .timeline-item');

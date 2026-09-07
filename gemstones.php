@@ -57,12 +57,52 @@ include __DIR__ . '/includes/header.php';
                     <div class="filters-drawer-body">
                     <div class="filter-group">
                         <h4>Category</h4>
-                        <?php foreach ($categories as $c): ?>
-                            <label class="filter-check<?= !empty($c['depth']) ? ' is-subcategory' : '' ?>">
-                                <input type="checkbox" name="category[]" value="<?= (int) $c['id'] ?>" <?= in_array($c['id'], $filters['category']) ? 'checked' : '' ?>>
-                                <?= e($c['name']) ?>
-                            </label>
-                        <?php endforeach; ?>
+                        <div class="cat-accordion">
+                            <?php
+                                $catI = 0;
+                                $catN = count($categories);
+                                while ($catI < $catN):
+                                    $topCat = $categories[$catI];
+                                    $children = [];
+                                    $catJ = $catI + 1;
+                                    while ($catJ < $catN && !empty($categories[$catJ]['depth'])) {
+                                        $children[] = $categories[$catJ];
+                                        $catJ++;
+                                    }
+                                    $hasChildren  = !empty($children);
+                                    $childChecked = false;
+                                    foreach ($children as $ch) {
+                                        if (in_array($ch['id'], $filters['category'])) { $childChecked = true; break; }
+                                    }
+                            ?>
+                                <div class="cat-accordion-item<?= $childChecked ? ' is-open' : '' ?>">
+                                    <div class="cat-accordion-row">
+                                        <label class="cat-accordion-label">
+                                            <input type="checkbox" name="category[]" value="<?= (int) $topCat['id'] ?>" <?= in_array($topCat['id'], $filters['category']) ? 'checked' : '' ?>>
+                                            <span><?= e($topCat['name']) ?></span>
+                                        </label>
+                                        <?php if ($hasChildren): ?>
+                                            <button type="button" class="cat-accordion-toggle" aria-label="Show sub-categories" aria-expanded="<?= $childChecked ? 'true' : 'false' ?>">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php if ($hasChildren): ?>
+                                        <div class="cat-accordion-panel<?= $childChecked ? ' open' : '' ?>">
+                                            <?php foreach ($children as $ch): ?>
+                                                <label class="filter-check is-subcategory">
+                                                    <input type="checkbox" name="category[]" value="<?= (int) $ch['id'] ?>" <?= in_array($ch['id'], $filters['category']) ? 'checked' : '' ?>>
+                                                    <?= e($ch['name']) ?>
+                                                </label>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php
+                                    $catI = $catJ;
+                                endwhile;
+                            ?>
+                        </div>
                     </div>
 
                     <div class="filter-group">
