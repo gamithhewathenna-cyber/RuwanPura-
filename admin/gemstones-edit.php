@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $treatmentId = (int)($_POST['treatment_id'] ?? 0) ?: null;
             $originId    = (int)($_POST['origin_id'] ?? 0) ?: null;
             $weight      = $_POST['weight'] !== '' ? (float)$_POST['weight'] : null;
+            $dimensions  = trim($_POST['dimensions'] ?? '') ?: null;
             $description = trim($_POST['description'] ?? '');
             $certInfo    = trim($_POST['certificate_info'] ?? '');
             $status      = $_POST['status'] ?? 'available';
@@ -53,13 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($id) {
                 $slug = unique_slug('products', $name, $id);
-                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, price=?, discount_type=?, discount_value=?, discount_active=?, quantity=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
-                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $quantity, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $id]);
+                $stmt = db()->prepare("UPDATE products SET name=?, slug=?, sku=?, price=?, discount_type=?, discount_value=?, discount_active=?, quantity=?, category_id=?, shape_id=?, treatment_id=?, origin_id=?, weight=?, dimensions=?, description=?, certificate_info=?, status=?, is_active=? WHERE id=?");
+                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $quantity, $categoryId, $shapeId, $treatmentId, $originId, $weight, $dimensions, $description, $certInfo, $status, $isActive, $id]);
             } else {
                 $slug = unique_slug('products', $name);
                 $ord  = db()->query("SELECT COALESCE(MAX(sort_order),0)+1 FROM products")->fetchColumn();
-                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, price, discount_type, discount_value, discount_active, quantity, category_id, shape_id, treatment_id, origin_id, weight, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $quantity, $categoryId, $shapeId, $treatmentId, $originId, $weight, $description, $certInfo, $status, $isActive, $ord]);
+                $stmt = db()->prepare("INSERT INTO products (name, slug, sku, price, discount_type, discount_value, discount_active, quantity, category_id, shape_id, treatment_id, origin_id, weight, dimensions, description, certificate_info, status, is_active, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                $stmt->execute([$name, $slug, $sku, $price, $discountType, $discountValue, $discountActive, $quantity, $categoryId, $shapeId, $treatmentId, $originId, $weight, $dimensions, $description, $certInfo, $status, $isActive, $ord]);
                 $id = (int) db()->lastInsertId();
             }
 
@@ -178,6 +179,13 @@ require_once __DIR__ . '/layout-top.php';
             <div class="form-group">
                 <label>Weight (carat)</label>
                 <input type="number" step="0.01" min="0" name="weight" class="form-control" value="<?= e($product['weight'] ?? '') ?>">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group" style="grid-column: span 2;">
+                <label>Dimensions (mm) <span class="hint">(optional)</span></label>
+                <input type="text" name="dimensions" class="form-control" value="<?= e($product['dimensions'] ?? '') ?>" placeholder="e.g. 8.2 x 6.1 x 4.3 mm">
             </div>
         </div>
 

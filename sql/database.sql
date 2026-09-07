@@ -264,6 +264,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `treatment_id` INT(11) DEFAULT NULL,
   `origin_id` INT(11) DEFAULT NULL,
   `weight` DECIMAL(8,2) DEFAULT NULL COMMENT 'Carat weight',
+  `dimensions` VARCHAR(60) DEFAULT NULL COMMENT 'e.g. 8.2 x 6.1 x 4.3 mm',
   `description` TEXT DEFAULT NULL,
   `certificate_info` TEXT DEFAULT NULL,
   `video` VARCHAR(255) DEFAULT NULL COMMENT 'Optional MP4 shown in the product gallery',

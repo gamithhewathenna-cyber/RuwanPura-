@@ -101,6 +101,7 @@ include __DIR__ . '/includes/header.php';
 
                 <div class="product-specs">
                     <?php if ($product['weight'] !== null): ?><div><span>Weight</span><strong><?= e($product['weight']) ?> ct</strong></div><?php endif; ?>
+                    <?php if (!empty($product['dimensions'])): ?><div><span>Dimensions</span><strong><?= e($product['dimensions']) ?></strong></div><?php endif; ?>
                     <?php if ($shapeName): ?><div><span>Shape</span><strong><?= e($shapeName) ?></strong></div><?php endif; ?>
                     <?php if ($treatmentName): ?><div><span>Treatment</span><strong><?= e($treatmentName) ?></strong></div><?php endif; ?>
                     <?php if ($originName): ?><div><span>Origin</span><strong><?= e($originName) ?></strong></div><?php endif; ?>
