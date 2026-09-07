@@ -1192,8 +1192,7 @@ a.announcement-card:hover { color: var(--gold); }
 .catalogue-layout { display: grid; grid-template-columns: 260px 1fr; gap: 50px; align-items: start; }
 
 .catalogue-filters {
-    background: #fafafa; border: 1px solid var(--line); border-radius: 12px;
-    padding: 26px 24px; position: sticky; top: 116px;
+    position: sticky; top: 116px;
 }
 .filter-group { margin-bottom: 24px; }
 .filter-group:last-of-type { margin-bottom: 20px; }
