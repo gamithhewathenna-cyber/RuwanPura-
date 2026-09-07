@@ -58,7 +58,7 @@ include __DIR__ . '/includes/header.php';
                     <div class="filter-group">
                         <h4>Category</h4>
                         <?php foreach ($categories as $c): ?>
-                            <label class="filter-check" <?= !empty($c['depth']) ? 'style="padding-left:18px;"' : '' ?>>
+                            <label class="filter-check<?= !empty($c['depth']) ? ' is-subcategory' : '' ?>">
                                 <input type="checkbox" name="category[]" value="<?= (int) $c['id'] ?>" <?= in_array($c['id'], $filters['category']) ? 'checked' : '' ?>>
                                 <?= e($c['name']) ?>
                             </label>
