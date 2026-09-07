@@ -1147,10 +1147,6 @@ a.announcement-card:hover { color: var(--gold); }
 
 .catalogue { padding: 60px 0 90px; }
 
-.catalogue-main-head { margin-bottom: 28px; }
-.catalogue-shop-title { font-family: var(--serif); font-size: 42px; font-weight: 600; color: var(--ink); line-height: 1.1; }
-.catalogue-shop-desc { color: var(--muted); font-size: 15.5px; margin-top: 8px; }
-
 .catalogue-search-wrap { position: relative; z-index: 50; display: flex; justify-content: flex-start; margin-bottom: 44px; }
 .catalogue-search { position: relative; width: 100%; max-width: 100%; min-width: 0; }
 .catalogue-search-icon {
@@ -1895,7 +1891,6 @@ body.drawer-open { overflow: hidden; }
     .blog-grid, .blog-related .blog-grid { grid-template-columns: 1fr; gap: 26px; }
     .blog-card-title { font-size: 19px; }
 
-    .catalogue-shop-title { font-size: 32px; }
     .catalogue-toolbar { align-items: flex-start; flex-direction: column; gap: 8px; }
 }
 

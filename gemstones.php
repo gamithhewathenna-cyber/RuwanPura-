@@ -20,6 +20,15 @@ $activeFilterCount = active_filter_count($filters);
 include __DIR__ . '/includes/header.php';
 ?>
 
+<!-- ================= CATALOGUE HERO ================= -->
+<section class="catalogue-hero">
+    <div class="container reveal-left">
+        <div class="eyebrow">OUR COLLECTION</div>
+        <h1 class="about-hero-title catalogue-hero-title">Gemstones</h1>
+        <p class="catalogue-hero-desc">Discover our collection of natural, ethically sourced gemstones.</p>
+    </div>
+</section>
+
 <!-- ================= GEMSTONE SHOP ================= -->
 <section class="catalogue catalogue-shop">
     <div class="container">
@@ -188,11 +197,6 @@ include __DIR__ . '/includes/header.php';
             </aside>
 
             <div class="catalogue-main">
-                <div class="catalogue-main-head">
-                    <h1 class="catalogue-shop-title">Gemstones</h1>
-                    <p class="catalogue-shop-desc">Discover our collection of natural, ethically sourced gemstones.</p>
-                </div>
-
                 <div class="catalogue-toolbar-row">
                     <div class="catalogue-search-wrap reveal">
                         <div class="catalogue-search">
