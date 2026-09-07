@@ -186,6 +186,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
+    /* ---- Wishlist: lightweight client-side "save" heart on product cards ----
+       localStorage only, no account required — mirrors the cart's storage
+       pattern. sync() re-applies saved state to whatever cards are currently
+       in the DOM, so it can be re-run after each AJAX results swap. */
+    (function () {
+        var STORAGE_KEY = 'ruwanpura_wishlist';
+
+        function getWishlist() {
+            try {
+                var raw = localStorage.getItem(STORAGE_KEY);
+                var list = raw ? JSON.parse(raw) : [];
+                return Array.isArray(list) ? list : [];
+            } catch (e) { return []; }
+        }
+        function saveWishlist(list) {
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
+        }
+        function isSaved(id) { return getWishlist().indexOf(id) !== -1; }
+        function toggle(id) {
+            var list = getWishlist();
+            var idx = list.indexOf(id);
+            if (idx === -1) { list.push(id); } else { list.splice(idx, 1); }
+            saveWishlist(list);
+            return idx === -1; // now active
+        }
+        function sync(root) {
+            (root || document).querySelectorAll('.product-card-wishlist').forEach(function (heart) {
+                var active = isSaved(heart.getAttribute('data-id'));
+                heart.classList.toggle('is-active', active);
+                heart.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+        }
+
+        window.RuwanpuraWishlist = { isSaved: isSaved, toggle: toggle, sync: sync };
+        sync();
+    })();
+
     /* ---- Gemstone catalogue filters: drawer + instant no-reload updates ----
        Checking a filter fetches just the results fragment (count + grid +
        pagination) and swaps it in via the Fetch API, updating the URL with
@@ -248,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     resultsEl.querySelectorAll('.reveal, .reveal-fade').forEach(function (el) {
                         el.classList.add('in-view');
                     });
+                    if (window.RuwanpuraWishlist) window.RuwanpuraWishlist.sync(resultsEl);
                     window.history.pushState({ gemFilters: true }, '', url);
                     updateBadge();
                     closeDrawer();
@@ -289,6 +327,32 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             applyFilters(link.getAttribute('href').replace(/^\?/, ''));
             resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        /* Sort dropdown lives inside the results fragment (so it can show the
+           active value after each swap) but is form-associated via form="filterForm" —
+           always auto-applies, on both desktop and mobile, since it isn't part of
+           the drawer's "pick several then apply" flow. */
+        resultsEl.addEventListener('change', function (e) {
+            if (e.target.id !== 'sortSelect') return;
+            applyFilters(formQueryString());
+        });
+
+        /* Wishlist heart — never navigates the card link, just toggles the save state */
+        resultsEl.addEventListener('click', function (e) {
+            var heart = e.target.closest('.product-card-wishlist');
+            if (!heart || !window.RuwanpuraWishlist) return;
+            e.preventDefault();
+            e.stopPropagation();
+            var active = window.RuwanpuraWishlist.toggle(heart.getAttribute('data-id'));
+            heart.classList.toggle('is-active', active);
+            heart.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        resultsEl.addEventListener('keydown', function (e) {
+            var heart = e.target.closest('.product-card-wishlist');
+            if (!heart || (e.key !== 'Enter' && e.key !== ' ')) return;
+            e.preventDefault();
+            heart.click();
         });
 
         window.addEventListener('popstate', function () {
@@ -355,6 +419,41 @@ document.addEventListener('DOMContentLoaded', function () {
                     checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                 });
             }
+        });
+    })();
+
+    /* ---- Filter accordion (Availability / Carat Weight / Shape & Cut / Origin /
+       Treatment / Price) — same measured-height smooth expand/collapse as the
+       category accordion above, just on its own header/panel pair. ---- */
+    (function () {
+        document.querySelectorAll('.filter-acc-item').forEach(function (item) {
+            var header = item.querySelector('.filter-acc-header');
+            var panel = item.querySelector('.filter-acc-panel');
+            if (!header || !panel) return;
+
+            if (item.classList.contains('is-open')) {
+                panel.style.maxHeight = 'none';
+                header.setAttribute('aria-expanded', 'true');
+            }
+
+            header.addEventListener('click', function () {
+                var isOpen = item.classList.contains('is-open');
+                if (isOpen) {
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                    requestAnimationFrame(function () { panel.style.maxHeight = '0px'; });
+                    item.classList.remove('is-open');
+                    header.setAttribute('aria-expanded', 'false');
+                } else {
+                    item.classList.add('is-open');
+                    panel.style.maxHeight = panel.scrollHeight + 'px';
+                    header.setAttribute('aria-expanded', 'true');
+                    panel.addEventListener('transitionend', function handler(e) {
+                        if (e.propertyName !== 'max-height') return;
+                        panel.style.maxHeight = 'none';
+                        panel.removeEventListener('transitionend', handler);
+                    });
+                }
+            });
         });
     })();
 

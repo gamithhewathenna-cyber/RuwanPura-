@@ -10,5 +10,6 @@ $page    = max(1, (int) ($_GET['page'] ?? 1));
 
 $result       = get_products($filters, $page, 12);
 $statusLabels = product_status_labels();
+$sortOptions  = sort_options();
 
 include __DIR__ . '/includes/gemstone-results.php';

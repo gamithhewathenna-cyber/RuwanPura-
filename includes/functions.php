@@ -311,6 +311,45 @@ function product_status_labels()
     ];
 }
 
+/* Fixed price buckets used for catalogue filtering (based on the effective,
+   discounted price — see product_effective_price_sql()) */
+function price_ranges()
+{
+    return [
+        'u500'       => ['label' => 'Under $500',       'min' => 0,     'max' => 500],
+        '500-1000'   => ['label' => '$500 – $1,000',    'min' => 500,   'max' => 1000],
+        '1000-5000'  => ['label' => '$1,000 – $5,000',  'min' => 1000,  'max' => 5000],
+        '5000-10000' => ['label' => '$5,000 – $10,000', 'min' => 5000,  'max' => 10000],
+        '10000p'     => ['label' => '$10,000 & above',  'min' => 10000, 'max' => null],
+    ];
+}
+
+/* Catalogue sort options */
+function sort_options()
+{
+    return [
+        'featured'   => 'Featured',
+        'price_asc'  => 'Price: Low to High',
+        'price_desc' => 'Price: High to Low',
+        'newest'     => 'Newest Arrivals',
+        'name_asc'   => 'Name: A-Z',
+    ];
+}
+
+/* SQL expression for a product's effective (discounted) price — the same math
+   as product_pricing()'s 'final' value, done in SQL so it can be used in a
+   WHERE/ORDER BY clause. $alias is the products table alias in the query. */
+function product_effective_price_sql($alias = 'p')
+{
+    return "(CASE
+        WHEN $alias.discount_active = 1 AND $alias.discount_type = 'percentage' AND $alias.discount_value IS NOT NULL
+            THEN $alias.price * (1 - LEAST(GREATEST($alias.discount_value, 0), 100) / 100)
+        WHEN $alias.discount_active = 1 AND $alias.discount_type = 'amount' AND $alias.discount_value IS NOT NULL
+            THEN GREATEST($alias.price - $alias.discount_value, 0)
+        ELSE $alias.price
+    END)";
+}
+
 /* ------------------------------------------------------------------ */
 /*  E-commerce: pricing, orders, money formatting                      */
 /* ------------------------------------------------------------------ */
@@ -408,8 +447,19 @@ function product_filters_from_get()
         'treatment' => array_map('intval', $_GET['treatment'] ?? []),
         'origin'    => array_map('intval', $_GET['origin'] ?? []),
         'weight'    => array_values(array_intersect((array) ($_GET['weight'] ?? []), array_keys(weight_ranges()))),
+        'price'     => array_values(array_intersect((array) ($_GET['price'] ?? []), array_keys(price_ranges()))),
         'status'    => array_values(array_intersect((array) ($_GET['status'] ?? []), array_keys(product_status_labels()))),
+        'sort'      => array_key_exists($_GET['sort'] ?? '', sort_options()) ? $_GET['sort'] : 'featured',
     ];
+}
+
+/* Sum of active multi-select filter counts, for the mobile "Filters (n)" badge —
+   excludes 'sort' since it's a single always-set value, not an active/inactive filter. */
+function active_filter_count($filters)
+{
+    $countable = $filters;
+    unset($countable['sort']);
+    return array_sum(array_map('count', $countable));
 }
 
 /* Filtered + paginated product listing for the catalogue page */
@@ -452,6 +502,20 @@ function get_products($filters = [], $page = 1, $perPage = 12)
         if ($clauses) $where[] = '(' . implode(' OR ', $clauses) . ')';
     }
 
+    $priceExpr = product_effective_price_sql('p');
+    if (!empty($filters['price']) && is_array($filters['price'])) {
+        $ranges = price_ranges();
+        $clauses = [];
+        foreach ($filters['price'] as $key) {
+            if (!isset($ranges[$key])) continue;
+            $r = $ranges[$key];
+            $clauses[] = $r['max'] === null
+                ? "($priceExpr >= " . (float)$r['min'] . ')'
+                : "($priceExpr >= " . (float)$r['min'] . " AND $priceExpr < " . (float)$r['max'] . ')';
+        }
+        if ($clauses) $where[] = "(p.price IS NOT NULL AND (" . implode(' OR ', $clauses) . '))';
+    }
+
     $whereSql = implode(' AND ', $where);
 
     $countStmt = db()->prepare("SELECT COUNT(*) FROM products p WHERE $whereSql");
@@ -462,20 +526,29 @@ function get_products($filters = [], $page = 1, $perPage = 12)
     $page    = max(1, (int) $page);
     $offset  = ($page - 1) * $perPage;
 
+    switch ($filters['sort'] ?? 'featured') {
+        case 'price_asc':  $orderBy = "(p.price IS NULL), $priceExpr ASC, p.id DESC"; break;
+        case 'price_desc': $orderBy = "(p.price IS NULL), $priceExpr DESC, p.id DESC"; break;
+        case 'newest':     $orderBy = 'p.created_at DESC, p.id DESC'; break;
+        case 'name_asc':   $orderBy = 'p.name ASC'; break;
+        default:           $orderBy = 'p.sort_order, p.id DESC'; // featured
+    }
+
     $sql = "SELECT p.*,
                    (SELECT image FROM product_images WHERE product_id = p.id ORDER BY is_primary DESC, sort_order, id LIMIT 1) AS thumb
             FROM products p
             WHERE $whereSql
-            ORDER BY p.sort_order, p.id DESC
+            ORDER BY $orderBy
             LIMIT $perPage OFFSET $offset";
     $stmt = db()->prepare($sql);
     $stmt->execute($params);
 
     return [
-        'items' => $stmt->fetchAll(),
-        'total' => $total,
-        'pages' => (int) ceil($total / $perPage),
-        'page'  => $page,
+        'items'    => $stmt->fetchAll(),
+        'total'    => $total,
+        'pages'    => (int) ceil($total / $perPage),
+        'page'     => $page,
+        'per_page' => $perPage,
     ];
 }
 

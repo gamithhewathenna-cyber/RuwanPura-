@@ -7,152 +7,172 @@ $page = max(1, (int) ($_GET['page'] ?? 1));
 
 $result = get_products($filters, $page, 12);
 
-$categories   = get_categories_tree();
-$shapes       = get_shapes();
-$treatments   = get_treatments();
-$origins      = get_origins();
-$weightRanges = weight_ranges();
-$statusLabels = product_status_labels();
-$activeFilterCount = array_sum(array_map('count', $filters));
+$categories    = get_categories_tree();
+$shapes        = get_shapes();
+$treatments    = get_treatments();
+$origins       = get_origins();
+$weightRanges  = weight_ranges();
+$priceRangeOpts = price_ranges();
+$statusLabels  = product_status_labels();
+$sortOptions   = sort_options();
+$activeFilterCount = active_filter_count($filters);
 
 include __DIR__ . '/includes/header.php';
 ?>
 
-<!-- ================= CATALOGUE HERO ================= -->
-<section class="catalogue-hero">
-    <div class="container reveal-left">
-        <div class="eyebrow">OUR COLLECTION</div>
-        <h1 class="about-hero-title catalogue-hero-title">Gemstone Catalogue</h1>
-        <p class="catalogue-hero-desc">Discover a curated collection of exceptional natural gemstones, selected for their beauty, rarity, and timeless character.</p>
-    </div>
-</section>
-
-<!-- ================= CATALOGUE ================= -->
-<section class="catalogue">
+<!-- ================= GEMSTONE SHOP ================= -->
+<section class="catalogue catalogue-shop">
     <div class="container">
-        <div class="catalogue-toolbar-row">
-            <div class="catalogue-search-wrap reveal">
-                <div class="catalogue-search">
-                    <svg class="catalogue-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                    <input type="text" id="gemSearchInput" placeholder="Search gemstones by name…" autocomplete="off" aria-label="Search gemstones">
-                    <div id="gemSearchResults" class="catalogue-search-results"></div>
-                </div>
-            </div>
-
-            <button type="button" id="filtersToggleBtn" class="catalogue-filter-toggle" aria-label="Open filters">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
-                <span class="filters-btn-label">Filters</span>
-                <?php if ($activeFilterCount > 0): ?><span class="filter-count-badge"><?= (int) $activeFilterCount ?></span><?php endif; ?>
-            </button>
-        </div>
-        <div id="filtersBackdrop" class="filters-backdrop"></div>
-
         <div class="catalogue-layout">
             <aside class="catalogue-filters" id="catalogueFilters">
                 <div class="filters-drawer-header">
-                    <h3>Filters</h3>
+                    <h3>Categories &amp; Filters</h3>
                     <button type="button" id="filtersCloseBtn" class="filters-drawer-close" aria-label="Close filters">&times;</button>
                 </div>
                 <form method="get" id="filterForm">
                     <div class="filters-drawer-body">
-                    <div class="filter-group">
-                        <h4>Category</h4>
-                        <div class="cat-accordion">
-                            <?php
-                                $catI = 0;
-                                $catN = count($categories);
-                                while ($catI < $catN):
-                                    $topCat = $categories[$catI];
-                                    $children = [];
-                                    $catJ = $catI + 1;
-                                    while ($catJ < $catN && !empty($categories[$catJ]['depth'])) {
-                                        $children[] = $categories[$catJ];
-                                        $catJ++;
-                                    }
-                                    $hasChildren  = !empty($children);
-                                    $childChecked = false;
-                                    foreach ($children as $ch) {
-                                        if (in_array($ch['id'], $filters['category'])) { $childChecked = true; break; }
-                                    }
-                            ?>
-                                <div class="cat-accordion-item<?= $childChecked ? ' is-open' : '' ?>">
-                                    <div class="cat-accordion-row" role="button" tabindex="0"<?= $hasChildren ? ' aria-expanded="' . ($childChecked ? 'true' : 'false') . '"' : '' ?>>
-                                        <label class="cat-accordion-check">
-                                            <input type="checkbox" name="category[]" value="<?= (int) $topCat['id'] ?>" <?= in_array($topCat['id'], $filters['category']) ? 'checked' : '' ?>>
-                                        </label>
-                                        <span class="cat-accordion-name"><?= e($topCat['name']) ?></span>
-                                        <?php if ($hasChildren): ?>
-                                            <span class="cat-accordion-toggle" aria-hidden="true">
-                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                                            </span>
-                                        <?php endif; ?>
-                                    </div>
+
+                    <!-- Category accordion -->
+                    <div class="cat-accordion">
+                        <?php
+                            $catI = 0;
+                            $catN = count($categories);
+                            while ($catI < $catN):
+                                $topCat = $categories[$catI];
+                                $children = [];
+                                $catJ = $catI + 1;
+                                while ($catJ < $catN && !empty($categories[$catJ]['depth'])) {
+                                    $children[] = $categories[$catJ];
+                                    $catJ++;
+                                }
+                                $hasChildren  = !empty($children);
+                                $childChecked = false;
+                                foreach ($children as $ch) {
+                                    if (in_array($ch['id'], $filters['category'])) { $childChecked = true; break; }
+                                }
+                        ?>
+                            <div class="cat-accordion-item<?= $childChecked ? ' is-open' : '' ?>">
+                                <div class="cat-accordion-row" role="button" tabindex="0"<?= $hasChildren ? ' aria-expanded="' . ($childChecked ? 'true' : 'false') . '"' : '' ?>>
+                                    <label class="cat-accordion-check">
+                                        <input type="checkbox" name="category[]" value="<?= (int) $topCat['id'] ?>" <?= in_array($topCat['id'], $filters['category']) ? 'checked' : '' ?>>
+                                    </label>
+                                    <span class="cat-accordion-name"><?= e($topCat['name']) ?></span>
                                     <?php if ($hasChildren): ?>
-                                        <div class="cat-accordion-panel<?= $childChecked ? ' open' : '' ?>">
-                                            <?php foreach ($children as $ch): ?>
-                                                <label class="filter-check is-subcategory">
-                                                    <input type="checkbox" name="category[]" value="<?= (int) $ch['id'] ?>" <?= in_array($ch['id'], $filters['category']) ? 'checked' : '' ?>>
-                                                    <?= e($ch['name']) ?>
-                                                </label>
-                                            <?php endforeach; ?>
-                                        </div>
+                                        <span class="cat-accordion-toggle" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                                        </span>
                                     <?php endif; ?>
                                 </div>
-                            <?php
-                                    $catI = $catJ;
-                                endwhile;
-                            ?>
+                                <?php if ($hasChildren): ?>
+                                    <div class="cat-accordion-panel<?= $childChecked ? ' open' : '' ?>">
+                                        <?php foreach ($children as $ch): ?>
+                                            <label class="filter-check is-subcategory">
+                                                <input type="checkbox" name="category[]" value="<?= (int) $ch['id'] ?>" <?= in_array($ch['id'], $filters['category']) ? 'checked' : '' ?>>
+                                                <?= e($ch['name']) ?>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php
+                                $catI = $catJ;
+                            endwhile;
+                        ?>
+                    </div>
+
+                    <!-- Filter: accordion -->
+                    <div class="filter-acc-section">
+                        <h3 class="filter-acc-heading">Filter:</h3>
+
+                        <div class="filter-acc-item<?= !empty($filters['status']) ? ' is-open' : '' ?>">
+                            <button type="button" class="filter-acc-header" aria-expanded="<?= !empty($filters['status']) ? 'true' : 'false' ?>">
+                                <span>Availability</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="filter-acc-panel">
+                                <?php foreach ($statusLabels as $key => $label): ?>
+                                    <label class="filter-check">
+                                        <input type="checkbox" name="status[]" value="<?= e($key) ?>" <?= in_array($key, $filters['status']) ? 'checked' : '' ?>>
+                                        <?= e($label) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="filter-group">
-                        <h4>Weight</h4>
-                        <?php foreach ($weightRanges as $key => $r): ?>
-                            <label class="filter-check">
-                                <input type="checkbox" name="weight[]" value="<?= e($key) ?>" <?= in_array($key, $filters['weight']) ? 'checked' : '' ?>>
-                                <?= e($r['label']) ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
+                        <div class="filter-acc-item<?= !empty($filters['weight']) ? ' is-open' : '' ?>">
+                            <button type="button" class="filter-acc-header" aria-expanded="<?= !empty($filters['weight']) ? 'true' : 'false' ?>">
+                                <span>Carat Weight</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="filter-acc-panel">
+                                <?php foreach ($weightRanges as $key => $r): ?>
+                                    <label class="filter-check">
+                                        <input type="checkbox" name="weight[]" value="<?= e($key) ?>" <?= in_array($key, $filters['weight']) ? 'checked' : '' ?>>
+                                        <?= e($r['label']) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
 
-                    <div class="filter-group">
-                        <h4>Shape</h4>
-                        <?php foreach ($shapes as $s): ?>
-                            <label class="filter-check">
-                                <input type="checkbox" name="shape[]" value="<?= (int) $s['id'] ?>" <?= in_array($s['id'], $filters['shape']) ? 'checked' : '' ?>>
-                                <?= e($s['name']) ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
+                        <div class="filter-acc-item<?= !empty($filters['shape']) ? ' is-open' : '' ?>">
+                            <button type="button" class="filter-acc-header" aria-expanded="<?= !empty($filters['shape']) ? 'true' : 'false' ?>">
+                                <span>Shape &amp; Cut</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="filter-acc-panel">
+                                <?php foreach ($shapes as $s): ?>
+                                    <label class="filter-check">
+                                        <input type="checkbox" name="shape[]" value="<?= (int) $s['id'] ?>" <?= in_array($s['id'], $filters['shape']) ? 'checked' : '' ?>>
+                                        <?= e($s['name']) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
 
-                    <div class="filter-group">
-                        <h4>Treatment</h4>
-                        <?php foreach ($treatments as $t): ?>
-                            <label class="filter-check">
-                                <input type="checkbox" name="treatment[]" value="<?= (int) $t['id'] ?>" <?= in_array($t['id'], $filters['treatment']) ? 'checked' : '' ?>>
-                                <?= e($t['name']) ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
+                        <div class="filter-acc-item<?= !empty($filters['origin']) ? ' is-open' : '' ?>">
+                            <button type="button" class="filter-acc-header" aria-expanded="<?= !empty($filters['origin']) ? 'true' : 'false' ?>">
+                                <span>Origin</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="filter-acc-panel">
+                                <?php foreach ($origins as $o): ?>
+                                    <label class="filter-check">
+                                        <input type="checkbox" name="origin[]" value="<?= (int) $o['id'] ?>" <?= in_array($o['id'], $filters['origin']) ? 'checked' : '' ?>>
+                                        <?= e($o['name']) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
 
-                    <div class="filter-group">
-                        <h4>Origin</h4>
-                        <?php foreach ($origins as $o): ?>
-                            <label class="filter-check">
-                                <input type="checkbox" name="origin[]" value="<?= (int) $o['id'] ?>" <?= in_array($o['id'], $filters['origin']) ? 'checked' : '' ?>>
-                                <?= e($o['name']) ?>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
+                        <div class="filter-acc-item<?= !empty($filters['treatment']) ? ' is-open' : '' ?>">
+                            <button type="button" class="filter-acc-header" aria-expanded="<?= !empty($filters['treatment']) ? 'true' : 'false' ?>">
+                                <span>Treatment</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="filter-acc-panel">
+                                <?php foreach ($treatments as $t): ?>
+                                    <label class="filter-check">
+                                        <input type="checkbox" name="treatment[]" value="<?= (int) $t['id'] ?>" <?= in_array($t['id'], $filters['treatment']) ? 'checked' : '' ?>>
+                                        <?= e($t['name']) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
 
-                    <div class="filter-group">
-                        <h4>Availability</h4>
-                        <?php foreach ($statusLabels as $key => $label): ?>
-                            <label class="filter-check">
-                                <input type="checkbox" name="status[]" value="<?= e($key) ?>" <?= in_array($key, $filters['status']) ? 'checked' : '' ?>>
-                                <?= e($label) ?>
-                            </label>
-                        <?php endforeach; ?>
+                        <div class="filter-acc-item<?= !empty($filters['price']) ? ' is-open' : '' ?>">
+                            <button type="button" class="filter-acc-header" aria-expanded="<?= !empty($filters['price']) ? 'true' : 'false' ?>">
+                                <span>Price</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                            </button>
+                            <div class="filter-acc-panel">
+                                <?php foreach ($priceRangeOpts as $key => $r): ?>
+                                    <label class="filter-check">
+                                        <input type="checkbox" name="price[]" value="<?= e($key) ?>" <?= in_array($key, $filters['price']) ? 'checked' : '' ?>>
+                                        <?= e($r['label']) ?>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     </div>
 
                     <button type="submit" class="btn-dark catalogue-apply-btn">Apply Filters</button>
@@ -166,8 +186,32 @@ include __DIR__ . '/includes/header.php';
                 </form>
             </aside>
 
-            <div class="catalogue-main" id="catalogueResults">
-                <?php include __DIR__ . '/includes/gemstone-results.php'; ?>
+            <div class="catalogue-main">
+                <div class="catalogue-main-head">
+                    <h1 class="catalogue-shop-title">Gemstones</h1>
+                    <p class="catalogue-shop-desc">Discover our collection of natural, ethically sourced gemstones.</p>
+                </div>
+
+                <div class="catalogue-toolbar-row">
+                    <div class="catalogue-search-wrap reveal">
+                        <div class="catalogue-search">
+                            <svg class="catalogue-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                            <input type="text" id="gemSearchInput" placeholder="Search gemstones by name…" autocomplete="off" aria-label="Search gemstones">
+                            <div id="gemSearchResults" class="catalogue-search-results"></div>
+                        </div>
+                    </div>
+
+                    <button type="button" id="filtersToggleBtn" class="catalogue-filter-toggle" aria-label="Open categories and filters">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+                        <span class="filters-btn-label">Categories &amp; Filters</span>
+                        <?php if ($activeFilterCount > 0): ?><span class="filter-count-badge"><?= (int) $activeFilterCount ?></span><?php endif; ?>
+                    </button>
+                </div>
+                <div id="filtersBackdrop" class="filters-backdrop"></div>
+
+                <div id="catalogueResults">
+                    <?php include __DIR__ . '/includes/gemstone-results.php'; ?>
+                </div>
             </div>
         </div>
     </div>
