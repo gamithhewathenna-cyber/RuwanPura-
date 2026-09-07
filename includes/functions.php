@@ -233,6 +233,30 @@ function get_categories($activeOnly = true)
     $sql = "SELECT * FROM gem_categories" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";
     return db()->query($sql)->fetchAll();
 }
+
+/* Categories grouped as top-level -> sub-categories (2 levels), each row annotated
+   with 'depth' (0 = top-level, 1 = sub-category) so callers can render indentation.
+   Sub-categories appear directly after their parent, in the same sort order used
+   for top-level categories. */
+function get_categories_tree($activeOnly = true)
+{
+    $all = get_categories($activeOnly);
+    $byParent = [];
+    foreach ($all as $c) {
+        $byParent[(int) ($c['parent_id'] ?? 0)][] = $c;
+    }
+
+    $tree = [];
+    foreach ($byParent[0] ?? [] as $top) {
+        $top['depth'] = 0;
+        $tree[] = $top;
+        foreach ($byParent[(int) $top['id']] ?? [] as $child) {
+            $child['depth'] = 1;
+            $tree[] = $child;
+        }
+    }
+    return $tree;
+}
 function get_shapes($activeOnly = true)
 {
     $sql = "SELECT * FROM gem_shapes" . ($activeOnly ? " WHERE is_active=1" : "") . " ORDER BY sort_order, id";

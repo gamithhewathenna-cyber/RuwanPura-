@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$categories   = get_categories(false);
+$categories   = get_categories_tree(false);
 $shapes       = get_shapes(false);
 $treatments   = get_treatments(false);
 $origins      = get_origins(false);
@@ -172,7 +172,7 @@ require_once __DIR__ . '/layout-top.php';
                 <select name="category_id" class="form-control">
                     <option value="">— Select —</option>
                     <?php foreach ($categories as $c): ?>
-                        <option value="<?= (int)$c['id'] ?>" <?= (isset($product['category_id']) && (int)$product['category_id'] === (int)$c['id']) ? 'selected' : '' ?>><?= e($c['name']) ?></option>
+                        <option value="<?= (int)$c['id'] ?>" <?= (isset($product['category_id']) && (int)$product['category_id'] === (int)$c['id']) ? 'selected' : '' ?>><?= !empty($c['depth']) ? '— ' : '' ?><?= e($c['name']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>

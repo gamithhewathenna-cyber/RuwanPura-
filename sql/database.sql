@@ -216,10 +216,12 @@ CREATE TABLE IF NOT EXISTS `gem_categories` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(120) NOT NULL,
   `slug` VARCHAR(140) NOT NULL,
+  `parent_id` INT(11) NULL DEFAULT NULL COMMENT 'Parent category id, for sub-categories',
   `sort_order` INT(11) NOT NULL DEFAULT 0,
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  UNIQUE KEY `slug` (`slug`),
+  KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `gem_shapes` (

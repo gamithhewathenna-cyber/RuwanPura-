@@ -7,7 +7,7 @@ $page = max(1, (int) ($_GET['page'] ?? 1));
 
 $result = get_products($filters, $page, 12);
 
-$categories   = get_categories();
+$categories   = get_categories_tree();
 $shapes       = get_shapes();
 $treatments   = get_treatments();
 $origins      = get_origins();
@@ -58,7 +58,7 @@ include __DIR__ . '/includes/header.php';
                     <div class="filter-group">
                         <h4>Category</h4>
                         <?php foreach ($categories as $c): ?>
-                            <label class="filter-check">
+                            <label class="filter-check" <?= !empty($c['depth']) ? 'style="padding-left:18px;"' : '' ?>>
                                 <input type="checkbox" name="category[]" value="<?= (int) $c['id'] ?>" <?= in_array($c['id'], $filters['category']) ? 'checked' : '' ?>>
                                 <?= e($c['name']) ?>
                             </label>
