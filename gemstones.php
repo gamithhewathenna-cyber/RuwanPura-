@@ -76,15 +76,15 @@ include __DIR__ . '/includes/header.php';
                                     }
                             ?>
                                 <div class="cat-accordion-item<?= $childChecked ? ' is-open' : '' ?>">
-                                    <div class="cat-accordion-row">
-                                        <label class="cat-accordion-label">
+                                    <div class="cat-accordion-row" role="button" tabindex="0"<?= $hasChildren ? ' aria-expanded="' . ($childChecked ? 'true' : 'false') . '"' : '' ?>>
+                                        <label class="cat-accordion-check">
                                             <input type="checkbox" name="category[]" value="<?= (int) $topCat['id'] ?>" <?= in_array($topCat['id'], $filters['category']) ? 'checked' : '' ?>>
-                                            <span><?= e($topCat['name']) ?></span>
                                         </label>
+                                        <span class="cat-accordion-name"><?= e($topCat['name']) ?></span>
                                         <?php if ($hasChildren): ?>
-                                            <button type="button" class="cat-accordion-toggle" aria-label="Show sub-categories" aria-expanded="<?= $childChecked ? 'true' : 'false' ?>">
+                                            <span class="cat-accordion-toggle" aria-hidden="true">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-                                            </button>
+                                            </span>
                                         <?php endif; ?>
                                     </div>
                                     <?php if ($hasChildren): ?>

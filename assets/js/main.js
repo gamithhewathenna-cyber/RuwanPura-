@@ -296,17 +296,65 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     })();
 
-    /* ---- Category accordion: chevron reveals a category's sub-categories ---- */
+    /* ---- Category accordion: full-width row click reveals sub-categories ----
+       Rows with children expand/collapse their panel (measuring scrollHeight for
+       a smooth height animation rather than an instant show/hide). Rows without
+       children toggle their own filter checkbox instead, so every row stays a
+       full-width clickable control either way. Clicking the checkbox itself
+       always just toggles the filter, never the accordion. */
     (function () {
-        document.querySelectorAll('.cat-accordion-toggle').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var item = btn.closest('.cat-accordion-item');
-                var panel = item ? item.querySelector('.cat-accordion-panel') : null;
-                if (!panel) return;
-                var open = panel.classList.toggle('open');
-                item.classList.toggle('is-open', open);
-                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-            });
+        document.querySelectorAll('.cat-accordion-item').forEach(function (item) {
+            var row = item.querySelector('.cat-accordion-row');
+            var panel = item.querySelector('.cat-accordion-panel');
+            if (!row) return;
+            var checkbox = row.querySelector('.cat-accordion-check input');
+
+            if (panel) {
+                if (panel.classList.contains('open')) panel.style.maxHeight = 'none';
+
+                var toggle = function () {
+                    var isOpen = panel.classList.contains('open');
+                    if (isOpen) {
+                        panel.style.maxHeight = panel.scrollHeight + 'px';
+                        requestAnimationFrame(function () { panel.style.maxHeight = '0px'; });
+                        panel.classList.remove('open');
+                        item.classList.remove('is-open');
+                        row.setAttribute('aria-expanded', 'false');
+                    } else {
+                        panel.classList.add('open');
+                        item.classList.add('is-open');
+                        panel.style.maxHeight = panel.scrollHeight + 'px';
+                        row.setAttribute('aria-expanded', 'true');
+                        panel.addEventListener('transitionend', function handler(e) {
+                            if (e.propertyName !== 'max-height') return;
+                            panel.style.maxHeight = 'none';
+                            panel.removeEventListener('transitionend', handler);
+                        });
+                    }
+                };
+
+                row.addEventListener('click', function (e) {
+                    if (e.target.closest('.cat-accordion-check')) return;
+                    toggle();
+                });
+                row.addEventListener('keydown', function (e) {
+                    if (e.key !== 'Enter' && e.key !== ' ') return;
+                    e.preventDefault();
+                    toggle();
+                });
+            } else if (checkbox) {
+                row.addEventListener('click', function (e) {
+                    if (e.target === checkbox) return;
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+                row.addEventListener('keydown', function (e) {
+                    if (e.key !== 'Enter' && e.key !== ' ') return;
+                    e.preventDefault();
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+            }
         });
     })();
 
