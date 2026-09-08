@@ -49,6 +49,7 @@ include __DIR__ . '/../includes/header.php';
         <div class="account-tabs">
             <a href="<?= BASE_URL ?>account/index.php" class="account-tab">Profile</a>
             <a href="<?= BASE_URL ?>account/orders.php" class="account-tab active">Order History</a>
+            <a href="<?= BASE_URL ?>account/change-password.php" class="account-tab">Change Password</a>
             <a href="<?= BASE_URL ?>account/logout.php" class="account-tab" style="margin-left:auto;">Logout</a>
         </div>
 
