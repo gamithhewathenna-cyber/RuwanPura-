@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__ . '/functions.php';
 $currentPage = basename($_SERVER['PHP_SELF']);
+// basename() alone can't tell the real homepage apart from another folder's own
+// index.php (e.g. account/index.php) — compare the full path so only the actual
+// site root gets the transparent/white-text header meant to sit over the hero video.
+$isHomePage = rtrim($_SERVER['PHP_SELF'], '/') === rtrim(BASE_URL, '/') . '/index.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,11 +78,11 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <?php endif; ?>
 
 <!-- ================= HEADER ================= -->
-<header class="site-header<?= $currentPage === 'index.php' ? ' site-header--transparent' : '' ?>">
+<header class="site-header<?= $isHomePage ? ' site-header--transparent' : '' ?>">
     <div class="container">
         <nav class="nav">
             <div class="nav-left nav-menu">
-                <a href="<?= BASE_URL ?>index.php" class="nav-link<?= $currentPage === 'index.php' ? ' active' : '' ?>"><?= e(c('nav_home')) ?></a>
+                <a href="<?= BASE_URL ?>index.php" class="nav-link<?= $isHomePage ? ' active' : '' ?>"><?= e(c('nav_home')) ?></a>
                 <a href="<?= BASE_URL ?>gemstones.php" class="nav-link<?= in_array($currentPage, ['gemstones.php', 'gemstone.php'], true) ? ' active' : '' ?>"><?= e(c('nav_gemstones')) ?></a>
                 <a href="<?= BASE_URL ?>about.php" class="nav-link<?= $currentPage === 'about.php' ? ' active' : '' ?>"><?= e(c('nav_about')) ?></a>
                 <!-- Mobile-only: these two mirror the links in .nav-right, which are hidden on
@@ -91,7 +95,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <a class="nav-logo" href="<?= BASE_URL ?>index.php">
                 <img class="logo-default" src="<?= logo_url() ?>" alt="<?= e(setting('site_name')) ?>"
                      onerror="this.style.display='none'">
-                <?php if ($currentPage === 'index.php'): ?>
+                <?php if ($isHomePage): ?>
                     <img class="logo-white" src="<?= logo_white_url() ?>" alt="<?= e(setting('site_name')) ?>"
                          onerror="this.style.display='none'">
                 <?php endif; ?>
