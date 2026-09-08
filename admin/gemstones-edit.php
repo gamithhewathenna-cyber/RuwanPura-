@@ -46,6 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $discountActive = (isset($_POST['discount_active']) && $discountType !== 'none' && $discountValue !== null && $discountValue > 0) ? 1 : 0;
             $quantity       = max(0, (int)($_POST['quantity'] ?? 1));
 
+            // Restocking a Reserved/Sold gemstone (quantity back above 0) should clear that
+            // auto-set status automatically — otherwise it stays hidden as unavailable even
+            // though units now exist to sell again.
+            if ($quantity > 0 && in_array($status, ['reserved', 'sold'], true)) {
+                $status = 'available';
+            }
+
             if ($name === '') {
                 set_flash('error', 'Please enter a gemstone name.');
                 header('Location: ' . BASE_URL . 'admin/gemstones-edit.php' . ($id ? '?id=' . $id : ''));
