@@ -5,6 +5,13 @@ maybe_show_maintenance_page();
 $formSuccess = false;
 $formErrors  = [];
 
+// A product page can link here (e.g. "Enquire About This Gem" on a sold/out-of-stock
+// gemstone) with ?product=Name to pre-fill the message field.
+$prefillMessage = '';
+if (!empty($_GET['product'])) {
+    $prefillMessage = 'I\'m interested in the ' . trim($_GET['product']) . '. Could you please share more details, including availability and pricing?';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
     if (!verify_csrf()) {
         $formErrors[] = 'Security check failed — please try again.';
@@ -125,7 +132,7 @@ include __DIR__ . '/includes/header.php';
                     </div>
                     <div class="form-field">
                         <label>Message</label>
-                        <textarea name="message" rows="5" required><?= e($_POST['message'] ?? '') ?></textarea>
+                        <textarea name="message" rows="5" required><?= e($_POST['message'] ?? $prefillMessage) ?></textarea>
                     </div>
                     <button type="submit" class="btn-dark">Send Message</button>
                 </form>

@@ -149,17 +149,22 @@ include __DIR__ . '/includes/header.php';
                     </div>
                 <?php endif; ?>
 
-                <button type="button" class="btn-dark add-to-cart-btn"
-                    data-id="<?= (int) $product['id'] ?>"
-                    data-name="<?= e($product['name']) ?>"
-                    data-weight="<?= e($product['weight']) ?>"
-                    data-shape="<?= e($shapeName) ?>"
-                    data-image="<?= $images ? UPLOAD_URL . e($images[0]['image']) : '' ?>"
-                    data-max-qty="<?= (int) $stock ?>"
-                    data-qty-input="addQty"
-                    <?= !$inStock ? 'disabled' : '' ?>>
-                    <?= $inStock ? 'Add to Cart' : ($stock <= 0 ? 'Out of Stock' : e($statusLabels[$product['status']])) ?>
-                </button>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <button type="button" class="btn-dark add-to-cart-btn" style="<?= !$inStock ? 'flex:1;' : 'width:100%;' ?>"
+                        data-id="<?= (int) $product['id'] ?>"
+                        data-name="<?= e($product['name']) ?>"
+                        data-weight="<?= e($product['weight']) ?>"
+                        data-shape="<?= e($shapeName) ?>"
+                        data-image="<?= $images ? UPLOAD_URL . e($images[0]['image']) : '' ?>"
+                        data-max-qty="<?= (int) $stock ?>"
+                        data-qty-input="addQty"
+                        <?= !$inStock ? 'disabled' : '' ?>>
+                        <?= $inStock ? 'Add to Cart' : ($stock <= 0 ? 'Out of Stock' : e($statusLabels[$product['status']])) ?>
+                    </button>
+                    <?php if (!$inStock): ?>
+                        <a href="<?= BASE_URL ?>contact.php?product=<?= urlencode($product['name']) ?>" class="btn-outline" style="flex:1;text-align:center;">Enquire About This Gem</a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
