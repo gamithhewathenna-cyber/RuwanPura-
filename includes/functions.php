@@ -471,6 +471,18 @@ function get_products($filters = [], $page = 1, $perPage = 12)
     foreach (['category' => 'category_id', 'shape' => 'shape_id', 'treatment' => 'treatment_id', 'origin' => 'origin_id'] as $key => $col) {
         if (!empty($filters[$key]) && is_array($filters[$key])) {
             $ids = array_filter(array_map('intval', $filters[$key]));
+            if ($key === 'category' && $ids) {
+                // Selecting a top-level category should also match products filed
+                // directly under its sub-categories, not just that exact category_id.
+                $expanded = $ids;
+                $in = implode(',', array_fill(0, count($ids), '?'));
+                $childStmt = db()->prepare("SELECT id FROM gem_categories WHERE parent_id IN ($in)");
+                $childStmt->execute(array_values($ids));
+                foreach ($childStmt->fetchAll(PDO::FETCH_COLUMN) as $childId) {
+                    $expanded[] = (int) $childId;
+                }
+                $ids = array_unique($expanded);
+            }
             if ($ids) {
                 $in = implode(',', array_fill(0, count($ids), '?'));
                 $where[] = "p.$col IN ($in)";
